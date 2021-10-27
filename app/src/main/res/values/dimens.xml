@@ -1,0 +1,14 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="design_bottom_navigation_height" tools:override="true">65dp</dimen>
+    <dimen name="field_name_text_size">12sp</dimen>
+    <dimen name="field_text_size">16sp</dimen>
+    <dimen name="margin_between_fields">8dp</dimen>
+    <dimen name="margin_between_name_and_field">6dp</dimen>
+    <dimen name="separator_width">3dp</dimen>
+    <dimen name="separator_length_portrait">250dp</dimen>
+    <dimen name="separator_length_landscape">150dp</dimen>
+    <dimen name="map_margin">15dp</dimen>
+</resources>

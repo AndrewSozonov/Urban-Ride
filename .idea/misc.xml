@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Repositories/SberAndroidSchool/UrbanRide/app/src/main/res/drawable/arrow_up.xml" value="0.382051282051282" />
+        <entry key="..\:/Repositories/SberAndroidSchool/UrbanRide/app/src/main/res/drawable/bottom_icon_selector.xml" value="0.3880208333333333" />
+        <entry key="..\:/Repositories/SberAndroidSchool/UrbanRide/app/src/main/res/drawable/ic_baseline_pause_24.xml" value="0.225" />
+        <entry key="..\:/Repositories/SberAndroidSchool/UrbanRide/app/src/main/res/drawable/ic_baseline_pause_36.xml" value="0.3880208333333333" />
+        <entry key="..\:/Repositories/SberAndroidSchool/UrbanRide/app/src/main/res/drawable/ic_baseline_play_arrow_24.xml" value="0.225" />
+        <entry key="..\:/Repositories/SberAndroidSchool/UrbanRide/app/src/main/res/drawable/ic_baseline_play_arrow_36.xml" value="0.225" />
+        <entry key="..\:/Repositories/SberAndroidSchool/UrbanRide/app/src/main/res/drawable/ic_history_white_24dp.xml" value="0.28020833333333334" />
+        <entry key="..\:/Repositories/SberAndroidSchool/UrbanRide/app/src/main/res/drawable/ic_ride_icon_white_24dp.xml" value="0.3880208333333333" />
+        <entry key="..\:/Repositories/SberAndroidSchool/UrbanRide/app/src/main/res/drawable/recycler_item_divider.xml" value="0.28020833333333334" />
+        <entry key="..\:/Repositories/SberAndroidSchool/UrbanRide/app/src/main/res/drawable/separator.xml" value="0.22395833333333334" />
+        <entry key="..\:/Repositories/SberAndroidSchool/UrbanRide/app/src/main/res/layout-land/fragment_ride.xml" value="0.3148148148148148" />
+        <entry key="..\:/Repositories/SberAndroidSchool/UrbanRide/app/src/main/res/layout/activity_main.xml" value="0.371875" />
+        <entry key="..\:/Repositories/SberAndroidSchool/UrbanRide/app/src/main/res/layout/fragment_dashboard.xml" value="0.371875" />
+        <entry key="..\:/Repositories/SberAndroidSchool/UrbanRide/app/src/main/res/layout/fragment_history.xml" value="0.371875" />
+        <entry key="..\:/Repositories/SberAndroidSchool/UrbanRide/app/src/main/res/layout/fragment_home.xml" value="0.371875" />
+        <entry key="..\:/Repositories/SberAndroidSchool/UrbanRide/app/src/main/res/layout/fragment_notifications.xml" value="0.371875" />
+        <entry key="..\:/Repositories/SberAndroidSchool/UrbanRide/app/src/main/res/layout/fragment_ride.xml" value="0.25" />
+        <entry key="..\:/Repositories/SberAndroidSchool/UrbanRide/app/src/main/res/layout/recycler_item_history.xml" value="0.371875" />
+        <entry key="..\:/Repositories/SberAndroidSchool/UrbanRide/app/src/main/res/menu/bottom_nav_menu.xml" value="0.371875" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_12" project-jdk-name="JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

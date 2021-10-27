@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.ride.RideFragment">
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/map_margin"
+        android:layout_marginTop="@dimen/map_margin"
+        android:layout_marginEnd="@dimen/map_margin"
+        app:layout_constraintHeight_percent="0.55"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/distance_field_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_between_fields"
+        android:text="@string/distance"
+        android:textColor="@color/middle_blue"
+        android:textSize="@dimen/field_name_text_size"
+        app:layout_constraintStart_toStartOf="@id/mapView"
+        app:layout_constraintTop_toBottomOf="@id/mapView" />
+
+    <TextView
+        android:id="@+id/distance_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_between_name_and_field"
+        android:text="@string/_0_0_km"
+        android:textColor="@color/black"
+        android:textSize="@dimen/field_text_size"
+        app:layout_constraintStart_toStartOf="@id/mapView"
+        app:layout_constraintTop_toBottomOf="@id/distance_field_name" />
+
+    <View
+        android:id="@+id/separator1"
+        android:layout_width="@dimen/separator_length_portrait"
+        android:layout_height="@dimen/separator_width"
+        android:layout_marginTop="@dimen/margin_between_fields"
+        android:background="@drawable/separator"
+        app:layout_constraintStart_toStartOf="@id/mapView"
+        app:layout_constraintTop_toBottomOf="@id/distance_textView" />
+
+    <TextView
+        android:id="@+id/speed_field_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_between_fields"
+        android:text="@string/speed"
+        android:textColor="@color/middle_blue"
+        android:textSize="@dimen/field_name_text_size"
+        app:layout_constraintStart_toStartOf="@id/mapView"
+        app:layout_constraintTop_toBottomOf="@id/separator1" />
+
+    <TextView
+        android:id="@+id/speed_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_between_name_and_field"
+        android:text="@string/_0_km_h"
+        android:textColor="@color/black"
+        android:textSize="@dimen/field_text_size"
+        app:layout_constraintStart_toStartOf="@id/mapView"
+        app:layout_constraintTop_toBottomOf="@id/speed_field_name" />
+
+    <View
+        android:id="@+id/separator2"
+        android:layout_width="@dimen/separator_length_portrait"
+        android:layout_height="@dimen/separator_width"
+        android:layout_marginTop="@dimen/margin_between_fields"
+        android:background="@drawable/separator"
+        app:layout_constraintStart_toStartOf="@id/mapView"
+        app:layout_constraintTop_toBottomOf="@id/speed_textView" />
+
+    <TextView
+        android:id="@+id/average_speed_field_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_between_fields"
+        android:text="@string/average_speed"
+        android:textColor="@color/middle_blue"
+        android:textSize="@dimen/field_name_text_size"
+        app:layout_constraintStart_toStartOf="@id/mapView"
+        app:layout_constraintTop_toBottomOf="@id/separator2" />
+
+    <TextView
+        android:id="@+id/average_speed_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_between_name_and_field"
+        android:text="@string/_0_km_h"
+        android:textColor="@color/black"
+        android:textSize="@dimen/field_text_size"
+        app:layout_constraintStart_toStartOf="@id/mapView"
+        app:layout_constraintTop_toBottomOf="@id/average_speed_field_name" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/stop_ride_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_stop_24"
+        app:fabCustomSize="48dp"
+        app:layout_constraintEnd_toEndOf="@id/duration_textView"
+        app:layout_constraintStart_toStartOf="@id/duration_textView"
+        app:layout_constraintTop_toBottomOf="@id/average_speed_field_name"
+        app:maxImageSize="36dp"
+        android:visibility="gone"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/start_ride_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/fab_field_states"
+        app:fabCustomSize="64dp"
+        app:layout_constraintEnd_toEndOf="@id/duration_textView"
+        app:layout_constraintStart_toStartOf="@id/duration_textView"
+        app:layout_constraintTop_toTopOf="@id/distance_field_name"
+        app:maxImageSize="48dp" />
+
+    <TextView
+        android:id="@+id/duration_field_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/duration"
+        android:textColor="@color/middle_blue"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/duration_textView"
+        app:layout_constraintStart_toStartOf="@+id/duration_textView"
+        app:layout_constraintTop_toBottomOf="@id/speed_field_name" />
+
+    <TextView
+        android:id="@+id/duration_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_00_00_00"
+        android:textColor="@color/middle_blue"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/mapView"
+        app:layout_constraintTop_toBottomOf="@id/duration_field_name" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
