@@ -51,6 +51,7 @@ class LocationService : LifecycleService() {
     private var lastSecondTimestamp = 0L
 
     companion object {
+        val serviceStatus = MutableLiveData<String>()
         val isTracking = MutableLiveData<Boolean>()
         val trackingPoints = MutableLiveData<MutableList<MutableList<LatLng>>>()
         val rideTime = MutableLiveData<Long>()
@@ -76,6 +77,7 @@ class LocationService : LifecycleService() {
         intent?.let {
             when (it.action) {
                 START_LOCATION_SERVICE -> {
+                    serviceStatus.value = "Started"
                     if (!isServiceResumed) {
                         Log.d("onStartCommand", "SERVICE_STARTED")
                         startForegroundService()
@@ -89,10 +91,12 @@ class LocationService : LifecycleService() {
                     }
                 }
                 PAUSE_LOCATION_SERVICE -> {
+                    serviceStatus.value = "Paused"
                     Log.d("onStartCommand", "PAUSE_LOCATION_SERVICE")
                     pauseService()
                 }
                 STOP_LOCATION_SERVICE -> {
+                    serviceStatus.value = "Stopped"
                     Log.d("onStartCommand", "STOP_LOCATION_SERVICE")
                     stopService()
                 } else -> return super.onStartCommand(intent, flags, startId)
@@ -150,7 +154,7 @@ class LocationService : LifecycleService() {
         }
     }
 
-    val locationCallBack = object : LocationCallback() {
+    private val locationCallBack = object : LocationCallback() {
         override fun onLocationResult(p0: LocationResult) {
             super.onLocationResult(p0)
             if (isTracking.value!!) {

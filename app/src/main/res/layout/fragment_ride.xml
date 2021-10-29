@@ -14,7 +14,8 @@
         android:layout_marginTop="@dimen/map_margin"
         android:layout_marginEnd="@dimen/map_margin"
         app:layout_constraintHeight_percent="0.55"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/imageview_border"/>
 
     <TextView
         android:id="@+id/distance_field_name"

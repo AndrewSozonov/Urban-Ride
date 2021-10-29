@@ -26,12 +26,14 @@
                     android:id="@+id/date_field_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:text="date"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toTopOf="@+id/date_textView"
                     app:layout_constraintEnd_toEndOf="@id/date_textView"
+                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="@id/date_textView"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:text="date"
-                    android:textColor="@color/white"/>
+                    app:layout_constraintVertical_chainStyle="packed" />
 
                 <TextView
                     android:id="@+id/date_textView"
@@ -39,20 +41,22 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="@dimen/margin_between_name_and_field"
+                    android:text="04.10.21"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/date_field_name"
-                    android:text="04.10.21" />
+                    app:layout_constraintTop_toBottomOf="@id/date_field_name" />
 
                 <TextView
                     android:id="@+id/start_field_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    app:layout_constraintEnd_toEndOf="@id/start_textView"
-                    app:layout_constraintStart_toStartOf="@id/start_textView"
-                    app:layout_constraintTop_toTopOf="parent"
                     android:text="start"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toTopOf="@+id/start_textView"
+                    app:layout_constraintEnd_toEndOf="@id/start_textView"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="@id/start_textView"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/start_textView"
@@ -61,19 +65,21 @@
                     android:layout_marginTop="@dimen/margin_between_name_and_field"
                     android:layout_marginEnd="15dp"
                     android:text="10:45"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/arrow_button"
-                    app:layout_constraintTop_toBottomOf="@id/start_field_name" />
+                    app:layout_constraintTop_toBottomOf="@+id/start_field_name" />
 
                 <TextView
                     android:id="@+id/finish_field_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    app:layout_constraintEnd_toEndOf="@id/finish_textView"
-                    app:layout_constraintStart_toStartOf="@id/finish_textView"
-                    app:layout_constraintTop_toTopOf="parent"
                     android:text="finish"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toTopOf="@+id/finish_textView"
+                    app:layout_constraintEnd_toEndOf="@id/finish_textView"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="@id/finish_textView"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/finish_textView"
@@ -82,19 +88,21 @@
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="@dimen/margin_between_name_and_field"
                     android:text="11:15"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/arrow_button"
-                    app:layout_constraintTop_toBottomOf="@id/finish_field_name" />
+                    app:layout_constraintTop_toBottomOf="@+id/finish_field_name" />
 
                 <TextView
                     android:id="@+id/duration_field_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    app:layout_constraintEnd_toEndOf="@id/duration_textView"
-                    app:layout_constraintStart_toStartOf="@id/duration_textView"
-                    app:layout_constraintTop_toTopOf="parent"
                     android:text="duration"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toTopOf="@+id/duration_textView"
+                    app:layout_constraintEnd_toEndOf="@id/duration_textView"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="@id/duration_textView"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/duration_textView"
@@ -103,18 +111,20 @@
                     android:layout_marginTop="@dimen/margin_between_name_and_field"
                     android:layout_marginEnd="15dp"
                     android:text="00:45:00"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/duration_field_name" />
+                    app:layout_constraintTop_toBottomOf="@+id/duration_field_name" />
 
                 <Button
                     android:id="@+id/arrow_button"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:background="@drawable/arrow_up"
+                    android:rotation="180"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/start_textView"
-                    android:rotation="180"/>
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -204,13 +214,15 @@
                 <ImageView
                     android:id="@+id/history_map"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     app:layout_constraintHeight_percent="0.9"
                     app:layout_constraintWidth_percent="0.7"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="15dp"
                     android:layout_marginBottom="15dp"
                     android:layout_marginEnd="15dp"
+                    android:background="@drawable/imageview_border"
                      />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
