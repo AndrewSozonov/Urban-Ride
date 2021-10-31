@@ -23,6 +23,10 @@ import com.andrewsozonov.urbanride.databinding.FragmentRideBinding
 import com.andrewsozonov.urbanride.model.RideDataModel
 import com.andrewsozonov.urbanride.service.LocationService
 import com.andrewsozonov.urbanride.util.Constants.PAUSE_LOCATION_SERVICE
+import com.andrewsozonov.urbanride.util.Constants.POLYLINE_WIDTH
+import com.andrewsozonov.urbanride.util.Constants.SERVICE_STATUS_PAUSED
+import com.andrewsozonov.urbanride.util.Constants.SERVICE_STATUS_STARTED
+import com.andrewsozonov.urbanride.util.Constants.SERVICE_STATUS_STOPPED
 import com.andrewsozonov.urbanride.util.Constants.START_LOCATION_SERVICE
 import com.andrewsozonov.urbanride.util.Constants.STOP_LOCATION_SERVICE
 import com.andrewsozonov.urbanride.util.Converter
@@ -30,10 +34,7 @@ import com.andrewsozonov.urbanride.util.PermissionsUtil
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
-import com.google.android.gms.maps.model.JointType
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.gms.maps.model.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import javax.inject.Inject
 
@@ -56,7 +57,7 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     private var averageSpeedTextView: TextView? = null
     private var timer: TextView? = null
 
-    private var serviceStatus: String = "Stopped"
+    private var serviceStatus: String = SERVICE_STATUS_STOPPED
     private var trackingPoints = mutableListOf<MutableList<LatLng>>()
 
     @Inject
@@ -104,8 +105,8 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
         buttonStart?.setOnClickListener {
             if (PermissionsUtil.checkPermissions(requireContext())) {
                 when (serviceStatus) {
-                    "Started" -> operateService(PAUSE_LOCATION_SERVICE)
-                    "Paused" -> operateService(START_LOCATION_SERVICE)
+                    SERVICE_STATUS_STARTED -> operateService(PAUSE_LOCATION_SERVICE)
+                    SERVICE_STATUS_PAUSED -> operateService(START_LOCATION_SERVICE)
                     else -> {
                         clearMap()
                         operateService(START_LOCATION_SERVICE)
@@ -131,7 +132,8 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
 
         LocationService.trackingPoints.observe(viewLifecycleOwner, {
             trackingPoints = it
-            updateRoute()
+//            updateRoute()
+            drawRoute()
             rideViewModel.calculateData(trackingPoints)
         })
 
@@ -165,15 +167,15 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     private fun updateUi(serviceStatus: String) {
         this.serviceStatus = serviceStatus
         when (serviceStatus) {
-            "Started" -> {
+            SERVICE_STATUS_STARTED -> {
                 buttonStart?.setImageLevel(1)
                 buttonStop?.visibility = GONE
             }
-            "Paused" -> {
+            SERVICE_STATUS_PAUSED -> {
                 buttonStart?.setImageLevel(0)
                 buttonStop?.visibility = VISIBLE
             }
-            "Stopped" -> {
+            SERVICE_STATUS_STOPPED -> {
                 buttonStart?.setImageLevel(0)
                 buttonStop?.visibility = GONE
             }
@@ -219,13 +221,29 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
             clearMap()
         }
         for (line in trackingPoints) {
-            val polylineOptions = PolylineOptions()
-                .width(8f)
-                .color(R.color.middle_cyan)
-                .jointType(JointType.ROUND)
-                .addAll(line)
-            map.addPolyline(polylineOptions)
+            if (trackingPoints.last() == line) {
+                val polylineOptions = PolylineOptions()
+                    .width(POLYLINE_WIDTH)
+                    .color(resources.getColor(R.color.middle_blue))
+                    .jointType(JointType.ROUND)
+                    .addAll(line)
+                    .endCap(
+                        CustomCap(
+                            BitmapDescriptorFactory.fromResource(R.drawable.ic_arrow), 70f
+                        )
+                    )
+                map.addPolyline(polylineOptions)
+            } else {
+                val polylineOptions = PolylineOptions()
+                    .width(POLYLINE_WIDTH)
+                    .color(resources.getColor(R.color.middle_blue))
+                    .jointType(JointType.ROUND)
+                    .addAll(line)
+                map.addPolyline(polylineOptions)
+            }
         }
+        moveCameraToCurrentLocation()
+
     }
 
     private fun updateRoute() {
@@ -233,10 +251,15 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
             val lastLatLng = trackingPoints.last()[trackingPoints.last().size - 2]
             val currentLatLng = trackingPoints.last().last()
             val polylineOptions = PolylineOptions()
-                .width(8f)
+                .width(POLYLINE_WIDTH)
                 .color(R.color.middle_cyan)
                 .jointType(JointType.ROUND)
                 .add(lastLatLng, currentLatLng)
+                .endCap(
+                    CustomCap(
+                        BitmapDescriptorFactory.fromResource(R.drawable.ic_arrow), 6f
+                    )
+                )
             map.addPolyline(polylineOptions)
         }
         moveCameraToCurrentLocation()
@@ -253,27 +276,33 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     }
 
     private fun zoomMapToSaveForDB() {
-        val bounds = LatLngBounds.Builder()
-        for (line in trackingPoints) {
-            for (point in line) {
-                bounds.include(point)
-            }
-        }
+        Log.d("zoomMap", " trackingPoints: $trackingPoints")
 
-        map.moveCamera(
-            mapView?.width?.let {
-                mapView?.height?.let { it1 ->
-                    CameraUpdateFactory.newLatLngBounds(
-                        bounds.build(),
-                        it,
-                        it1,
-                        (mapView?.height!! * 0.05f).toInt()
-                    )
+        if (trackingPoints.any {
+            it.isNotEmpty()
+            }) {
+            val bounds = LatLngBounds.Builder()
+            for (line in trackingPoints) {
+                for (point in line) {
+                    bounds.include(point)
                 }
             }
-        )
-        map.setOnMapLoadedCallback {
-            saveRide()
+
+            map.moveCamera(
+                mapView?.width?.let {
+                    mapView?.height?.let { it1 ->
+                        CameraUpdateFactory.newLatLngBounds(
+                            bounds.build(),
+                            it,
+                            it1,
+                            (mapView?.height!! * 0.05f).toInt()
+                        )
+                    }
+                }
+            )
+            map.setOnMapLoadedCallback {
+                saveRide()
+            }
         }
     }
 
@@ -354,7 +383,7 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 requestMultiplePermissions.launch(
                     arrayOf(
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
                         Manifest.permission.ACCESS_FINE_LOCATION
                     )
                 )

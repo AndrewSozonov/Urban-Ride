@@ -8,9 +8,10 @@
 
     <ListPreference
         app:key="@string/unit_system_pref_key"
-        android:title="Unit system"
+        android:title="Units"
         app:entries="@array/units_array"
         app:entryValues="@array/units_array"
+        android:defaultValue="@string/units_kilometers"
         />
 
 </PreferenceScreen>

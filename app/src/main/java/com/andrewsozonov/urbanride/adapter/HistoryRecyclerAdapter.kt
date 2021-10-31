@@ -1,7 +1,9 @@
 package com.andrewsozonov.urbanride.adapter
 
+import android.content.res.Resources
 import android.transition.AutoTransition
 import android.transition.TransitionManager
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -52,15 +54,26 @@ class HistoryRecyclerAdapter : RecyclerView.Adapter<HistoryViewHolder>() {
     private fun expandItemView(holder: HistoryViewHolder) {
         TransitionManager.beginDelayedTransition(holder.cardView, AutoTransition())
         holder.expandableView.visibility = VISIBLE
-        holder.cardView.background.setTint(ContextCompat.getColor(holder.itemView.context, R.color.light_gray))
+
+        val theme: Resources.Theme = holder.itemView.context.theme
+
+        val typedValueColorSurface = TypedValue()
+        theme.resolveAttribute(R.attr.colorSurface, typedValueColorSurface, true)
+        val cardViewColor = typedValueColorSurface.data
+
+        val typedValueColorOnSurface = TypedValue()
+        theme.resolveAttribute(R.attr.colorOnSurface, typedValueColorOnSurface, true)
+        val textFieldColor = typedValueColorOnSurface.data
+        holder.cardView.background.setTint(cardViewColor)
+
         holder.arrowButton.animate().rotationBy(180F).start()
-        holder.dateFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.middle_blue))
-        holder.startFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.middle_blue))
-        holder.finishFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.middle_blue))
-        holder.durationFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.middle_blue))
-        holder.distanceFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.middle_blue))
-        holder.averageSpeedFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.middle_blue))
-        holder.maxSpeedFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.middle_blue))
+        holder.dateFieldName.setTextColor(textFieldColor)
+        holder.startFieldName.setTextColor(textFieldColor)
+        holder.finishFieldName.setTextColor(textFieldColor)
+        holder.durationFieldName.setTextColor(textFieldColor)
+        holder.distanceFieldName.setTextColor(textFieldColor)
+        holder.averageSpeedFieldName.setTextColor(textFieldColor)
+        holder.maxSpeedFieldName.setTextColor(textFieldColor)
     }
 
     private fun closeItemView(holder: HistoryViewHolder) {

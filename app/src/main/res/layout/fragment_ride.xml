@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_between_fields"
         android:text="@string/distance"
-        android:textColor="@color/middle_blue"
+        android:textColor="?colorOnSurface"
         android:textSize="@dimen/field_name_text_size"
         app:layout_constraintStart_toStartOf="@id/mapView"
         app:layout_constraintTop_toBottomOf="@id/mapView" />
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_between_name_and_field"
         android:text="@string/_0_0_km"
-        android:textColor="@color/black"
+        android:textColor="?colorOnBackground"
         android:textSize="@dimen/field_text_size"
         app:layout_constraintStart_toStartOf="@id/mapView"
         app:layout_constraintTop_toBottomOf="@id/distance_field_name" />
@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_between_fields"
         android:text="@string/speed"
-        android:textColor="@color/middle_blue"
+        android:textColor="?colorOnSurface"
         android:textSize="@dimen/field_name_text_size"
         app:layout_constraintStart_toStartOf="@id/mapView"
         app:layout_constraintTop_toBottomOf="@id/separator1" />
@@ -65,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_between_name_and_field"
         android:text="@string/_0_km_h"
-        android:textColor="@color/black"
+        android:textColor="?colorOnBackground"
         android:textSize="@dimen/field_text_size"
         app:layout_constraintStart_toStartOf="@id/mapView"
         app:layout_constraintTop_toBottomOf="@id/speed_field_name" />
@@ -85,7 +85,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_between_fields"
         android:text="@string/average_speed"
-        android:textColor="@color/middle_blue"
+        android:textColor="?colorOnSurface"
         android:textSize="@dimen/field_name_text_size"
         app:layout_constraintStart_toStartOf="@id/mapView"
         app:layout_constraintTop_toBottomOf="@id/separator2" />
@@ -96,7 +96,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_between_name_and_field"
         android:text="@string/_0_km_h"
-        android:textColor="@color/black"
+        android:textColor="?colorOnBackground"
         android:textSize="@dimen/field_text_size"
         app:layout_constraintStart_toStartOf="@id/mapView"
         app:layout_constraintTop_toBottomOf="@id/average_speed_field_name" />
@@ -129,7 +129,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/duration"
-        android:textColor="@color/middle_blue"
+        android:textColor="?colorOnSurface"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@+id/duration_textView"
         app:layout_constraintStart_toStartOf="@+id/duration_textView"
@@ -140,7 +140,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/_00_00_00"
-        android:textColor="@color/middle_blue"
+        android:textColor="?colorOnSurface"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="@+id/mapView"
         app:layout_constraintTop_toBottomOf="@id/duration_field_name" />

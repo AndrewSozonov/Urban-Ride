@@ -11,5 +11,11 @@ object Constants {
     const val NOTIFICATION_ID = 1
     const val ACTION_SHOW_RIDING_FRAGMENT = "ACTION_SHOW_RIDING_FRAGMENT"
 
+    const val SERVICE_STATUS_STARTED = "Started"
+    const val SERVICE_STATUS_STOPPED = "Stopped"
+    const val SERVICE_STATUS_PAUSED = "Paused"
+
+    const val POLYLINE_WIDTH = 12f
+
 
 }
