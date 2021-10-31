@@ -44,12 +44,7 @@ object DataFormatter {
     fun calculateSpeed(ridingTime: Long, trackingPoints: List<List<LatLng>>): Float {
 
         if (trackingPoints.isNotEmpty() && trackingPoints.last().size > 1 && ridingTime > 1000) {
-            Log.d("calculateSpeed", "trackingPoints: $trackingPoints")
-            Log.d("calculateSpeed", "currentLatLng: ${trackingPoints.last().last()}")
-            Log.d(
-                "calculateSpeed",
-                "lastLatLng: ${trackingPoints.last()[trackingPoints.last().size - 2]}"
-            )
+
             val currentLatLng = trackingPoints.last().last()
             val lastLatLng = trackingPoints.last()[trackingPoints.last().size - 2]
 
@@ -61,22 +56,16 @@ object DataFormatter {
                 lastLatLng.longitude,
                 result
             )
-            Log.d("calculate speed", " riding time: $ridingTime")
 
             return ((result[0] / 1000f) / (ridingTime / 1000f / 60 / 60)).toBigDecimal()
                 .setScale(2, RoundingMode.HALF_UP).toFloat()
 
         } else
             return 0.0f
-
     }
 
-
     fun calculateAverageSpeed(ridingTime: Long, distance: Float): Float {
-        Log.d(
-            "calculateAverageSpeed",
-            "distance: $distance  ridingTime: ${ridingTime / 1000f / 60 / 60}"
-        )
+
         return if (ridingTime > 1000) {
             (distance / (ridingTime / 1000f / 60 / 60)).toBigDecimal()
                 .setScale(2, RoundingMode.HALF_UP).toFloat()

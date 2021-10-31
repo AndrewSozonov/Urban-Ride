@@ -2,23 +2,28 @@ package com.andrewsozonov.urbanride
 
 import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
+import androidx.preference.PreferenceScreen
 import com.andrewsozonov.urbanride.databinding.ActivityMainBinding
 import com.andrewsozonov.urbanride.util.Constants.ACTION_SHOW_RIDING_FRAGMENT
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(){
 
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
+
+        setColorTheme()
+
         setContentView(binding.root)
         navigateToRideFragment(intent)
 
@@ -34,6 +39,17 @@ class MainActivity : AppCompatActivity() {
         )
 //        setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+    }
+
+    private fun setColorTheme() {
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val isDarkThemeOn =
+            sharedPrefs.getBoolean(getString(R.string.dark_theme_pref_key), false)
+        if (isDarkThemeOn) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {

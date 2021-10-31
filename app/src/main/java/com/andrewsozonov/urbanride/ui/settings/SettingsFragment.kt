@@ -1,15 +1,29 @@
 package com.andrewsozonov.urbanride.ui.settings
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import com.andrewsozonov.urbanride.databinding.FragmentSettingsBinding
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
+import com.andrewsozonov.urbanride.R
 
+class SettingsFragment : PreferenceFragmentCompat() {
+
+
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        setPreferencesFromResource(R.xml.preferences, null)
+
+    }
+
+    override fun onPreferenceTreeClick(preference: Preference?): Boolean {
+        preference?.let {
+            if (it.key == getString(R.string.dark_theme_pref_key)) {
+                activity?.recreate()
+            }
+        }
+        return super.onPreferenceTreeClick(preference)
+    }
+
+
+/*
 class SettingsFragment : Fragment() {
 
     private lateinit var settingsViewModel: SettingsViewModel
@@ -41,4 +55,5 @@ class SettingsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+*/
 }

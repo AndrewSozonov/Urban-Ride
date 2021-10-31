@@ -12,6 +12,7 @@ import com.andrewsozonov.urbanride.util.DataFormatter
 import com.google.android.gms.maps.model.LatLng
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 import javax.inject.Inject
@@ -21,6 +22,7 @@ class RideViewModel : ViewModel() {
 
     @Inject
     lateinit var repository: MainRepository
+    private var disposable: Disposable? = null
 
     val trackingPoints: List<List<LatLng>> = mutableListOf()
     val timerLiveData: MutableLiveData<String> = MutableLiveData()
@@ -52,36 +54,36 @@ class RideViewModel : ViewModel() {
     }
 
     fun saveRide(mapImage: Bitmap) {
-        val rideFinishTimeinMillis = Calendar.getInstance().timeInMillis
-        val rideStartTimeinMillis = rideFinishTimeinMillis - ridingTime
+        val rideFinishTimeInMillis = Calendar.getInstance().timeInMillis
+        val rideStartTimeInMillis = rideFinishTimeInMillis - ridingTime
 
         val currentRide = Ride(
-            rideStartTimeinMillis,
-            rideFinishTimeinMillis,
+            rideStartTimeInMillis,
+            rideFinishTimeInMillis,
             ridingTime,
             distance,
             averageSpeed,
             0.0f,
             mapImage
         )
-
         addRideToDB(currentRide)
-
     }
 
-
-    fun addRideToDB(ride: Ride) {
+    private fun addRideToDB(ride: Ride) {
 
         val observable = Completable.fromCallable {
-            Log.d("MainViewModel", "repository: $repository")
-
             repository.addRide(ride)
         }
 
-        val disposable = observable
+        disposable = observable
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({Log.d("RideViewModel", " addRideToDB $ride")})
+            .subscribe()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposable?.dispose()
     }
 
 }

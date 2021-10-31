@@ -20,8 +20,6 @@
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize"
-
             android:exported="true"
             android:label="@string/app_name">
             <intent-filter>

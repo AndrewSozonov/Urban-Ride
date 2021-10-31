@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.preference.PreferenceManager
 import com.andrewsozonov.urbanride.R
 import com.andrewsozonov.urbanride.databinding.FragmentRideBinding
 import com.andrewsozonov.urbanride.model.RideDataModel
@@ -24,6 +25,7 @@ import com.andrewsozonov.urbanride.service.LocationService
 import com.andrewsozonov.urbanride.util.Constants.PAUSE_LOCATION_SERVICE
 import com.andrewsozonov.urbanride.util.Constants.START_LOCATION_SERVICE
 import com.andrewsozonov.urbanride.util.Constants.STOP_LOCATION_SERVICE
+import com.andrewsozonov.urbanride.util.Converter
 import com.andrewsozonov.urbanride.util.PermissionsUtil
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -43,7 +45,9 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     private lateinit var rideViewModel: RideViewModel
     private var _binding: FragmentRideBinding? = null
     private lateinit var map: GoogleMap
-    private lateinit var mapView: MapView
+
+    //    private lateinit var mapView: MapView
+    private var mapView: MapView? = null
 
     private var buttonStart: FloatingActionButton? = null
     private var buttonStop: FloatingActionButton? = null
@@ -52,9 +56,7 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     private var averageSpeedTextView: TextView? = null
     private var timer: TextView? = null
 
-    var distance: Float = 0.0f
     private var serviceStatus: String = "Stopped"
-
     private var trackingPoints = mutableListOf<MutableList<LatLng>>()
 
     @Inject
@@ -89,15 +91,14 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        mapView.onCreate(savedInstanceState)
-        mapView.getMapAsync {
+        mapView?.onCreate(savedInstanceState)
+        mapView?.getMapAsync {
             map = it
             map.setOnMyLocationButtonClickListener(this)
             map.setOnMyLocationClickListener(this)
 
             subscribeToObservers()
             drawRoute()
-
         }
 
         buttonStart?.setOnClickListener {
@@ -111,11 +112,7 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
                     }
                 }
             } else {
-                Toast.makeText(
-                    requireContext(),
-                    "This application require Location permission to work properly",
-                    Toast.LENGTH_SHORT
-                ).show()
+                showPermissionToast()
             }
         }
         buttonStop?.setOnClickListener {
@@ -188,9 +185,33 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     }
 
     private fun updateData(model: RideDataModel) {
-        speedTextView?.text = resources.getString(R.string.km_h, model.speed)
-        distanceTextView?.text = resources.getString(R.string.km, model.distance)
-        averageSpeedTextView?.text = resources.getString(R.string.km_h, model.averageSpeed)
+
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        val metricSystemChose =
+            sharedPrefs.getString(
+                getString(R.string.unit_system_pref_key),
+                getString(R.string.units_kilometers)
+            )
+
+        if (metricSystemChose == getString(R.string.units_kilometers)) {
+            speedTextView?.text = resources.getString(R.string.km_h, model.speed.toString())
+            distanceTextView?.text = resources.getString(R.string.km, model.distance.toString())
+            averageSpeedTextView?.text =
+                resources.getString(R.string.km_h, model.averageSpeed.toString())
+        } else {
+            speedTextView?.text = resources.getString(
+                R.string.miles_h,
+                Converter.convertKilometersToMiles(model.speed).toString()
+            )
+            distanceTextView?.text = resources.getString(
+                R.string.miles,
+                Converter.convertKilometersToMiles(model.distance).toString()
+            )
+            averageSpeedTextView?.text = resources.getString(
+                R.string.miles_h,
+                Converter.convertKilometersToMiles(model.averageSpeed).toString()
+            )
+        }
     }
 
     private fun drawRoute() {
@@ -240,12 +261,16 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
         }
 
         map.moveCamera(
-            CameraUpdateFactory.newLatLngBounds(
-                bounds.build(),
-                mapView.width,
-                mapView.height,
-                (mapView.height * 0.05f).toInt()
-            )
+            mapView?.width?.let {
+                mapView?.height?.let { it1 ->
+                    CameraUpdateFactory.newLatLngBounds(
+                        bounds.build(),
+                        it,
+                        it1,
+                        (mapView?.height!! * 0.05f).toInt()
+                    )
+                }
+            }
         )
         map.setOnMapLoadedCallback {
             saveRide()
@@ -266,34 +291,36 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
 
     override fun onStart() {
         super.onStart()
-        mapView.onStart()
-        Log.d("onStart", "tracking points: $trackingPoints")
+        mapView?.onStart()
+        Log.d("onStart", "mapView: $mapView")
 
     }
 
     override fun onResume() {
         super.onResume()
-        mapView.onResume()
+        mapView?.onResume()
         drawRoute()
-        Log.d("onResume", "tracking points: $trackingPoints")
+        Log.d("onResume", "mapView: $mapView")
 
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        mapView.onSaveInstanceState(outState)
+        mapView?.onSaveInstanceState(outState)
+        Log.d("onSaveInstanceState", "mapView: $mapView")
+
     }
 
     override fun onPause() {
         super.onPause()
-        mapView.onPause()
-        Log.d("onPause", "tracking points: $trackingPoints")
+        mapView?.onPause()
+        Log.d("onPause", "mapView: $mapView")
     }
 
     override fun onStop() {
         super.onStop()
-        mapView.onStop()
-        Log.d("onStop", "tracking points: $trackingPoints")
+        mapView?.onStop()
+        Log.d("onStop", "mapView: $mapView")
 
     }
 
@@ -302,40 +329,36 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
         _binding = null
     }
 
+    private fun showPermissionToast() {
+        Toast.makeText(
+            requireContext(),
+            getString(R.string.permission_toast),
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
     private fun requestLocationPermissions() {
 
         if (!PermissionsUtil.checkPermissions(requireContext())) {
 
             val requestMultiplePermissions =
                 registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-                    permissions.entries.forEach {
-                        Log.e("DEBUG", "${it.key} = ${it.value}")
-                    }
 
                     val granted = permissions.entries.all {
                         it.value == true
                     }
-
-                    if (granted) {
-//                subscribeToObservers()
-//                drawRoute()
-                    } else {
-                        Toast.makeText(
-                            requireContext(),
-                            "This application require Location permission to work properly",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                    if (!granted) {
+                        showPermissionToast()
                     }
                 }
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 requestMultiplePermissions.launch(
                     arrayOf(
-//                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
                         Manifest.permission.ACCESS_FINE_LOCATION
                     )
                 )
             } else {
-
                 val requestPermissionLauncher =
                     registerForActivityResult(
                         ActivityResultContracts.RequestPermission()

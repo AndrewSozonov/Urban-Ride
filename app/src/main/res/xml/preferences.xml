@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        app:key="@string/dark_theme_pref_key"
+        app:title="Dark theme"/>
+
+    <ListPreference
+        app:key="@string/unit_system_pref_key"
+        android:title="Unit system"
+        app:entries="@array/units_array"
+        app:entryValues="@array/units_array"
+        />
+
+</PreferenceScreen>

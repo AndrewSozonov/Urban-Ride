@@ -7,11 +7,24 @@
     <string name="speed">Speed</string>
     <string name="average_speed">Average speed</string>
     <string name="duration">Duration</string>
+
     <string name="_0_0_km">0.0 km</string>
     <string name="_0_km_h">0 km/h</string>
     <string name="_00_00_00">00:00:00</string>
+
     <string name="km">%1$s km</string>
     <string name="km_h">%1$s km/h</string>
+    <string name="miles">%1$s miles</string>
+    <string name="miles_h">%1$s mph</string>
     <string name="max_speed">Max speed</string>
     <string name="avg_speed">Avg. speed</string>
+
+    <string name="units_kilometers">Kilometers</string>
+    <string name="units_miles">Miles</string>
+
+    <string name="dark_theme_pref_key">dark_theme_pref_key</string>
+    <string name="unit_system_pref_key">unit_system_pref_key</string>
+    <string name="history_date_pattern">dd.MM.yy</string>
+    <string name="history_time_pattern">HH:mm</string>
+    <string name="permission_toast">This application require Location permission to work properly</string>
 </resources>

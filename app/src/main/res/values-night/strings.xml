@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="unit_system_pref_key">unit_system_pref_key</string>
+</resources>
