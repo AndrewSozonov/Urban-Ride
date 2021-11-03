@@ -1,13 +1,23 @@
 package com.andrewsozonov.urbanride.util
 
 import android.location.Location
-import android.util.Log
 import com.google.android.gms.maps.model.LatLng
 import java.math.RoundingMode
 import java.util.concurrent.TimeUnit
 
+/**
+ * Форматирует данные для отображения на экране
+ *
+ * @author Андрей Созонов
+ */
 object DataFormatter {
 
+    /**
+     * Ковертирует миллисекунды в строку
+     *
+     * @param time время в миллисекундах
+     * @return возвращает строку в формате HH:MM:SS
+     */
     fun formatTime(time: Long): String {
         var millisecs = time
         val hours = TimeUnit.MILLISECONDS.toHours(millisecs)
@@ -21,6 +31,13 @@ object DataFormatter {
                 "${if (seconds < 10) "0" else ""}$seconds"
     }
 
+
+    /**
+     * Вычисляет расстояние из списка с координатами
+     *
+     * @param trackingPoints список из списков с координатами
+     * @return возвращает расстояние между всеми координатами в км
+     */
     fun calculateDistance(trackingPoints: List<List<LatLng>>): Float {
         var distance = 0.0
         for (path in trackingPoints) {
@@ -41,6 +58,13 @@ object DataFormatter {
         return distance.toInt().toFloat() / 1000
     }
 
+    /**
+     * Вычисляет скорость между двумя последними координатами
+     *
+     * @param ridingTime время которе прошло между двумя последними координатами в миллисекундах
+     * @param trackingPoints список координат
+     * @return возвращает скорость между двумя последними координатами в км/ч
+     */
     fun calculateSpeed(ridingTime: Long, trackingPoints: List<List<LatLng>>): Float {
 
         if (trackingPoints.isNotEmpty() && trackingPoints.last().size > 1 && ridingTime > 1000) {
@@ -64,6 +88,13 @@ object DataFormatter {
             return 0.0f
     }
 
+    /**
+     * Вычисляет скорость за все пройденное на данный момент расстояние
+     *
+     * @param ridingTime время поездки
+     * @param distance расстояние поездки
+     * @return возвращает скорость в км/ч
+     */
     fun calculateAverageSpeed(ridingTime: Long, distance: Float): Float {
 
         return if (ridingTime > 1000) {

@@ -16,6 +16,11 @@ import com.bumptech.glide.Glide
 import java.text.SimpleDateFormat
 import java.util.*
 
+/**
+ * ViewHolder для [HistoryRecyclerAdapter]
+ *
+ * @author Андрей Созонов
+ */
 class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val expandableView : ConstraintLayout = itemView.findViewById(R.id.expandable_root_item)
     val cardView : CardView = itemView.findViewById(R.id.item_cardView)
@@ -37,6 +42,13 @@ class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var mapImageView: ImageView = itemView.findViewById(R.id.history_map)
     private val resources: Resources = itemView.resources
 
+    /**
+     * Биндит данные во ViewHolder
+     *
+     * @param ride модель данных поездки [Ride]
+     * @param isUnitsMetric значение единиц измерения из Preferences
+     * если значение true показывает данные в км, если false - в милях
+     */
     fun bind(ride: Ride, isUnitsMetric: Boolean) {
         val dateFormat = SimpleDateFormat(itemView.context.getString(R.string.history_date_pattern), Locale.getDefault())
         val timeFormat = SimpleDateFormat(itemView.context.getString(R.string.history_time_pattern), Locale.getDefault())

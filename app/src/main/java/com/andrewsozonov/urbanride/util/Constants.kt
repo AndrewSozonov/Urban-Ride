@@ -17,5 +17,7 @@ object Constants {
 
     const val POLYLINE_WIDTH = 12f
 
+    const val LOCATION_UPDATE_INTERVAL = 5000L
+
 
 }

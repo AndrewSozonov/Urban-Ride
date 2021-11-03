@@ -17,7 +17,13 @@ import io.reactivex.schedulers.Schedulers
 import java.util.*
 import javax.inject.Inject
 
-
+/**
+ * [ViewModel] прикреплена к [RideFragment]
+ * Получает данные из фрагмента, вычисляет расстояние и скорость.
+ * Сохраняет в базу данных.
+ *
+ * @author Андрей Созонов
+ */
 class RideViewModel : ViewModel() {
 
     @Inject
@@ -25,7 +31,15 @@ class RideViewModel : ViewModel() {
     private var disposable: Disposable? = null
 
     val trackingPoints: List<List<LatLng>> = mutableListOf()
+
+    /**
+     * [MutableLiveData] хранит значение таймера для обновления во фрагменте
+     */
     val timerLiveData: MutableLiveData<String> = MutableLiveData()
+
+    /**
+     * [MutableLiveData] хранит модель данных: скорость, расстояние и среднюю скорость для отображения во фрагменте
+     */
     val data: MutableLiveData<RideDataModel> = MutableLiveData()
 
     private var ridingTime: Long = 0L
@@ -39,11 +53,22 @@ class RideViewModel : ViewModel() {
         App.getAppComponent()?.inject(this)
     }
 
+    /**
+     * Пероводит время в формат HH:MM:SS и обновляет в [timerLiveData]
+     *
+     * @param time время в миллисекундах
+     */
     fun calculateTime(time: Long) {
         ridingTime = time
         timerLiveData.value = DataFormatter.formatTime(ridingTime)
     }
 
+    /**
+     * Вычисляет из списка с координатами расстояние, скорость и среднюю скорость
+     * обновляет в [data]
+     *
+     * @param trackingPoints список координат
+     */
     fun calculateData(trackingPoints: List<List<LatLng>>) {
         distance = DataFormatter.calculateDistance(trackingPoints)
         pointEndTime = ridingTime
@@ -53,6 +78,11 @@ class RideViewModel : ViewModel() {
         data.value = RideDataModel(distance, speed, averageSpeed)
     }
 
+    /**
+     * Собирает модель данных [Ride] для БД
+     *
+     * @param mapImage изображение карты с конечным маршрутом
+     */
     fun saveRide(mapImage: Bitmap) {
         val rideFinishTimeInMillis = Calendar.getInstance().timeInMillis
         val rideStartTimeInMillis = rideFinishTimeInMillis - ridingTime

@@ -19,6 +19,13 @@ import com.andrewsozonov.urbanride.database.Ride
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 
+
+/**
+ * Фрагмент с историей поездок.
+ * Загружает список поездок из БД и показывает список
+ *
+ * @author Андрей Созонов
+ */
 class HistoryFragment : Fragment() {
 
     private lateinit var historyViewModel: HistoryViewModel
@@ -28,8 +35,6 @@ class HistoryFragment : Fragment() {
     private var listOfRides: List<Ride> = mutableListOf()
     private lateinit var itemTouchHelper: ItemTouchHelper
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -55,11 +60,6 @@ class HistoryFragment : Fragment() {
             setData(it)
             listOfRides = it
         })
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        Log.d("HistoryFragment", "OnSaveInstanceState")
     }
 
     private fun initRecyclerView() {

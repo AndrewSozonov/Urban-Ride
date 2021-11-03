@@ -8,8 +8,16 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
-class HistoryItemDecoration(val context: Context, val resId: Int, val spaceHeight: Int) : RecyclerView.ItemDecoration() {
-    var divider: Drawable? = null
+/**
+ * ItemDecoration для списка истории поездок
+ *
+ * @param resId ресурс разделителя
+ * @param spaceHeight пространство между элементами
+ *
+ * @author Андрей Созонов
+ */
+class HistoryItemDecoration(val context: Context, private val resId: Int, private val spaceHeight: Int) : RecyclerView.ItemDecoration() {
+    private var divider: Drawable? = null
 
     init {
         divider = ContextCompat.getDrawable(context, resId)
@@ -25,25 +33,20 @@ class HistoryItemDecoration(val context: Context, val resId: Int, val spaceHeigh
     }
 
     override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        val left: Int = parent.getPaddingLeft()
-        val right: Int = parent.getWidth() - parent.getPaddingRight();
+        val left: Int = parent.paddingLeft
+        val right: Int = parent.width - parent.paddingRight;
 
-        val childCount = parent.getChildCount()
+        val childCount = parent.childCount
         for (i in 0 until childCount) {
             val child = parent.getChildAt(i)
 
             val params: RecyclerView.LayoutParams =
-                child.getLayoutParams() as RecyclerView.LayoutParams
+                child.layoutParams as RecyclerView.LayoutParams
 
-           /* val top = child.getBottom() + params.bottomMargin
-            val bottom = top + divider!!.getIntrinsicHeight()
 
-            divider!!.setBounds(left, top, right, bottom)
-            divider!!.draw(c);*/
             val upTop = child.top + params.topMargin - divider!!.intrinsicHeight
             val upBottom = child.top + params.bottomMargin
-            /*val topLeft = child.top + params.topMargin
-            val topRight = topLeft + divider!!.intrinsicHeight*/
+
             val downTop = child.bottom + params.bottomMargin
             val downBottom = child.bottom + params.bottomMargin + divider!!.intrinsicHeight
 

@@ -38,7 +38,15 @@ import com.google.android.gms.maps.model.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import javax.inject.Inject
 
-
+/**
+ * Главный фрагмент приложения.
+ * Показывает карту.
+ * При нажатии на кнопку запуска, запускает [LocationService] и получает координаты пользователя.
+ * Обновляет карту на основе полученных координат и рисует маршрут.
+ * Координаты и время отправляет во [RideViewModel] для подсчета расстояния и скорости
+ * Полученные из [RideViewModel] данные отображает в соответсвующих полях.
+ * При нажатии на кнопку стоп отправлет данные в базу.
+ */
 class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     GoogleMap.OnMyLocationClickListener,
     ActivityCompat.OnRequestPermissionsResultCallback {
@@ -47,7 +55,6 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     private var _binding: FragmentRideBinding? = null
     private lateinit var map: GoogleMap
 
-    //    private lateinit var mapView: MapView
     private var mapView: MapView? = null
 
     private var buttonStart: FloatingActionButton? = null
@@ -63,9 +70,6 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(

@@ -14,6 +14,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.andrewsozonov.urbanride.R
 import com.andrewsozonov.urbanride.database.Ride
 
+/**
+ * Адаптер для списка истории поездок во фрагменте HistoryFragment
+ *
+ * @author Андрей Созонов
+ */
 class HistoryRecyclerAdapter : RecyclerView.Adapter<HistoryViewHolder>() {
 
     private var data: List<Ride> = mutableListOf()
@@ -46,6 +51,11 @@ class HistoryRecyclerAdapter : RecyclerView.Adapter<HistoryViewHolder>() {
         return data.size
     }
 
+    /**
+     * Устанавливает список поездок в адаптер
+     *
+     * @param list список поездок [Ride]
+     */
     fun setData(list : List<Ride>) {
         data = list
         notifyDataSetChanged()

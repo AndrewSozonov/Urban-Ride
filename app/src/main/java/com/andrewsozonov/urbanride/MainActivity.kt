@@ -7,14 +7,20 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
-import androidx.preference.PreferenceScreen
 import com.andrewsozonov.urbanride.databinding.ActivityMainBinding
 import com.andrewsozonov.urbanride.util.Constants.ACTION_SHOW_RIDING_FRAGMENT
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class MainActivity : AppCompatActivity(){
+
+/**
+ * Главное активити приложения
+ * Показывает 3 фрагмента через Bottom Navigation View
+ * Проверяет настройки и устанавливает светлую/темную тему.
+ *
+ * @author Андрей Созонов
+ */
+class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 

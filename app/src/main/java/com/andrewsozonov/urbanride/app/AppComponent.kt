@@ -9,7 +9,6 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [AppModule::class])
-//@Module(includes = [AppModule::class])
 interface AppComponent {
 
     fun inject(viewModel: RideViewModel)

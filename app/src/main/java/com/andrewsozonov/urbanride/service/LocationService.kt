@@ -16,14 +16,18 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.andrewsozonov.urbanride.MainActivity
+import com.andrewsozonov.urbanride.R
 import com.google.android.gms.location.LocationCallback
 import com.andrewsozonov.urbanride.util.Constants.ACTION_SHOW_RIDING_FRAGMENT
+import com.andrewsozonov.urbanride.util.Constants.LOCATION_UPDATE_INTERVAL
 import com.andrewsozonov.urbanride.util.Constants.NOTIFICATION_CHANNEL_ID
 import com.andrewsozonov.urbanride.util.Constants.NOTIFICATION_CHANNEL_NAME
 import com.andrewsozonov.urbanride.util.Constants.NOTIFICATION_ID
 import com.andrewsozonov.urbanride.util.Constants.PAUSE_LOCATION_SERVICE
+import com.andrewsozonov.urbanride.util.Constants.SERVICE_STATUS_PAUSED
+import com.andrewsozonov.urbanride.util.Constants.SERVICE_STATUS_STARTED
+import com.andrewsozonov.urbanride.util.Constants.SERVICE_STATUS_STOPPED
 import com.andrewsozonov.urbanride.util.Constants.START_LOCATION_SERVICE
 import com.andrewsozonov.urbanride.util.Constants.STOP_LOCATION_SERVICE
 import com.andrewsozonov.urbanride.util.PermissionsUtil
@@ -37,12 +41,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-
+/**
+ * Сервис получает геолокацию устройства
+ * Стартует таймер во время работы
+ * Обновляет данные в [MutableLiveData]
+ *
+ * @author Андрей Созонов
+ */
 class LocationService : LifecycleService() {
 
 
-    var isServiceResumed = false
-    var serviceStopped = false
+    private var isServiceResumed = false
+    private var serviceStopped = false
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private var isTimerEnabled = false
     private var intervalTime = 0L
@@ -51,9 +61,26 @@ class LocationService : LifecycleService() {
     private var lastSecondTimestamp = 0L
 
     companion object {
+        /**
+         * Хранит статус сервиса [SERVICE_STATUS_STARTED],
+         * [SERVICE_STATUS_PAUSED],
+         * [SERVICE_STATUS_STOPPED]
+         */
         val serviceStatus = MutableLiveData<String>()
+
+        /**
+         * Хранит значение получает ли в данный момент сервис геолокацию или нет
+         */
         val isTracking = MutableLiveData<Boolean>()
+
+        /**
+         * Список координат полученных от сервиса
+         */
         val trackingPoints = MutableLiveData<MutableList<MutableList<LatLng>>>()
+
+        /**
+         * Время текущей поездки в миллисекундах
+         */
         val rideTime = MutableLiveData<Long>()
     }
 
@@ -77,27 +104,23 @@ class LocationService : LifecycleService() {
         intent?.let {
             when (it.action) {
                 START_LOCATION_SERVICE -> {
-                    serviceStatus.value = "Started"
+                    serviceStatus.value = SERVICE_STATUS_STARTED
                     if (!isServiceResumed) {
-                        Log.d("onStartCommand", "SERVICE_STARTED")
                         startForegroundService()
                         isServiceResumed = true
 
                     } else {
-                        Log.d("onStartCommand", "SERVICE_RESUMED")
 //                        startForegroundService()
                         startTimer()
 
                     }
                 }
                 PAUSE_LOCATION_SERVICE -> {
-                    serviceStatus.value = "Paused"
-                    Log.d("onStartCommand", "PAUSE_LOCATION_SERVICE")
+                    serviceStatus.value = SERVICE_STATUS_PAUSED
                     pauseService()
                 }
                 STOP_LOCATION_SERVICE -> {
-                    serviceStatus.value = "Stopped"
-                    Log.d("onStartCommand", "STOP_LOCATION_SERVICE")
+                    serviceStatus.value = SERVICE_STATUS_STOPPED
                     stopService()
                 } else -> return super.onStartCommand(intent, flags, startId)
             }
@@ -139,7 +162,7 @@ class LocationService : LifecycleService() {
         if(isTracking) {
             if (PermissionsUtil.checkPermissions(this)) {
                 val request = LocationRequest().apply {
-                    interval = 5000L
+                    interval = LOCATION_UPDATE_INTERVAL
                     fastestInterval = 2000L
                     priority = PRIORITY_HIGH_ACCURACY
                 }
@@ -160,7 +183,7 @@ class LocationService : LifecycleService() {
             if (isTracking.value!!) {
                 p0.locations.let { locations ->
                     for(location in locations) {
-                        addTrackingpoint(location)
+                        addTrackingPoint(location)
                         Log.d("locationCallback", "latitude: ${location.latitude}  longitude: ${location.longitude}")
                     }
                 }
@@ -169,7 +192,7 @@ class LocationService : LifecycleService() {
 
     }
 
-    private fun addTrackingpoint(location: Location?) {
+    private fun addTrackingPoint(location: Location?) {
         location?.let {
             val position = LatLng(location.latitude, location.longitude)
             trackingPoints.value?.apply {
@@ -196,7 +219,7 @@ class LocationService : LifecycleService() {
         val notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setAutoCancel(false)
             .setOngoing(true)
-            .setContentTitle("Urban Ride")
+            .setContentTitle(R.string.app_name.toString())
             .setContentIntent(getMainActivityIntent())
 
         startForeground(NOTIFICATION_ID, notificationBuilder.build())

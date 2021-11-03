@@ -10,9 +10,17 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 
-
+/**
+ * Класс проверяющий permissions
+ *
+ * @author Андрей Созонов
+ */
 object PermissionsUtil {
 
+
+    /**
+     * Проверяет наличие разрешений на геолокацию у пользователя при старте приложения
+     */
     fun checkPermissions(context: Context): Boolean {
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
