@@ -12,14 +12,14 @@ import javax.inject.Inject
  *
  * @author Андрей Созонов
  */
-class MainRepository @Inject constructor(private val rideDAO: RideDAO) {
+class MainRepository @Inject constructor(private val rideDAO: RideDAO) : BaseRepository {
 
     /**
      * Добавляет поездку в БД
      *
      * @param ride модель данных поездки [Ride]
      */
-    fun addRide(ride: Ride) = rideDAO.addRide(ride)
+    override fun addRide(ride: Ride) = rideDAO.addRide(ride)
 
 
     /**
@@ -27,7 +27,7 @@ class MainRepository @Inject constructor(private val rideDAO: RideDAO) {
      *
      * @param ride модель данных поездки [Ride]
      */
-    fun deleteRide(ride: Ride) = rideDAO.deleteRide(ride)
+    override fun deleteRide(ride: Ride) = rideDAO.deleteRide(ride)
 
 
     /**
@@ -35,7 +35,7 @@ class MainRepository @Inject constructor(private val rideDAO: RideDAO) {
      *
      * @return спиок поездок [Ride]
      */
-    fun getAllRides() : List<Ride> {
+    override fun getAllRides() : List<Ride> {
         return rideDAO.getAllRides()
     }
 

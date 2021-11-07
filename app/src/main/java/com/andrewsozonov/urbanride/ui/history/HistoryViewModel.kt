@@ -5,7 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.andrewsozonov.urbanride.app.App
 import com.andrewsozonov.urbanride.database.Ride
+import com.andrewsozonov.urbanride.repository.BaseRepository
 import com.andrewsozonov.urbanride.repository.MainRepository
+import com.andrewsozonov.urbanride.util.ISchedulersProvider
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -18,24 +20,19 @@ import javax.inject.Inject
  * [ViewModel] прикреплена к [HistoryFragment]
  * Загружает список поездок из БД для отображения во фрагменте
  *
+ * @param repository интерфейс репозитория
+ * @param schedulersProvider интерфейс предоставляющий потоки
+ *
  * @author Андрей Созонов
  */
-class HistoryViewModel : ViewModel() {
+class HistoryViewModel(val repository: BaseRepository, val schedulersProvider: ISchedulersProvider) : ViewModel() {
 
-
-    @Inject
-    lateinit var repository: MainRepository
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     /**
      * [MutableLiveData] хранит модель данных для отображения во фрагменте
      */
     val listOfRides = MutableLiveData<List<Ride>>()
-
-
-    init {
-        App.getAppComponent()?.inject(this)
-    }
 
     /**
      * Удаляет поездку из БД
@@ -47,8 +44,8 @@ class HistoryViewModel : ViewModel() {
             repository.deleteRide(ride)
         }
         compositeDisposable.add(observable
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(schedulersProvider.io())
+            .observeOn(schedulersProvider.ui())
             .subscribe {
                 getRidesFromDB()
             })

@@ -1,6 +1,9 @@
 package com.andrewsozonov.urbanride.app
 
 import android.app.Application
+import com.andrewsozonov.urbanride.di.app.AppComponent
+import com.andrewsozonov.urbanride.di.app.AppModule
+import com.andrewsozonov.urbanride.di.app.DaggerAppComponent
 
 
 class App : Application() {
@@ -17,9 +20,9 @@ class App : Application() {
             return appComponent
         }
 
-        fun setComponent(component: AppComponent?) {
+        /*fun setComponent(component: AppComponent?) {
             appComponent = component
-        }
+        }*/
     }
 
     private fun generateAppComponent(): AppComponent {

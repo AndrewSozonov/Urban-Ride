@@ -7,8 +7,10 @@ import androidx.lifecycle.ViewModel
 import com.andrewsozonov.urbanride.app.App
 import com.andrewsozonov.urbanride.database.Ride
 import com.andrewsozonov.urbanride.model.RideDataModel
+import com.andrewsozonov.urbanride.repository.BaseRepository
 import com.andrewsozonov.urbanride.repository.MainRepository
 import com.andrewsozonov.urbanride.util.DataFormatter
+import com.andrewsozonov.urbanride.util.ISchedulersProvider
 import com.google.android.gms.maps.model.LatLng
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -22,12 +24,13 @@ import javax.inject.Inject
  * Получает данные из фрагмента, вычисляет расстояние и скорость.
  * Сохраняет в базу данных.
  *
+ * @param repository интерфейс репозитория
+ * @param schedulersProvider интерфейс предоставляющий потоки
+ *
  * @author Андрей Созонов
  */
-class RideViewModel : ViewModel() {
+class RideViewModel(val repository: BaseRepository, val schedulersProvider: ISchedulersProvider) : ViewModel() {
 
-    @Inject
-    lateinit var repository: MainRepository
     private var disposable: Disposable? = null
 
     val trackingPoints: List<List<LatLng>> = mutableListOf()
@@ -49,12 +52,8 @@ class RideViewModel : ViewModel() {
     private var speed: Float = 0f
     private var averageSpeed: Float = 0f
 
-    init {
-        App.getAppComponent()?.inject(this)
-    }
-
     /**
-     * Пероводит время в формат HH:MM:SS и обновляет в [timerLiveData]
+     * Переводит время в формат HH:MM:SS и обновляет в [timerLiveData]
      *
      * @param time время в миллисекундах
      */
@@ -106,8 +105,8 @@ class RideViewModel : ViewModel() {
         }
 
         disposable = observable
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(schedulersProvider.io())
+            .observeOn(schedulersProvider.ui())
             .subscribe()
     }
 
@@ -115,5 +114,4 @@ class RideViewModel : ViewModel() {
         super.onCleared()
         disposable?.dispose()
     }
-
 }

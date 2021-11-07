@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import com.andrewsozonov.urbanride.R
+import com.andrewsozonov.urbanride.app.App
 import com.andrewsozonov.urbanride.databinding.FragmentRideBinding
 import com.andrewsozonov.urbanride.model.RideDataModel
 import com.andrewsozonov.urbanride.service.LocationService
@@ -68,7 +69,7 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     private var trackingPoints = mutableListOf<MutableList<LatLng>>()
 
     @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+    lateinit var viewModelFactory: RideViewModelFactory
 
     private val binding get() = _binding!!
 
@@ -78,8 +79,7 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
         savedInstanceState: Bundle?
     ): View {
 
-        rideViewModel =
-            ViewModelProvider(this).get(RideViewModel::class.java)
+        createViewModel()
 
         _binding = FragmentRideBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -123,6 +123,12 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
         buttonStop?.setOnClickListener {
             zoomMapToSaveForDB()
         }
+    }
+
+    private fun createViewModel() {
+        App.getAppComponent()?.activityComponent()?.inject(this)
+        rideViewModel = viewModelFactory.create(RideViewModel::class.java)
+
     }
 
     private fun subscribeToObservers() {
@@ -250,7 +256,7 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
 
     }
 
-    private fun updateRoute() {
+    /*private fun updateRoute() {
         if (trackingPoints.isNotEmpty() && trackingPoints.last().size > 1) {
             val lastLatLng = trackingPoints.last()[trackingPoints.last().size - 2]
             val currentLatLng = trackingPoints.last().last()
@@ -267,7 +273,7 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
             map.addPolyline(polylineOptions)
         }
         moveCameraToCurrentLocation()
-    }
+    }*/
 
     private fun clearMap() {
         map.clear()

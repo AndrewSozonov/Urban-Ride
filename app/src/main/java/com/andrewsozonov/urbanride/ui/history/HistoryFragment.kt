@@ -14,10 +14,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.andrewsozonov.urbanride.R
 import com.andrewsozonov.urbanride.adapter.HistoryItemDecoration
 import com.andrewsozonov.urbanride.adapter.HistoryRecyclerAdapter
+import com.andrewsozonov.urbanride.app.App
 import com.andrewsozonov.urbanride.databinding.FragmentHistoryBinding
 import com.andrewsozonov.urbanride.database.Ride
+import com.andrewsozonov.urbanride.ui.ride.RideViewModel
+import com.andrewsozonov.urbanride.ui.ride.RideViewModelFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
+import javax.inject.Inject
 
 
 /**
@@ -37,13 +41,17 @@ class HistoryFragment : Fragment() {
 
     private val binding get() = _binding!!
 
+    @Inject
+    lateinit var viewModelFactory: HistoryViewModelFactory
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        historyViewModel =
-            ViewModelProvider(this).get(HistoryViewModel::class.java)
+        /*historyViewModel =
+            ViewModelProvider(this).get(HistoryViewModel::class.java)*/
+        createViewModel()
 
         _binding = FragmentHistoryBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -60,6 +68,12 @@ class HistoryFragment : Fragment() {
             setData(it)
             listOfRides = it
         })
+    }
+
+    private fun createViewModel() {
+        App.getAppComponent()?.activityComponent()?.inject(this)
+        historyViewModel = viewModelFactory.create(HistoryViewModel::class.java)
+
     }
 
     private fun initRecyclerView() {
