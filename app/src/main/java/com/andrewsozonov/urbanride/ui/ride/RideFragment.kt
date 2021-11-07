@@ -16,13 +16,13 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import com.andrewsozonov.urbanride.R
 import com.andrewsozonov.urbanride.app.App
 import com.andrewsozonov.urbanride.databinding.FragmentRideBinding
 import com.andrewsozonov.urbanride.model.RideDataModel
 import com.andrewsozonov.urbanride.service.LocationService
+import com.andrewsozonov.urbanride.util.BitmapHelper
 import com.andrewsozonov.urbanride.util.Constants.PAUSE_LOCATION_SERVICE
 import com.andrewsozonov.urbanride.util.Constants.POLYLINE_WIDTH
 import com.andrewsozonov.urbanride.util.Constants.SERVICE_STATUS_PAUSED
@@ -121,6 +121,7 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
             }
         }
         buttonStop?.setOnClickListener {
+            drawFinalRoute()
             zoomMapToSaveForDB()
         }
     }
@@ -256,6 +257,51 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
 
     }
 
+    private fun drawFinalRoute() {
+        if (trackingPoints.isNotEmpty()) {
+            clearMap()
+        }
+        for (line in trackingPoints) {
+            val polylineOptions = PolylineOptions()
+                .width(POLYLINE_WIDTH)
+                .color(resources.getColor(R.color.middle_blue))
+                .jointType(JointType.ROUND)
+                .addAll(line)
+            map.addPolyline(polylineOptions)
+
+        }
+        addMarkers(map)
+        moveCameraToCurrentLocation()
+    }
+
+    private fun addMarkers(googleMap: GoogleMap) {
+        val startMarker = googleMap.addMarker(
+            MarkerOptions()
+                .title("Start")
+                .position(trackingPoints.first().first())
+                .icon(
+                    BitmapHelper.vectorToBitmap(
+                        requireContext(),
+                        R.drawable.ic_start_flag,
+                        resources.getColor(R.color.dark_blue)
+                    )
+                )
+        )
+        val finishMarker = googleMap.addMarker(
+            MarkerOptions()
+                .title("Finish")
+                .position(trackingPoints.last().last())
+                .icon(
+                    BitmapHelper.vectorToBitmap(
+                        requireContext(),
+                        R.drawable.ic_finish_flag,
+                        resources.getColor(R.color.dark_blue)
+                    )
+                )
+
+        )
+    }
+
     /*private fun updateRoute() {
         if (trackingPoints.isNotEmpty() && trackingPoints.last().size > 1) {
             val lastLatLng = trackingPoints.last()[trackingPoints.last().size - 2]
@@ -289,7 +335,7 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
         Log.d("zoomMap", " trackingPoints: $trackingPoints")
 
         if (trackingPoints.any {
-            it.isNotEmpty()
+                it.isNotEmpty()
             }) {
             val bounds = LatLngBounds.Builder()
             for (line in trackingPoints) {
@@ -305,7 +351,7 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
                             bounds.build(),
                             it,
                             it1,
-                            (mapView?.height!! * 0.05f).toInt()
+                            (mapView?.height!! * 0.1f).toInt()
                         )
                     }
                 }

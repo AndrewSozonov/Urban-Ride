@@ -1,6 +1,7 @@
 package com.andrewsozonov.urbanride.service
 
 import android.annotation.SuppressLint
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_LOW
@@ -14,6 +15,7 @@ import android.os.Looper
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import com.andrewsozonov.urbanride.MainActivity
@@ -30,6 +32,7 @@ import com.andrewsozonov.urbanride.util.Constants.SERVICE_STATUS_STARTED
 import com.andrewsozonov.urbanride.util.Constants.SERVICE_STATUS_STOPPED
 import com.andrewsozonov.urbanride.util.Constants.START_LOCATION_SERVICE
 import com.andrewsozonov.urbanride.util.Constants.STOP_LOCATION_SERVICE
+import com.andrewsozonov.urbanride.util.DataFormatter
 import com.andrewsozonov.urbanride.util.PermissionsUtil
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
@@ -151,6 +154,7 @@ class LocationService : LifecycleService() {
             while (isTracking.value == true) {
                 intervalTime = System.currentTimeMillis() - timeStarted
                 rideTime.postValue(totalTime + intervalTime)
+                updateNotification(createNotification())
                 delay(1000)
             }
         }
@@ -216,13 +220,19 @@ class LocationService : LifecycleService() {
             createNotificationChannel(notificationManager)
         }
 
+
+
+        startForeground(NOTIFICATION_ID, createNotification())
+    }
+
+    private fun createNotification(): Notification {
         val notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setAutoCancel(false)
             .setOngoing(true)
-            .setContentTitle(R.string.app_name.toString())
+            .setSmallIcon(R.drawable.ic_ride_white_24dp)
+            .setContentText(rideTime.value?.let { DataFormatter.formatTime(it) })
             .setContentIntent(getMainActivityIntent())
-
-        startForeground(NOTIFICATION_ID, notificationBuilder.build())
+        return notificationBuilder.build()
     }
 
     private fun getMainActivityIntent(): PendingIntent {
@@ -236,6 +246,11 @@ class LocationService : LifecycleService() {
         val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, IMPORTANCE_LOW)
 
         notificationManager.createNotificationChannel(channel)
+    }
+
+    private fun updateNotification(notification: Notification) {
+        val notificationManager = NotificationManagerCompat.from(this)
+        notificationManager.notify(NOTIFICATION_ID, notification)
     }
 
 
