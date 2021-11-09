@@ -103,7 +103,12 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
             map.setOnMyLocationClickListener(this)
 
             subscribeToObservers()
-            drawRoute()
+
+            if (serviceStatus == SERVICE_STATUS_STOPPED && trackingPoints.isNotEmpty()) {
+                drawFinalRoute()
+            } else {
+                drawRoute()
+            }
         }
 
         buttonStart?.setOnClickListener {

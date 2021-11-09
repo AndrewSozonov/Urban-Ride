@@ -3,7 +3,11 @@ package com.andrewsozonov.urbanride.database
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.room.TypeConverter
+import com.google.android.gms.maps.model.LatLng
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.io.ByteArrayOutputStream
+import java.lang.reflect.Type
 
 /**
  * Конвертирует данные для БД
@@ -35,4 +39,21 @@ class Converter {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
         return outputStream.toByteArray()
     }
-}
+
+    @TypeConverter
+    fun fromLatLng(list : List<List<LatLng>>) : String {
+        val gson = Gson()
+        return gson.toJson(list)
+    }
+
+    @TypeConverter
+    fun fromStringToLatLng(jsonString: String) : List<List<LatLng>> {
+        val gson = Gson()
+
+        val type: Type = object : TypeToken<ArrayList<ArrayList<LatLng>>>(){}.type
+        val trackingPoints: List<List<LatLng>> = Gson().fromJson(jsonString, type)
+
+        return trackingPoints
+    }
+
+    }

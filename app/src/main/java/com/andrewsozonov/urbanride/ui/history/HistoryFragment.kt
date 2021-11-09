@@ -5,15 +5,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.andrewsozonov.urbanride.R
 import com.andrewsozonov.urbanride.adapter.HistoryItemDecoration
 import com.andrewsozonov.urbanride.adapter.HistoryRecyclerAdapter
+import com.andrewsozonov.urbanride.adapter.IHistoryRecyclerListener
 import com.andrewsozonov.urbanride.app.App
 import com.andrewsozonov.urbanride.databinding.FragmentHistoryBinding
 import com.andrewsozonov.urbanride.database.Ride
@@ -49,8 +53,7 @@ class HistoryFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        /*historyViewModel =
-            ViewModelProvider(this).get(HistoryViewModel::class.java)*/
+
         createViewModel()
 
         _binding = FragmentHistoryBinding.inflate(inflater, container, false)
@@ -79,7 +82,12 @@ class HistoryFragment : Fragment() {
     private fun initRecyclerView() {
         historyRecyclerView?.setHasFixedSize(true)
         historyRecyclerView?.layoutManager = LinearLayoutManager(requireContext())
-        historyRecyclerAdapter = HistoryRecyclerAdapter()
+        historyRecyclerAdapter = HistoryRecyclerAdapter(object: IHistoryRecyclerListener {
+            override fun onMapClick(position: Int) {
+                openMapFragment(position)
+            }
+
+        })
         historyRecyclerView?.addItemDecoration(HistoryItemDecoration(requireContext(), R.drawable.recycler_item_divider, 20))
         itemTouchHelper = ItemTouchHelper(itemTouchHelperCallBack)
         itemTouchHelper.attachToRecyclerView(historyRecyclerView)
@@ -89,6 +97,13 @@ class HistoryFragment : Fragment() {
     private fun setData(rides: List<Ride>) {
         historyRecyclerAdapter?.setData(rides)
 
+    }
+
+    private fun openMapFragment(position: Int) {
+        Log.d("openMapFragment", " position: $position")
+        val bundle = bundleOf("ID_KEY" to position)
+        val navController = activity?.findNavController(R.id.nav_host_fragment_activity_main)
+        navController?.navigate(R.id.action_navigation_history_to_mapFragment, bundle)
     }
 
     private val itemTouchHelperCallBack = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {

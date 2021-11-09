@@ -33,7 +33,7 @@ class RideViewModel(val repository: BaseRepository, val schedulersProvider: ISch
 
     private var disposable: Disposable? = null
 
-    val trackingPoints: List<List<LatLng>> = mutableListOf()
+    private var trackingPoints: List<List<LatLng>> = mutableListOf()
 
     /**
      * [MutableLiveData] хранит значение таймера для обновления во фрагменте
@@ -69,6 +69,7 @@ class RideViewModel(val repository: BaseRepository, val schedulersProvider: ISch
      * @param trackingPoints список координат
      */
     fun calculateData(trackingPoints: List<List<LatLng>>) {
+        this.trackingPoints = trackingPoints
         distance = DataFormatter.calculateDistance(trackingPoints)
         pointEndTime = ridingTime
         speed = DataFormatter.calculateSpeed(pointEndTime - pointStartTime, trackingPoints)
@@ -93,7 +94,8 @@ class RideViewModel(val repository: BaseRepository, val schedulersProvider: ISch
             distance,
             averageSpeed,
             0.0f,
-            mapImage
+            mapImage,
+            trackingPoints
         )
         addRideToDB(currentRide)
     }

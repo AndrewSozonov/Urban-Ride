@@ -3,6 +3,7 @@ package com.andrewsozonov.urbanride.database
 import android.graphics.Bitmap
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.android.gms.maps.model.LatLng
 
 /**
  * Модель данных для добавления в БД
@@ -25,7 +26,8 @@ data class Ride(
     var distance: Float,
     var averageSpeed: Float,
     var maxSpeed: Float,
-    var mapImg: Bitmap
+    var mapImg: Bitmap,
+    var trackingPoints: List<List<LatLng>>
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null

@@ -19,11 +19,21 @@
         android:id="@+id/navigation_history"
         android:name="com.andrewsozonov.urbanride.ui.history.HistoryFragment"
         android:label="@string/title_history"
-        tools:layout="@layout/fragment_history" />
+        tools:layout="@layout/fragment_history" >
+        <action
+            android:id="@+id/action_navigation_history_to_mapFragment"
+            app:destination="@id/mapFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_settings"
         android:name="com.andrewsozonov.urbanride.ui.settings.SettingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.andrewsozonov.urbanride.MapFragment"
+        android:label="map_fragment"
+        tools:layout="@layout/map_fragment" />
+
 </navigation>

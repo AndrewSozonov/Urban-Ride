@@ -89,6 +89,7 @@ class LocationService : LifecycleService() {
 
     private fun initLocationLiveData() {
         isTracking.postValue(false)
+        trackingPoints.value?.clear()
         trackingPoints.postValue(mutableListOf())
         rideTime.postValue(0L)
     }
@@ -109,13 +110,14 @@ class LocationService : LifecycleService() {
                 START_LOCATION_SERVICE -> {
                     serviceStatus.value = SERVICE_STATUS_STARTED
                     if (!isServiceResumed) {
+                        initLocationLiveData()
+                        Log.d("START_LOCATION_SERVICE", "tracking points: ${trackingPoints.value}")
                         startForegroundService()
                         isServiceResumed = true
 
                     } else {
 //                        startForegroundService()
                         startTimer()
-
                     }
                 }
                 PAUSE_LOCATION_SERVICE -> {
@@ -135,9 +137,9 @@ class LocationService : LifecycleService() {
         serviceStopped = true
         isServiceResumed = false
         pauseService()
-        initLocationLiveData()
         stopForeground(true)
         stopSelf()
+//        initLocationLiveData()
     }
 
     private fun pauseService() {
@@ -193,7 +195,6 @@ class LocationService : LifecycleService() {
                 }
             }
         }
-
     }
 
     private fun addTrackingPoint(location: Location?) {
@@ -212,6 +213,7 @@ class LocationService : LifecycleService() {
     } ?: trackingPoints.postValue(mutableListOf(mutableListOf()))
 
     private fun startForegroundService() {
+
         startTimer()
         isTracking.postValue(true)
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -219,9 +221,6 @@ class LocationService : LifecycleService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel(notificationManager)
         }
-
-
-
         startForeground(NOTIFICATION_ID, createNotification())
     }
 

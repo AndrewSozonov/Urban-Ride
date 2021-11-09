@@ -3,6 +3,7 @@ package com.andrewsozonov.urbanride.adapter
 import android.content.res.Resources
 import android.transition.AutoTransition
 import android.transition.TransitionManager
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View.GONE
@@ -19,7 +20,7 @@ import com.andrewsozonov.urbanride.database.Ride
  *
  * @author Андрей Созонов
  */
-class HistoryRecyclerAdapter : RecyclerView.Adapter<HistoryViewHolder>() {
+class HistoryRecyclerAdapter(val listener : IHistoryRecyclerListener) : RecyclerView.Adapter<HistoryViewHolder>() {
 
     private var data: List<Ride> = mutableListOf()
 
@@ -44,6 +45,12 @@ class HistoryRecyclerAdapter : RecyclerView.Adapter<HistoryViewHolder>() {
             } else {
                 closeItemView(holder)
             }
+        }
+
+        holder.mapImageView.setOnClickListener {
+            Log.d("onBindViewHolder", " tracking points: ${data[position].trackingPoints.size}")
+            Log.d("onBindViewHolder", " tracking points: ${data[position].trackingPoints}")
+            data[position].id?.let { id -> listener.onMapClick(id) }
         }
     }
 
