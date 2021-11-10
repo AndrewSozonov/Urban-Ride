@@ -1,4 +1,4 @@
-package com.andrewsozonov.urbanride.service
+package com.andrewsozonov.urbanride.presentation.service
 
 import android.annotation.SuppressLint
 import android.app.Notification
@@ -18,9 +18,10 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
-import com.andrewsozonov.urbanride.MainActivity
 import com.andrewsozonov.urbanride.R
-import com.google.android.gms.location.LocationCallback
+import com.andrewsozonov.urbanride.app.App
+import com.andrewsozonov.urbanride.presentation.MainActivity
+import com.andrewsozonov.urbanride.presentation.model.LocationPoint
 import com.andrewsozonov.urbanride.util.Constants.ACTION_SHOW_RIDING_FRAGMENT
 import com.andrewsozonov.urbanride.util.Constants.LOCATION_UPDATE_INTERVAL
 import com.andrewsozonov.urbanride.util.Constants.NOTIFICATION_CHANNEL_ID
@@ -32,17 +33,19 @@ import com.andrewsozonov.urbanride.util.Constants.SERVICE_STATUS_STARTED
 import com.andrewsozonov.urbanride.util.Constants.SERVICE_STATUS_STOPPED
 import com.andrewsozonov.urbanride.util.Constants.START_LOCATION_SERVICE
 import com.andrewsozonov.urbanride.util.Constants.STOP_LOCATION_SERVICE
+import com.andrewsozonov.urbanride.util.Constants.TIMER_DELAY
 import com.andrewsozonov.urbanride.util.DataFormatter
 import com.andrewsozonov.urbanride.util.PermissionsUtil
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationResult
-import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Сервис получает геолокацию устройства
@@ -53,38 +56,45 @@ import kotlinx.coroutines.launch
  */
 class LocationService : LifecycleService() {
 
+    @Inject
+    lateinit var viewModelFactory: LocationViewModelFactory
+    private lateinit var locationViewModel: LocationServiceViewModel
+
 
     private var isServiceResumed = false
     private var serviceStopped = false
-    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private var isTimerEnabled = false
     private var intervalTime = 0L
     private var totalTime = 0L
     private var timeStarted = 0L
-    private var lastSecondTimestamp = 0L
 
-    companion object {
-        /**
-         * Хранит статус сервиса [SERVICE_STATUS_STARTED],
-         * [SERVICE_STATUS_PAUSED],
-         * [SERVICE_STATUS_STOPPED]
-         */
-        val serviceStatus = MutableLiveData<String>()
+    private val isTracking = MutableLiveData<Boolean>()
 
-        /**
-         * Хранит значение получает ли в данный момент сервис геолокацию или нет
-         */
-        val isTracking = MutableLiveData<Boolean>()
+    private val trackingPoints = MutableLiveData<MutableList<MutableList<LocationPoint>>>()
+    private val rideTime = MutableLiveData<Long>()
+    private val currentSpeed = MutableLiveData<Float>()
+    private val serviceStatus = MutableLiveData<String>()
 
-        /**
-         * Список координат полученных от сервиса
-         */
-        val trackingPoints = MutableLiveData<MutableList<MutableList<LatLng>>>()
 
-        /**
-         * Время текущей поездки в миллисекундах
-         */
-        val rideTime = MutableLiveData<Long>()
+    override fun onCreate() {
+        super.onCreate()
+        createViewModel()
+
+        trackingPoints.observe(this, {
+            locationViewModel.updateTrackingPoints(it)
+        })
+
+        rideTime.observe(this, {
+            locationViewModel.updateTimerValue(it)
+        })
+
+        isTracking.observe(this, {
+            updateLocationTracking(it)
+        })
+
+        initLocationLiveData()
+        fusedLocationProviderClient = FusedLocationProviderClient(this)
     }
 
     private fun initLocationLiveData() {
@@ -94,40 +104,34 @@ class LocationService : LifecycleService() {
         rideTime.postValue(0L)
     }
 
-    override fun onCreate() {
-        super.onCreate()
-        initLocationLiveData()
-        fusedLocationProviderClient = FusedLocationProviderClient(this)
+    private fun createViewModel() {
+        App.getAppComponent()?.activityComponent()?.inject(this)
+        locationViewModel = viewModelFactory.create(LocationServiceViewModel::class.java)
 
-        isTracking.observe(this, {
-            updateLocationTracking(it)
-        })
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.let {
             when (it.action) {
                 START_LOCATION_SERVICE -> {
-                    serviceStatus.value = SERVICE_STATUS_STARTED
+                    locationViewModel.updateServiceStatus(SERVICE_STATUS_STARTED)
                     if (!isServiceResumed) {
                         initLocationLiveData()
-                        Log.d("START_LOCATION_SERVICE", "tracking points: ${trackingPoints.value}")
                         startForegroundService()
                         isServiceResumed = true
-
                     } else {
-//                        startForegroundService()
                         startTimer()
                     }
                 }
                 PAUSE_LOCATION_SERVICE -> {
-                    serviceStatus.value = SERVICE_STATUS_PAUSED
+                    locationViewModel.updateServiceStatus(SERVICE_STATUS_PAUSED)
                     pauseService()
                 }
                 STOP_LOCATION_SERVICE -> {
-                    serviceStatus.value = SERVICE_STATUS_STOPPED
+                    locationViewModel.updateServiceStatus(SERVICE_STATUS_STOPPED)
                     stopService()
-                } else -> return super.onStartCommand(intent, flags, startId)
+                }
+                else -> return super.onStartCommand(intent, flags, startId)
             }
         }
         return super.onStartCommand(intent, flags, startId)
@@ -139,7 +143,6 @@ class LocationService : LifecycleService() {
         pauseService()
         stopForeground(true)
         stopSelf()
-//        initLocationLiveData()
     }
 
     private fun pauseService() {
@@ -157,15 +160,15 @@ class LocationService : LifecycleService() {
                 intervalTime = System.currentTimeMillis() - timeStarted
                 rideTime.postValue(totalTime + intervalTime)
                 updateNotification(createNotification())
-                delay(1000)
+                delay(TIMER_DELAY)
             }
         }
-       totalTime += intervalTime
+        totalTime += intervalTime
     }
 
     @SuppressLint("MissingPermission")
     private fun updateLocationTracking(isTracking: Boolean) {
-        if(isTracking) {
+        if (isTracking) {
             if (PermissionsUtil.checkPermissions(this)) {
                 val request = LocationRequest().apply {
                     interval = LOCATION_UPDATE_INTERVAL
@@ -188,9 +191,14 @@ class LocationService : LifecycleService() {
             super.onLocationResult(p0)
             if (isTracking.value!!) {
                 p0.locations.let { locations ->
-                    for(location in locations) {
+                    for (location in locations) {
                         addTrackingPoint(location)
-                        Log.d("locationCallback", "latitude: ${location.latitude}  longitude: ${location.longitude}")
+                        currentSpeed.value = location.speed / 1000 * 3600
+                        /*Log.d("LocationCallBack", " currentSpeed: ${currentSpeed.value}")
+                        Log.d(
+                            "locationCallback",
+                            "latitude: ${location.latitude}  longitude: ${location.longitude}"
+                        )*/
                     }
                 }
             }
@@ -199,7 +207,9 @@ class LocationService : LifecycleService() {
 
     private fun addTrackingPoint(location: Location?) {
         location?.let {
-            val position = LatLng(location.latitude, location.longitude)
+//            val position = LatLng(location.latitude, location.longitude)
+            val position =
+                LocationPoint(location.latitude, location.longitude, location.speed, totalTime)
             trackingPoints.value?.apply {
                 last().add(position)
                 trackingPoints.postValue(this)
@@ -216,7 +226,8 @@ class LocationService : LifecycleService() {
 
         startTimer()
         isTracking.postValue(true)
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel(notificationManager)
@@ -242,7 +253,8 @@ class LocationService : LifecycleService() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel(notificationManager: NotificationManager) {
-        val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, IMPORTANCE_LOW)
+        val channel =
+            NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, IMPORTANCE_LOW)
 
         notificationManager.createNotificationChannel(channel)
     }
@@ -251,6 +263,4 @@ class LocationService : LifecycleService() {
         val notificationManager = NotificationManagerCompat.from(this)
         notificationManager.notify(NOTIFICATION_ID, notification)
     }
-
-
 }

@@ -1,6 +1,7 @@
 package com.andrewsozonov.urbanride.util
 
 import android.location.Location
+import com.andrewsozonov.urbanride.presentation.model.LocationPoint
 import com.google.android.gms.maps.model.LatLng
 import java.math.RoundingMode
 import java.util.concurrent.TimeUnit
@@ -38,7 +39,27 @@ object DataFormatter {
      * @param trackingPoints список из списков с координатами
      * @return возвращает расстояние между всеми координатами в км
      */
-    fun calculateDistance(trackingPoints: List<List<LatLng>>): Float {
+    /*fun calculateDistance(trackingPoints: List<List<LatLng>>): Float {
+        var distance = 0.0
+        for (path in trackingPoints) {
+            for (i in 0..path.size - 2) {
+                val point1 = path[i]
+                val point2 = path[i + 1]
+                val result = FloatArray(1)
+                Location.distanceBetween(
+                    point1.latitude,
+                    point1.longitude,
+                    point2.latitude,
+                    point2.longitude,
+                    result
+                )
+                distance += result[0]
+            }
+        }
+        return distance.toInt().toFloat() / 1000
+    }*/
+
+    fun calculateDistance(trackingPoints: List<List<LocationPoint>>): Float {
         var distance = 0.0
         for (path in trackingPoints) {
             for (i in 0..path.size - 2) {
@@ -65,7 +86,30 @@ object DataFormatter {
      * @param trackingPoints список координат
      * @return возвращает скорость между двумя последними координатами в км/ч
      */
-    fun calculateSpeed(ridingTime: Long, trackingPoints: List<List<LatLng>>): Float {
+    /*fun calculateSpeed(ridingTime: Long, trackingPoints: List<List<LatLng>>): Float {
+
+        if (trackingPoints.isNotEmpty() && trackingPoints.last().size > 1 && ridingTime > 1000) {
+
+            val currentLatLng = trackingPoints.last().last()
+            val lastLatLng = trackingPoints.last()[trackingPoints.last().size - 2]
+
+            val result = FloatArray(1)
+            Location.distanceBetween(
+                currentLatLng.latitude,
+                currentLatLng.longitude,
+                lastLatLng.latitude,
+                lastLatLng.longitude,
+                result
+            )
+
+            return ((result[0] / 1000f) / (ridingTime / 1000f / 60 / 60)).toBigDecimal()
+                .setScale(2, RoundingMode.HALF_UP).toFloat()
+
+        } else
+            return 0.0f
+    }*/
+
+    fun calculateSpeed(ridingTime: Long, trackingPoints: List<List<LocationPoint>>): Float {
 
         if (trackingPoints.isNotEmpty() && trackingPoints.last().size > 1 && ridingTime > 1000) {
 

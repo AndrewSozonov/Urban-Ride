@@ -11,13 +11,13 @@
 
     <fragment
         android:id="@+id/navigation_ride"
-        android:name="com.andrewsozonov.urbanride.ui.ride.RideFragment"
+        android:name="com.andrewsozonov.urbanride.presentation.ride.RideFragment"
         android:label="@string/title_ride"
         tools:layout="@layout/fragment_ride" />
 
     <fragment
         android:id="@+id/navigation_history"
-        android:name="com.andrewsozonov.urbanride.ui.history.HistoryFragment"
+        android:name="com.andrewsozonov.urbanride.presentation.history.HistoryFragment"
         android:label="@string/title_history"
         tools:layout="@layout/fragment_history" >
         <action
@@ -27,12 +27,12 @@
 
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="com.andrewsozonov.urbanride.ui.settings.SettingsFragment"
+        android:name="com.andrewsozonov.urbanride.presentation.settings.SettingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.andrewsozonov.urbanride.MapFragment"
+        android:name="com.andrewsozonov.urbanride.presentation.map.MapFragment"
         android:label="map_fragment"
         tools:layout="@layout/map_fragment" />
 

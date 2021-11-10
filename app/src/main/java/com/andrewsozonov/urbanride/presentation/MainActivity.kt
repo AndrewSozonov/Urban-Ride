@@ -1,4 +1,4 @@
-package com.andrewsozonov.urbanride
+package com.andrewsozonov.urbanride.presentation
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +8,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
+import com.andrewsozonov.urbanride.R
 import com.andrewsozonov.urbanride.databinding.ActivityMainBinding
 import com.andrewsozonov.urbanride.util.Constants.ACTION_SHOW_RIDING_FRAGMENT
 import com.google.android.material.bottomnavigation.BottomNavigationView

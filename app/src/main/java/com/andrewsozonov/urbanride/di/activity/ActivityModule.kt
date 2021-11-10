@@ -1,8 +1,10 @@
 package com.andrewsozonov.urbanride.di.activity
 
 import com.andrewsozonov.urbanride.repository.BaseRepository
-import com.andrewsozonov.urbanride.ui.history.HistoryViewModelFactory
-import com.andrewsozonov.urbanride.ui.ride.RideViewModelFactory
+import com.andrewsozonov.urbanride.presentation.service.LocationViewModelFactory
+import com.andrewsozonov.urbanride.presentation.history.HistoryViewModelFactory
+import com.andrewsozonov.urbanride.presentation.map.MapViewModelFactory
+import com.andrewsozonov.urbanride.presentation.ride.RideViewModelFactory
 import com.andrewsozonov.urbanride.util.ISchedulersProvider
 import dagger.Module
 import dagger.Provides
@@ -31,5 +33,20 @@ class ActivityModule {
         schedulersProvider: ISchedulersProvider
     ): HistoryViewModelFactory {
         return HistoryViewModelFactory(repository, schedulersProvider)
+    }
+
+    @Provides
+    fun provideLocationViewModelFactory(
+        repository: BaseRepository,
+    ): LocationViewModelFactory {
+        return LocationViewModelFactory(repository)
+    }
+
+    @Provides
+    fun provideMapViewModelFactory(
+        repository: BaseRepository,
+        schedulersProvider: ISchedulersProvider
+    ): MapViewModelFactory {
+        return MapViewModelFactory(repository, schedulersProvider)
     }
 }

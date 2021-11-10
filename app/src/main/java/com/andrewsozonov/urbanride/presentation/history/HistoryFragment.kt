@@ -1,4 +1,4 @@
-package com.andrewsozonov.urbanride.ui.history
+package com.andrewsozonov.urbanride.presentation.history
 
 import android.os.Bundle
 import android.util.Log
@@ -7,24 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.andrewsozonov.urbanride.R
-import com.andrewsozonov.urbanride.adapter.HistoryItemDecoration
-import com.andrewsozonov.urbanride.adapter.HistoryRecyclerAdapter
-import com.andrewsozonov.urbanride.adapter.IHistoryRecyclerListener
+import com.andrewsozonov.urbanride.presentation.history.adapter.HistoryItemDecoration
+import com.andrewsozonov.urbanride.presentation.history.adapter.HistoryRecyclerAdapter
+import com.andrewsozonov.urbanride.presentation.history.adapter.IHistoryRecyclerListener
 import com.andrewsozonov.urbanride.app.App
 import com.andrewsozonov.urbanride.databinding.FragmentHistoryBinding
 import com.andrewsozonov.urbanride.database.Ride
-import com.andrewsozonov.urbanride.ui.ride.RideViewModel
-import com.andrewsozonov.urbanride.ui.ride.RideViewModelFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapView
 import javax.inject.Inject
 
 

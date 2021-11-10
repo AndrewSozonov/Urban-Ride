@@ -1,19 +1,16 @@
-package com.andrewsozonov.urbanride.ui.history
+package com.andrewsozonov.urbanride.presentation.history
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.andrewsozonov.urbanride.app.App
 import com.andrewsozonov.urbanride.database.Ride
 import com.andrewsozonov.urbanride.repository.BaseRepository
-import com.andrewsozonov.urbanride.repository.MainRepository
 import com.andrewsozonov.urbanride.util.ISchedulersProvider
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
 
 
 /**

@@ -3,6 +3,7 @@ package com.andrewsozonov.urbanride.database
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.room.TypeConverter
+import com.andrewsozonov.urbanride.presentation.model.LocationPoint
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -40,13 +41,19 @@ class Converter {
         return outputStream.toByteArray()
     }
 
-    @TypeConverter
+    /*@TypeConverter
     fun fromLatLng(list : List<List<LatLng>>) : String {
+        val gson = Gson()
+        return gson.toJson(list)
+    }*/
+
+    @TypeConverter
+    fun fromLatLng(list : List<List<LocationPoint>>) : String {
         val gson = Gson()
         return gson.toJson(list)
     }
 
-    @TypeConverter
+    /*@TypeConverter
     fun fromStringToLatLng(jsonString: String) : List<List<LatLng>> {
         val gson = Gson()
 
@@ -54,6 +61,16 @@ class Converter {
         val trackingPoints: List<List<LatLng>> = Gson().fromJson(jsonString, type)
 
         return trackingPoints
+    }*/
+
+    @TypeConverter
+    fun fromStringToLatLng(jsonString: String) : List<List<LocationPoint>> {
+        val gson = Gson()
+
+        val type: Type = object : TypeToken<ArrayList<ArrayList<LocationPoint>>>(){}.type
+        val trackingPoints: List<List<LocationPoint>> = Gson().fromJson(jsonString, type)
+
+        return trackingPoints
     }
 
-    }
+}

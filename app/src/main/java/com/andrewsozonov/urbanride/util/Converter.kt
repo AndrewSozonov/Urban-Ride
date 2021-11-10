@@ -1,5 +1,7 @@
 package com.andrewsozonov.urbanride.util
 
+import com.andrewsozonov.urbanride.presentation.model.LocationPoint
+import com.google.android.gms.maps.model.LatLng
 import java.text.DecimalFormat
 
 /**
@@ -21,4 +23,22 @@ object Converter {
         val df = DecimalFormat("###.##")
         return df.format(miles).toDouble()
     }
+
+    fun convertLocationPointToLatLng(point: LocationPoint): LatLng {
+        return LatLng(point.latitude, point.longitude)
+    }
+
+    fun convertListLocationPointToListLatLng(points: List<List<LocationPoint>>): List<List<LatLng>> {
+        val trackingPoints: MutableList<MutableList<LatLng>> = mutableListOf()
+        for (list in points) {
+            val listLatLng: MutableList<LatLng> = mutableListOf()
+            for (point in list) {
+                val latLng = LatLng(point.latitude, point.longitude)
+                listLatLng.add(latLng)
+            }
+            trackingPoints.add(listLatLng)
+        }
+        return trackingPoints
+    }
+
 }

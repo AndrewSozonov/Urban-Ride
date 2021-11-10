@@ -3,6 +3,7 @@ package com.andrewsozonov.urbanride.database
 import android.graphics.Bitmap
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.andrewsozonov.urbanride.presentation.model.LocationPoint
 import com.google.android.gms.maps.model.LatLng
 
 /**
@@ -18,7 +19,7 @@ import com.google.android.gms.maps.model.LatLng
  *
  * @author Андрей Созонов
  */
-@Entity(tableName = "riding_table")
+/*@Entity(tableName = "riding_table")
 data class Ride(
     var startTime: Long,
     var finishTime: Long,
@@ -28,6 +29,21 @@ data class Ride(
     var maxSpeed: Float,
     var mapImg: Bitmap,
     var trackingPoints: List<List<LatLng>>
+) {
+    @PrimaryKey(autoGenerate = true)
+    var id: Int? = null
+}*/
+
+@Entity(tableName = "riding_table")
+data class Ride(
+    var startTime: Long,
+    var finishTime: Long,
+    var duration: Long,
+    var distance: Float,
+    var averageSpeed: Float,
+    var maxSpeed: Float,
+    var mapImg: Bitmap,
+    var trackingPoints: List<List<LocationPoint>>
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null

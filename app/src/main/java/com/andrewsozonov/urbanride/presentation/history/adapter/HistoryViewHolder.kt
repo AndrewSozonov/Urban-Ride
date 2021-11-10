@@ -1,4 +1,4 @@
-package com.andrewsozonov.urbanride.adapter
+package com.andrewsozonov.urbanride.presentation.history.adapter
 
 import android.content.res.Resources
 import android.view.View

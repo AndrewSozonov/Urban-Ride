@@ -1,4 +1,4 @@
-package com.andrewsozonov.urbanride.ui.settings
+package com.andrewsozonov.urbanride.presentation.settings
 
 import android.os.Bundle
 import androidx.preference.Preference

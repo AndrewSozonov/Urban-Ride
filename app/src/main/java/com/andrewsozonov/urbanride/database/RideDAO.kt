@@ -34,4 +34,8 @@ interface RideDAO {
      */
     @Query("SELECT * FROM riding_table")
     fun getAllRides(): List<Ride>
+
+
+    @Query("SELECT * FROM riding_table WHERE id = :id")
+    fun getRideByID(id: Int): Ride
 }

@@ -1,4 +1,4 @@
-package com.andrewsozonov.urbanride.ui.ride
+package com.andrewsozonov.urbanride.presentation.ride
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

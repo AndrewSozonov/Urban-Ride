@@ -1,4 +1,4 @@
-package com.andrewsozonov.urbanride.ui.ride
+package com.andrewsozonov.urbanride.presentation.ride
 
 import android.Manifest
 import android.content.Intent
@@ -11,7 +11,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -21,7 +20,7 @@ import com.andrewsozonov.urbanride.R
 import com.andrewsozonov.urbanride.app.App
 import com.andrewsozonov.urbanride.databinding.FragmentRideBinding
 import com.andrewsozonov.urbanride.model.RideDataModel
-import com.andrewsozonov.urbanride.service.LocationService
+import com.andrewsozonov.urbanride.presentation.service.LocationService
 import com.andrewsozonov.urbanride.util.BitmapHelper
 import com.andrewsozonov.urbanride.util.Constants.PAUSE_LOCATION_SERVICE
 import com.andrewsozonov.urbanride.util.Constants.POLYLINE_WIDTH
@@ -36,7 +35,6 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.*
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import javax.inject.Inject
 
 /**
@@ -55,22 +53,20 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     private lateinit var rideViewModel: RideViewModel
     private var _binding: FragmentRideBinding? = null
     private lateinit var map: GoogleMap
-
     private var mapView: MapView? = null
 
-    private var buttonStart: FloatingActionButton? = null
-    private var buttonStop: FloatingActionButton? = null
-    private var distanceTextView: TextView? = null
-    private var speedTextView: TextView? = null
-    private var averageSpeedTextView: TextView? = null
-    private var timer: TextView? = null
+//    private var buttonStart: FloatingActionButton? = null
+//    private var buttonStop: FloatingActionButton? = null
+//    private var distanceTextView: TextView? = null
+//    private var speedTextView: TextView? = null
+//    private var averageSpeedTextView: TextView? = null
+//    private var timer: TextView? = null
 
-    private var serviceStatus: String = SERVICE_STATUS_STOPPED
-    private var trackingPoints = mutableListOf<MutableList<LatLng>>()
+    private var trackingStatus: String = SERVICE_STATUS_STOPPED
+    private var trackingPoints = listOf<List<LatLng>>()
 
     @Inject
     lateinit var viewModelFactory: RideViewModelFactory
-
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -83,14 +79,13 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
 
         _binding = FragmentRideBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
         mapView = binding.mapView
-        buttonStart = binding.startRideButton
-        buttonStop = binding.stopRideButton
-        timer = binding.durationTextView
-        distanceTextView = binding.distanceTextView
-        speedTextView = binding.speedTextView
-        averageSpeedTextView = binding.averageSpeedTextView
+//        buttonStart = binding.startRideButton
+//        buttonStop = binding.stopRideButton
+//        timer = binding.durationTextView
+//        distanceTextView = binding.distanceTextView
+//        speedTextView = binding.speedTextView
+//        averageSpeedTextView = binding.averageSpeedTextView
         return root
     }
 
@@ -104,28 +99,40 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
 
             subscribeToObservers()
 
-            if (serviceStatus == SERVICE_STATUS_STOPPED && trackingPoints.isNotEmpty()) {
+            if (trackingStatus == SERVICE_STATUS_STOPPED && trackingPoints.isNotEmpty()) {
                 drawFinalRoute()
             } else {
                 drawRoute()
             }
+
         }
 
-        buttonStart?.setOnClickListener {
+        binding.startRideButton.setOnClickListener {
             if (PermissionsUtil.checkPermissions(requireContext())) {
-                when (serviceStatus) {
-                    SERVICE_STATUS_STARTED -> operateService(PAUSE_LOCATION_SERVICE)
-                    SERVICE_STATUS_PAUSED -> operateService(START_LOCATION_SERVICE)
+                when (trackingStatus) {
+                    SERVICE_STATUS_STARTED -> {
+                        trackingStatus = SERVICE_STATUS_PAUSED
+                        operateService(PAUSE_LOCATION_SERVICE)
+                    }
+
+                    SERVICE_STATUS_PAUSED -> {
+                        trackingStatus = SERVICE_STATUS_STARTED
+                        operateService(START_LOCATION_SERVICE)
+                    }
                     else -> {
+                        trackingStatus = SERVICE_STATUS_STARTED
                         clearMap()
                         operateService(START_LOCATION_SERVICE)
                     }
                 }
+                updateUi()
             } else {
                 showPermissionToast()
             }
         }
-        buttonStop?.setOnClickListener {
+        binding.stopRideButton.setOnClickListener {
+            trackingStatus = SERVICE_STATUS_STOPPED
+            updateUi()
             drawFinalRoute()
             zoomMapToSaveForDB()
         }
@@ -138,26 +145,18 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     }
 
     private fun subscribeToObservers() {
-        LocationService.serviceStatus.observe(viewLifecycleOwner, {
-            updateUi(it)
-        })
 
-        LocationService.rideTime.observe(viewLifecycleOwner, {
-            rideViewModel.calculateTime(it)
+        rideViewModel.serviceStatus.observe(viewLifecycleOwner, {
+            trackingStatus = it
+            updateUi()
         })
-
-        LocationService.trackingPoints.observe(viewLifecycleOwner, {
-            trackingPoints = it
-//            updateRoute()
-            drawRoute()
-            rideViewModel.calculateData(trackingPoints)
-        })
-
         rideViewModel.timerLiveData.observe(viewLifecycleOwner, {
             updateTimer(it)
         })
 
         rideViewModel.data.observe(viewLifecycleOwner, {
+            trackingPoints = it.trackingPoints
+            drawRoute()
             updateData(it)
         })
     }
@@ -170,7 +169,6 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
 
     private fun stopRide() {
         operateService(STOP_LOCATION_SERVICE)
-        buttonStop?.visibility = GONE
     }
 
     override fun onMyLocationButtonClick(): Boolean {
@@ -180,26 +178,25 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     override fun onMyLocationClick(p0: Location) {
     }
 
-    private fun updateUi(serviceStatus: String) {
-        this.serviceStatus = serviceStatus
-        when (serviceStatus) {
+    private fun updateUi() {
+        when (trackingStatus) {
             SERVICE_STATUS_STARTED -> {
-                buttonStart?.setImageLevel(1)
-                buttonStop?.visibility = GONE
+                binding.startRideButton.setImageLevel(1)
+                binding.stopRideButton.visibility = GONE
             }
             SERVICE_STATUS_PAUSED -> {
-                buttonStart?.setImageLevel(0)
-                buttonStop?.visibility = VISIBLE
+                binding.startRideButton.setImageLevel(0)
+                binding.stopRideButton.visibility = VISIBLE
             }
             SERVICE_STATUS_STOPPED -> {
-                buttonStart?.setImageLevel(0)
-                buttonStop?.visibility = GONE
+                binding.startRideButton.setImageLevel(0)
+                binding.stopRideButton.visibility = GONE
             }
         }
     }
 
     private fun updateTimer(time: String) {
-        timer?.text = time
+        binding.durationTextView.text = time
     }
 
     private fun updateData(model: RideDataModel) {
@@ -212,20 +209,21 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
             )
 
         if (metricSystemChose == getString(R.string.units_kilometers)) {
-            speedTextView?.text = resources.getString(R.string.km_h, model.speed.toString())
-            distanceTextView?.text = resources.getString(R.string.km, model.distance.toString())
-            averageSpeedTextView?.text =
+            binding.speedTextView.text = resources.getString(R.string.km_h, model.speed.toString())
+            binding.distanceTextView.text =
+                resources.getString(R.string.km, model.distance.toString())
+            binding.averageSpeedTextView.text =
                 resources.getString(R.string.km_h, model.averageSpeed.toString())
         } else {
-            speedTextView?.text = resources.getString(
+            binding.speedTextView.text = resources.getString(
                 R.string.miles_h,
                 Converter.convertKilometersToMiles(model.speed).toString()
             )
-            distanceTextView?.text = resources.getString(
+            binding.distanceTextView.text = resources.getString(
                 R.string.miles,
                 Converter.convertKilometersToMiles(model.distance).toString()
             )
-            averageSpeedTextView?.text = resources.getString(
+            binding.averageSpeedTextView.text = resources.getString(
                 R.string.miles_h,
                 Converter.convertKilometersToMiles(model.averageSpeed).toString()
             )
@@ -280,7 +278,7 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     }
 
     private fun addMarkers(googleMap: GoogleMap) {
-        val startMarker = googleMap.addMarker(
+        googleMap.addMarker(
             MarkerOptions()
                 .title("Start")
                 .position(trackingPoints.first().first())
@@ -292,7 +290,7 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
                     )
                 )
         )
-        val finishMarker = googleMap.addMarker(
+        googleMap.addMarker(
             MarkerOptions()
                 .title("Finish")
                 .position(trackingPoints.last().last())
@@ -303,28 +301,8 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
                         resources.getColor(R.color.dark_blue)
                     )
                 )
-
         )
     }
-
-    /*private fun updateRoute() {
-        if (trackingPoints.isNotEmpty() && trackingPoints.last().size > 1) {
-            val lastLatLng = trackingPoints.last()[trackingPoints.last().size - 2]
-            val currentLatLng = trackingPoints.last().last()
-            val polylineOptions = PolylineOptions()
-                .width(POLYLINE_WIDTH)
-                .color(R.color.middle_cyan)
-                .jointType(JointType.ROUND)
-                .add(lastLatLng, currentLatLng)
-                .endCap(
-                    CustomCap(
-                        BitmapDescriptorFactory.fromResource(R.drawable.ic_arrow), 6f
-                    )
-                )
-            map.addPolyline(polylineOptions)
-        }
-        moveCameraToCurrentLocation()
-    }*/
 
     private fun clearMap() {
         map.clear()
@@ -337,8 +315,6 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     }
 
     private fun zoomMapToSaveForDB() {
-        Log.d("zoomMap", " trackingPoints: $trackingPoints")
-
         if (trackingPoints.any {
                 it.isNotEmpty()
             }) {
@@ -382,36 +358,27 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     override fun onStart() {
         super.onStart()
         mapView?.onStart()
-        Log.d("onStart", "mapView: $mapView")
-
     }
 
     override fun onResume() {
         super.onResume()
         mapView?.onResume()
         drawRoute()
-        Log.d("onResume", "mapView: $mapView")
-
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         mapView?.onSaveInstanceState(outState)
-        Log.d("onSaveInstanceState", "mapView: $mapView")
-
     }
 
     override fun onPause() {
         super.onPause()
         mapView?.onPause()
-        Log.d("onPause", "mapView: $mapView")
     }
 
     override fun onStop() {
         super.onStop()
         mapView?.onStop()
-        Log.d("onStop", "mapView: $mapView")
-
     }
 
     override fun onDestroyView() {
@@ -453,13 +420,13 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
                     registerForActivityResult(
                         ActivityResultContracts.RequestPermission()
                     ) {
-                        Log.e("DEBUG", "ACCESS_FINE_LOCATION = ${it}")
+                        Log.e("DEBUG", "ACCESS_FINE_LOCATION = $it")
                     }
                 val requestPermissionLauncher2 =
                     registerForActivityResult(
                         ActivityResultContracts.RequestPermission()
                     ) {
-                        Log.e("DEBUG", "ACCESS_BACKGROUND_LOCATION = ${it}")
+                        Log.e("DEBUG", "ACCESS_BACKGROUND_LOCATION = $it")
                     }
                 requestPermissionLauncher.launch(
                     Manifest.permission.ACCESS_FINE_LOCATION
