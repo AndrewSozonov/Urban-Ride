@@ -20,7 +20,6 @@ interface BaseRepository {
 
     fun updateTimerValue(time: Long)
 
-//    fun updateLocation(trackingPoints: MutableList<MutableList<LatLng>>)
     fun updateLocation(trackingPoints: MutableList<MutableList<LocationPoint>>)
 
     fun getTimerValue() : MutableLiveData<String>
@@ -28,9 +27,6 @@ interface BaseRepository {
     fun updateServiceStatus(status: String)
 
     fun getServiceStatus(): LiveData<String>
-
-    fun getTrackingPoints() : MutableLiveData<List<List<LatLng>>>
-//    fun getTrackingPoints() : MutableLiveData<List<List<LocationPoint>>>
 
     fun getTrackingData() : MutableLiveData<RideDataModel>
 }

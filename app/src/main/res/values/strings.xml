@@ -27,4 +27,8 @@
     <string name="history_date_pattern">dd.MM.yy</string>
     <string name="history_time_pattern">HH:mm</string>
     <string name="permission_toast">This application require Location permission to work properly</string>
+    <string name="graph_time_axis">time (minutes)</string>
+    <string name="graph_speed_axis">speed (km/h)</string>
+    <string name="start">Start</string>
+    <string name="finish">Finish</string>
 </resources>

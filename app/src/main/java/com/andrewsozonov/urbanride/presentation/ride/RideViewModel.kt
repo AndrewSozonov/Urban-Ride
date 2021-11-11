@@ -28,10 +28,7 @@ class RideViewModel(val repository: BaseRepository, val schedulersProvider: ISch
 
     private var disposable: Disposable? = null
 
-
-
     val serviceStatus: LiveData<String> = repository.getServiceStatus()
-
 
     /**
      * [MutableLiveData] хранит значение таймера для обновления во фрагменте

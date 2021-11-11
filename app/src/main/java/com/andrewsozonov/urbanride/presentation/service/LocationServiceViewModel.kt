@@ -11,10 +11,6 @@ class LocationServiceViewModel(val repository: BaseRepository) : ViewModel() {
         repository.updateTimerValue(time)
     }
 
-    /*fun updateTrackingPoints(trackingPoints: MutableList<MutableList<LatLng>>) {
-        repository.updateLocation(trackingPoints)
-    }*/
-
     fun updateTrackingPoints(trackingPoints: MutableList<MutableList<LocationPoint>>) {
         repository.updateLocation(trackingPoints)
     }

@@ -74,8 +74,6 @@ class LocationService : LifecycleService() {
     private val trackingPoints = MutableLiveData<MutableList<MutableList<LocationPoint>>>()
     private val rideTime = MutableLiveData<Long>()
     private val currentSpeed = MutableLiveData<Float>()
-    private val serviceStatus = MutableLiveData<String>()
-
 
     override fun onCreate() {
         super.onCreate()
@@ -209,8 +207,9 @@ class LocationService : LifecycleService() {
         location?.let {
 //            val position = LatLng(location.latitude, location.longitude)
             val position =
-                LocationPoint(location.latitude, location.longitude, location.speed, totalTime)
+                LocationPoint(location.latitude, location.longitude, location.speed, rideTime.value!!)
             trackingPoints.value?.apply {
+                Log.d("addTrackingPoint", "lat: ${position.latitude}  long: ${position.longitude}  speed: ${position.speed}  time: ${position.time}")
                 last().add(position)
                 trackingPoints.postValue(this)
             }

@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.andrewsozonov.urbanride.R
@@ -200,7 +201,6 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     }
 
     private fun updateData(model: RideDataModel) {
-
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
         val metricSystemChose =
             sharedPrefs.getString(
@@ -238,7 +238,7 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
             if (trackingPoints.last() == line) {
                 val polylineOptions = PolylineOptions()
                     .width(POLYLINE_WIDTH)
-                    .color(resources.getColor(R.color.middle_blue))
+                    .color(ContextCompat.getColor(requireContext(), R.color.middle_blue ))
                     .jointType(JointType.ROUND)
                     .addAll(line)
                     .endCap(
@@ -250,7 +250,7 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
             } else {
                 val polylineOptions = PolylineOptions()
                     .width(POLYLINE_WIDTH)
-                    .color(resources.getColor(R.color.middle_blue))
+                    .color(ContextCompat.getColor(requireContext(), R.color.middle_blue ))
                     .jointType(JointType.ROUND)
                     .addAll(line)
                 map.addPolyline(polylineOptions)
@@ -267,7 +267,7 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
         for (line in trackingPoints) {
             val polylineOptions = PolylineOptions()
                 .width(POLYLINE_WIDTH)
-                .color(resources.getColor(R.color.middle_blue))
+                .color(ContextCompat.getColor(requireContext(), R.color.middle_blue ))
                 .jointType(JointType.ROUND)
                 .addAll(line)
             map.addPolyline(polylineOptions)
@@ -280,25 +280,25 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     private fun addMarkers(googleMap: GoogleMap) {
         googleMap.addMarker(
             MarkerOptions()
-                .title("Start")
+                .title(getString(R.string.start))
                 .position(trackingPoints.first().first())
                 .icon(
                     BitmapHelper.vectorToBitmap(
                         requireContext(),
                         R.drawable.ic_start_flag,
-                        resources.getColor(R.color.dark_blue)
+                        ContextCompat.getColor(requireContext(), R.color.dark_blue )
                     )
                 )
         )
         googleMap.addMarker(
             MarkerOptions()
-                .title("Finish")
+                .title(getString(R.string.finish))
                 .position(trackingPoints.last().last())
                 .icon(
                     BitmapHelper.vectorToBitmap(
                         requireContext(),
                         R.drawable.ic_finish_flag,
-                        resources.getColor(R.color.dark_blue)
+                        ContextCompat.getColor(requireContext(), R.color.dark_blue )
                     )
                 )
         )

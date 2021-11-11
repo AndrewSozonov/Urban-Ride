@@ -57,7 +57,9 @@
         android:textColor="?colorOnSurface"
         android:textSize="@dimen/field_name_text_size"
         app:layout_constraintStart_toStartOf="@id/mapView"
-        app:layout_constraintTop_toBottomOf="@id/separator1" />
+        app:layout_constraintTop_toBottomOf="@id/separator1"
+        app:drawableStartCompat="@drawable/ic_speed"
+        android:drawablePadding="5dp"/>
 
     <TextView
         android:id="@+id/speed_textView"
@@ -88,7 +90,9 @@
         android:textColor="?colorOnSurface"
         android:textSize="@dimen/field_name_text_size"
         app:layout_constraintStart_toStartOf="@id/mapView"
-        app:layout_constraintTop_toBottomOf="@id/separator2" />
+        app:layout_constraintTop_toBottomOf="@id/separator2"
+        app:drawableStartCompat="@drawable/ic_avg_speed"
+        android:drawablePadding="5dp" />
 
     <TextView
         android:id="@+id/average_speed_textView"

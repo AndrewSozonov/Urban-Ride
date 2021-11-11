@@ -1,10 +1,9 @@
 package com.andrewsozonov.urbanride.presentation.history.adapter
 
 import android.content.res.Resources
+import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +12,10 @@ import com.andrewsozonov.urbanride.database.Ride
 import com.andrewsozonov.urbanride.util.Converter
 import com.andrewsozonov.urbanride.util.DataFormatter
 import com.bumptech.glide.Glide
+import com.jjoe64.graphview.GraphView
+import com.jjoe64.graphview.LegendRenderer
+import com.jjoe64.graphview.series.DataPoint
+import com.jjoe64.graphview.series.LineGraphSeries
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -39,7 +42,10 @@ class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val distanceFieldName: TextView = itemView.findViewById(R.id.distance_field_name)
     val averageSpeedFieldName: TextView = itemView.findViewById(R.id.average_speed_field_name)
     val maxSpeedFieldName: TextView = itemView.findViewById(R.id.max_speed_field_name)
+    val showGraphButton: ImageButton = itemView.findViewById(R.id.show_graph_textView)
+    val graphRootView: FrameLayout = itemView.findViewById(R.id.graph_root_view)
     var mapImageView: ImageView = itemView.findViewById(R.id.history_map)
+    var graph: GraphView = itemView.findViewById(R.id.graph)
     private val resources: Resources = itemView.resources
 
     /**
@@ -80,5 +86,28 @@ class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .with(itemView.context)
             .load(ride.mapImg)
             .into(mapImageView)
+
+        buildGraph(ride)
+    }
+
+    private fun buildGraph(ride: Ride) {
+        val series: LineGraphSeries<DataPoint> = LineGraphSeries()
+
+        for (line in ride.trackingPoints) {
+            for (point in line) {
+                val x = (point.time / 1000).toDouble()
+                val y = point.speed.toDouble()
+                Log.d("buildGraph", " x: $x  y: $y")
+                series.appendData(DataPoint(x, y), true, 100)
+            }
+        }
+
+        graph.addSeries(series)
+//        series.title = "time/speed"
+//        graph.legendRenderer.isVisible = true
+//        graph.legendRenderer.align = LegendRenderer.LegendAlign.TOP
+        graph.gridLabelRenderer.horizontalAxisTitle = itemView.context.getString(R.string.graph_time_axis)
+        graph.gridLabelRenderer.verticalAxisTitle = itemView.context.getString(R.string.graph_speed_axis)
+        graph.viewport.isScalable = true
     }
 }

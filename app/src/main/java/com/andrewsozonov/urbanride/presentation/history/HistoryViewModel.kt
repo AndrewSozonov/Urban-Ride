@@ -41,10 +41,15 @@ class HistoryViewModel(val repository: BaseRepository, val schedulersProvider: I
             repository.deleteRide(ride)
         }
         compositeDisposable.add(observable
+            .andThen(
+                Single.fromCallable { repository.getAllRides() }
+            )
             .subscribeOn(schedulersProvider.io())
             .observeOn(schedulersProvider.ui())
-            .subscribe {
-                getRidesFromDB()
+            .subscribe { t1, t2 ->
+                t1?.let(listOfRides::setValue)
+                Log.d("getRidesFromDB", " listOfRides $t1")
+
             })
     }
 
@@ -55,13 +60,11 @@ class HistoryViewModel(val repository: BaseRepository, val schedulersProvider: I
         val singleObservable = Single.fromCallable {
             repository.getAllRides()
         }
-
         compositeDisposable.add(singleObservable
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(schedulersProvider.io())
+            .observeOn(schedulersProvider.ui())
             .subscribe({
                 listOfRides.value = it
-                Log.d("getRidesFromDB", " listOfRides $it")
             }, {})
         )
     }

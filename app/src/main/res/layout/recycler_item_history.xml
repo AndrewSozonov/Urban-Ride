@@ -9,8 +9,8 @@
         android:id="@+id/item_cardView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:elevation="20dp"
-        android:backgroundTint="@color/light_cyan">
+        android:backgroundTint="@color/light_cyan"
+        android:elevation="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -121,10 +121,10 @@
                     android:layout_height="20dp"
                     android:background="@drawable/arrow_up"
                     android:rotation="180"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -138,21 +138,21 @@
                     android:id="@+id/distance_field_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="@id/distance_textView"
                     android:layout_marginTop="@dimen/margin_between_fields"
                     android:text="@string/distance"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"
+                    app:layout_constraintStart_toStartOf="@id/distance_textView"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/distance_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/distance_field_name"
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="@dimen/margin_between_name_and_field"
-                    android:text="8.2 km" />
+                    android:text="8.2 km"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/distance_field_name" />
 
                 <View
                     android:id="@+id/separator1"
@@ -167,20 +167,20 @@
                     android:id="@+id/average_speed_field_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/separator1"
-                    app:layout_constraintStart_toStartOf="@id/distance_textView"
                     android:layout_marginTop="@dimen/margin_between_fields"
                     android:text="@string/avg_speed"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"
+                    app:layout_constraintStart_toStartOf="@id/distance_textView"
+                    app:layout_constraintTop_toBottomOf="@id/separator1" />
 
                 <TextView
                     android:id="@+id/average_speed_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="@id/distance_textView"
-                    app:layout_constraintTop_toBottomOf="@id/average_speed_field_name"
                     android:layout_marginTop="@dimen/margin_between_name_and_field"
-                    android:text="14.5 km/h " />
+                    android:text="14.5 km/h "
+                    app:layout_constraintStart_toStartOf="@id/distance_textView"
+                    app:layout_constraintTop_toBottomOf="@id/average_speed_field_name" />
 
                 <View
                     android:id="@+id/separator2"
@@ -195,37 +195,67 @@
                     android:id="@+id/max_speed_field_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/separator2"
-                    app:layout_constraintStart_toStartOf="@id/distance_textView"
                     android:layout_marginTop="@dimen/margin_between_fields"
                     android:text="@string/max_speed"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"
+                    app:layout_constraintStart_toStartOf="@id/distance_textView"
+                    app:layout_constraintTop_toBottomOf="@id/separator2" />
 
                 <TextView
                     android:id="@+id/max_speed_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="@id/distance_textView"
-                    app:layout_constraintTop_toBottomOf="@id/max_speed_field_name"
                     android:layout_marginTop="@dimen/margin_between_name_and_field"
                     android:layout_marginBottom="15dp"
-                    android:text="17.3 km/h" />
+                    android:text="17.3 km/h"
+                    app:layout_constraintStart_toStartOf="@id/distance_textView"
+                    app:layout_constraintTop_toBottomOf="@id/max_speed_field_name" />
+
+                <ImageButton
+                    android:id="@+id/show_graph_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_between_name_and_field"
+                    android:layout_marginBottom="15dp"
+                    android:src="@drawable/ic_chart_icon"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    app:layout_constraintEnd_toEndOf="@id/max_speed_field_name"
+                    app:layout_constraintBottom_toBottomOf="@id/history_map"/>
 
                 <ImageView
                     android:id="@+id/history_map"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintHeight_percent="0.9"
-                    app:layout_constraintWidth_percent="0.7"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/imageview_border"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:background="@drawable/imageview_border"
-                     />
+                    app:layout_constraintHeight_percent="0.9"
+                    app:layout_constraintWidth_percent="0.7" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <FrameLayout
+                android:id="@+id/graph_root_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/history_map" >
+
+
+                <com.jjoe64.graphview.GraphView
+                    android:id="@+id/graph"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginHorizontal="@dimen/map_margin"/>
+            </FrameLayout>
+
+
+
+
+
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

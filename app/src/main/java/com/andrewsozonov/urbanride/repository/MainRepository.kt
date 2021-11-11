@@ -9,7 +9,6 @@ import com.andrewsozonov.urbanride.model.RideDataModel
 import com.andrewsozonov.urbanride.presentation.model.LocationPoint
 import com.andrewsozonov.urbanride.util.Converter
 import com.andrewsozonov.urbanride.util.DataFormatter
-import com.google.android.gms.maps.model.LatLng
 import java.util.*
 import javax.inject.Inject
 
@@ -23,26 +22,20 @@ import javax.inject.Inject
  */
 class MainRepository @Inject constructor(private val rideDAO: RideDAO) : BaseRepository {
 
-//    private var trackingPoints: List<List<LatLng>> = mutableListOf()
     private var trackingPoints: List<List<LocationPoint>> = mutableListOf()
-
-
     private var ridingTime: Long = 0L
     private var pointStartTime: Long = 0
     private var pointEndTime: Long = 0
-    private var distance:Float = 0f
+    private var distance: Float = 0f
     private var speed: Float = 0f
     private var averageSpeed: Float = 0f
 
     private val serviceStatusLiveData: MutableLiveData<String> = MutableLiveData()
     private val timerLiveData: MutableLiveData<String> = MutableLiveData()
     private val data: MutableLiveData<RideDataModel> = MutableLiveData()
-    private val locationLiveData: MutableLiveData<List<List<LatLng>>> = MutableLiveData()
-//    private val locationLiveData: MutableLiveData<List<List<LocationPoint>>> = MutableLiveData()
-
 
     override fun getTimerValue(): MutableLiveData<String> {
-        return  timerLiveData
+        return timerLiveData
     }
 
     override fun updateServiceStatus(status: String) {
@@ -53,18 +46,9 @@ class MainRepository @Inject constructor(private val rideDAO: RideDAO) : BaseRep
         return serviceStatusLiveData
     }
 
-    override fun getTrackingPoints(): MutableLiveData<List<List<LatLng>>> {
-        return locationLiveData
-    }
-
-    /*override fun getTrackingPoints(): MutableLiveData<List<List<LocationPoint>>> {
-        return locationLiveData
-    }*/
-
     override fun getTrackingData(): MutableLiveData<RideDataModel> {
         return data
     }
-
 
     /**
      * Добавляет поездку в БД
@@ -84,10 +68,10 @@ class MainRepository @Inject constructor(private val rideDAO: RideDAO) : BaseRep
             averageSpeed,
             0.0f,
             mapImage,
-            trackingPoints)
+            trackingPoints
+        )
         rideDAO.addRide(currentRide)
     }
-
 
     /**
      * Удаляет поездку из БД
@@ -96,13 +80,12 @@ class MainRepository @Inject constructor(private val rideDAO: RideDAO) : BaseRep
      */
     override fun deleteRide(ride: Ride) = rideDAO.deleteRide(ride)
 
-
     /**
      * Получает список всех поездок из БД
      *
      * @return спиок поездок [Ride]
      */
-    override fun getAllRides() : List<Ride> {
+    override fun getAllRides(): List<Ride> {
         return rideDAO.getAllRides()
     }
 
@@ -115,16 +98,8 @@ class MainRepository @Inject constructor(private val rideDAO: RideDAO) : BaseRep
         timerLiveData.value = DataFormatter.formatTime(ridingTime)
     }
 
-    /*override fun updateLocation(trackingPoints: MutableList<MutableList<LatLng>>) {
-        this.trackingPoints = trackingPoints
-        locationLiveData.value = this.trackingPoints
-        calculateData(trackingPoints)
-    }*/
-
     override fun updateLocation(trackingPoints: MutableList<MutableList<LocationPoint>>) {
         this.trackingPoints = trackingPoints
-//        locationLiveData.value = this.trackingPoints
-        locationLiveData.value = Converter.convertListLocationPointToListLatLng(trackingPoints)
         calculateData(trackingPoints)
     }
 
@@ -134,28 +109,21 @@ class MainRepository @Inject constructor(private val rideDAO: RideDAO) : BaseRep
      *
      * @param trackingPoints список координат
      */
-    /*private fun calculateData(trackingPoints: List<List<LatLng>>) {
-        this.trackingPoints = trackingPoints
-        distance = DataFormatter.calculateDistance(trackingPoints)
-        pointEndTime = ridingTime
-        speed = DataFormatter.calculateSpeed(pointEndTime - pointStartTime, trackingPoints)
-        pointStartTime = pointEndTime
-        averageSpeed = DataFormatter.calculateAverageSpeed(ridingTime, distance)
-        data.value = RideDataModel(distance, speed, averageSpeed)
-    }*/
-
     private fun calculateData(trackingPoints: List<List<LocationPoint>>) {
-        this.trackingPoints = trackingPoints
+//        this.trackingPoints = trackingPoints
         distance = DataFormatter.calculateDistance(trackingPoints)
         pointEndTime = ridingTime
-//        speed = DataFormatter.calculateSpeed(pointEndTime - pointStartTime, trackingPoints)
-//        speed = trackingPoints.last().last().speed
 
-
-        speed = if (trackingPoints.last().isNotEmpty()) trackingPoints.last().last().speed / 1000 * 3600 else 0f
+        speed = if (trackingPoints.last().isNotEmpty()) trackingPoints.last()
+            .last().speed / 1000 * 3600 else 0f
 
         pointStartTime = pointEndTime
         averageSpeed = DataFormatter.calculateAverageSpeed(ridingTime, distance)
-        data.value = RideDataModel(distance, speed, averageSpeed, Converter.convertListLocationPointToListLatLng(trackingPoints) )
+        data.value = RideDataModel(
+            distance,
+            speed,
+            averageSpeed,
+            Converter.convertListLocationPointToListLatLng(trackingPoints)
+        )
     }
 }

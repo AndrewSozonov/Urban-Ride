@@ -1,18 +1,17 @@
 package com.andrewsozonov.urbanride.presentation.map
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.andrewsozonov.urbanride.R
 import com.andrewsozonov.urbanride.app.App
 import com.andrewsozonov.urbanride.databinding.MapFragmentBinding
 import com.andrewsozonov.urbanride.util.BitmapHelper
 import com.andrewsozonov.urbanride.util.Constants
+import com.andrewsozonov.urbanride.util.Constants.BUNDLE_RIDE_ID_KEY
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -47,7 +46,7 @@ class MapFragment : Fragment() {
         mapView?.onCreate(savedInstanceState)
         mapView?.getMapAsync {
             map = it
-            arguments?.getInt("ID_KEY")?.let { id -> viewModel.getRide(id) }
+            arguments?.getInt(BUNDLE_RIDE_ID_KEY)?.let { id -> viewModel.getRide(id) }
             subscribeToObservers()
         }
     }
@@ -72,7 +71,7 @@ class MapFragment : Fragment() {
         for (line in trackingPoints) {
             val polylineOptions = PolylineOptions()
                 .width(Constants.POLYLINE_WIDTH)
-                .color(resources.getColor(R.color.middle_blue))
+                .color(ContextCompat.getColor(requireContext(), R.color.middle_blue ))
                 .jointType(JointType.ROUND)
                 .addAll(line)
             map.addPolyline(polylineOptions)
@@ -85,25 +84,25 @@ class MapFragment : Fragment() {
     private fun addMarkers(googleMap: GoogleMap) {
         googleMap.addMarker(
             MarkerOptions()
-                .title("Start")
+                .title(getString(R.string.start))
                 .position(trackingPoints.first().first())
                 .icon(
                     BitmapHelper.vectorToBitmap(
                         requireContext(),
                         R.drawable.ic_start_flag,
-                        resources.getColor(R.color.dark_blue)
+                        ContextCompat.getColor(requireContext(), R.color.dark_blue )
                     )
                 )
         )
         googleMap.addMarker(
             MarkerOptions()
-                .title("Finish")
+                .title(getString(R.string.finish))
                 .position(trackingPoints.last().last())
                 .icon(
                     BitmapHelper.vectorToBitmap(
                         requireContext(),
                         R.drawable.ic_finish_flag,
-                        resources.getColor(R.color.dark_blue)
+                        ContextCompat.getColor(requireContext(), R.color.dark_blue )
                     )
                 )
         )

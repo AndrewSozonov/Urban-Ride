@@ -3,7 +3,6 @@ package com.andrewsozonov.urbanride.presentation.history.adapter
 import android.content.res.Resources
 import android.transition.AutoTransition
 import android.transition.TransitionManager
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View.GONE
@@ -20,7 +19,7 @@ import com.andrewsozonov.urbanride.database.Ride
  *
  * @author Андрей Созонов
  */
-class HistoryRecyclerAdapter(val listener : IHistoryRecyclerListener) : RecyclerView.Adapter<HistoryViewHolder>() {
+class HistoryRecyclerAdapter(private val listener : IHistoryRecyclerListener) : RecyclerView.Adapter<HistoryViewHolder>() {
 
     private var data: List<Ride> = mutableListOf()
 
@@ -44,13 +43,16 @@ class HistoryRecyclerAdapter(val listener : IHistoryRecyclerListener) : Recycler
                 expandItemView(holder)
             } else {
                 closeItemView(holder)
+                closeGraph(holder)
             }
         }
 
         holder.mapImageView.setOnClickListener {
-            Log.d("onBindViewHolder", " tracking points: ${data[position].trackingPoints.size}")
-            Log.d("onBindViewHolder", " tracking points: ${data[position].trackingPoints}")
             data[position].id?.let { id -> listener.onMapClick(id) }
+        }
+
+        holder.showGraphButton.setOnClickListener {
+            showGraph(holder)
         }
     }
 
@@ -105,5 +107,19 @@ class HistoryRecyclerAdapter(val listener : IHistoryRecyclerListener) : Recycler
         holder.distanceFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
         holder.averageSpeedFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
         holder.maxSpeedFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
+    }
+
+    private fun showGraph(holder: HistoryViewHolder) {
+        if (holder.graphRootView.visibility == GONE) {
+            TransitionManager.beginDelayedTransition(holder.cardView, AutoTransition())
+            holder.graphRootView.visibility = VISIBLE
+        } else {
+            closeGraph(holder)
+        }
+    }
+
+    private fun closeGraph(holder: HistoryViewHolder) {
+        TransitionManager.beginDelayedTransition(holder.cardView, AutoTransition())
+        holder.graphRootView.visibility = GONE
     }
 }
