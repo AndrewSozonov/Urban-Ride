@@ -3,7 +3,6 @@ package com.andrewsozonov.urbanride.presentation.map
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.andrewsozonov.urbanride.repository.BaseRepository
-import com.andrewsozonov.urbanride.util.Converter
 import com.andrewsozonov.urbanride.util.ISchedulersProvider
 import com.google.android.gms.maps.model.LatLng
 import io.reactivex.Single
@@ -22,9 +21,8 @@ class MapViewModel(val repository: BaseRepository, val schedulersProvider: ISche
         disposable = singleObservable
             .subscribeOn(schedulersProvider.io())
             .observeOn(schedulersProvider.ui())
-            .map { Converter.convertListLocationPointToListLatLng(it.trackingPoints) }
             .subscribe({
-                trackingPoints.value = it
+                trackingPoints.value = it.trackingPoints
             }, {})
     }
 

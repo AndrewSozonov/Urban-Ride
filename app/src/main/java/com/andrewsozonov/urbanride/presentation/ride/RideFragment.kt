@@ -30,7 +30,7 @@ import com.andrewsozonov.urbanride.util.Constants.SERVICE_STATUS_STARTED
 import com.andrewsozonov.urbanride.util.Constants.SERVICE_STATUS_STOPPED
 import com.andrewsozonov.urbanride.util.Constants.START_LOCATION_SERVICE
 import com.andrewsozonov.urbanride.util.Constants.STOP_LOCATION_SERVICE
-import com.andrewsozonov.urbanride.util.Converter
+import com.andrewsozonov.urbanride.util.DataFormatter
 import com.andrewsozonov.urbanride.util.PermissionsUtil
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -56,13 +56,6 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     private lateinit var map: GoogleMap
     private var mapView: MapView? = null
 
-//    private var buttonStart: FloatingActionButton? = null
-//    private var buttonStop: FloatingActionButton? = null
-//    private var distanceTextView: TextView? = null
-//    private var speedTextView: TextView? = null
-//    private var averageSpeedTextView: TextView? = null
-//    private var timer: TextView? = null
-
     private var trackingStatus: String = SERVICE_STATUS_STOPPED
     private var trackingPoints = listOf<List<LatLng>>()
 
@@ -81,12 +74,6 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
         _binding = FragmentRideBinding.inflate(inflater, container, false)
         val root: View = binding.root
         mapView = binding.mapView
-//        buttonStart = binding.startRideButton
-//        buttonStop = binding.stopRideButton
-//        timer = binding.durationTextView
-//        distanceTextView = binding.distanceTextView
-//        speedTextView = binding.speedTextView
-//        averageSpeedTextView = binding.averageSpeedTextView
         return root
     }
 
@@ -217,15 +204,15 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
         } else {
             binding.speedTextView.text = resources.getString(
                 R.string.miles_h,
-                Converter.convertKilometersToMiles(model.speed).toString()
+                DataFormatter.convertKilometersToMiles(model.speed).toString()
             )
             binding.distanceTextView.text = resources.getString(
                 R.string.miles,
-                Converter.convertKilometersToMiles(model.distance).toString()
+                DataFormatter.convertKilometersToMiles(model.distance).toString()
             )
             binding.averageSpeedTextView.text = resources.getString(
                 R.string.miles_h,
-                Converter.convertKilometersToMiles(model.averageSpeed).toString()
+                DataFormatter.convertKilometersToMiles(model.averageSpeed).toString()
             )
         }
     }

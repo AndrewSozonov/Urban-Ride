@@ -16,7 +16,7 @@ interface BaseRepository {
 
     fun getAllRides() : List<Ride>
 
-    fun getRideById(id: Int) : Ride
+    fun getRideById(id: Int) : RideDataModel
 
     fun updateTimerValue(time: Long)
 

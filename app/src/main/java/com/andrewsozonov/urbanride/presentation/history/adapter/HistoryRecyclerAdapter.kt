@@ -54,6 +54,10 @@ class HistoryRecyclerAdapter(private val listener : IHistoryRecyclerListener) : 
         holder.showGraphButton.setOnClickListener {
             showGraph(holder)
         }
+
+        holder.shareButton.setOnClickListener {
+            listener.onShareClick(position)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -113,6 +117,7 @@ class HistoryRecyclerAdapter(private val listener : IHistoryRecyclerListener) : 
         if (holder.graphRootView.visibility == GONE) {
             TransitionManager.beginDelayedTransition(holder.cardView, AutoTransition())
             holder.graphRootView.visibility = VISIBLE
+            holder.timeSpeedRadioButton.performClick()
         } else {
             closeGraph(holder)
         }

@@ -1,6 +1,12 @@
 package com.andrewsozonov.urbanride.presentation.history
 
+import android.content.ContentValues
+import android.content.Intent
+import android.graphics.*
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +25,8 @@ import com.andrewsozonov.urbanride.presentation.history.adapter.HistoryRecyclerA
 import com.andrewsozonov.urbanride.presentation.history.adapter.IHistoryRecyclerListener
 import com.andrewsozonov.urbanride.util.Constants.BUNDLE_RIDE_ID_KEY
 import com.andrewsozonov.urbanride.util.Constants.RECYCLER_ITEMS_SPACING
+import com.andrewsozonov.urbanride.util.DataFormatter
+import java.io.OutputStream
 import javax.inject.Inject
 
 
@@ -78,6 +86,10 @@ class HistoryFragment : Fragment() {
                 openMapFragment(position)
             }
 
+            override fun onShareClick(position: Int) {
+                showShareSheet(position)
+            }
+
         })
         historyRecyclerView?.addItemDecoration(
             HistoryItemDecoration(
@@ -99,6 +111,97 @@ class HistoryFragment : Fragment() {
         val bundle = bundleOf(BUNDLE_RIDE_ID_KEY to position)
         val navController = activity?.findNavController(R.id.nav_host_fragment_activity_main)
         navController?.navigate(R.id.action_navigation_history_to_mapFragment, bundle)
+    }
+
+    private fun showShareSheet(position: Int) {
+
+        val shareMapImage = createBitmapForSharing(position)
+
+        val shareIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            val contentValues = ContentValues()
+            contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+            contentValues.put(MediaStore.Images.Media.IS_PENDING, 1)
+
+            val resolver = requireActivity().contentResolver
+            val imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+            val fos: OutputStream? = imageUri?.let { resolver.openOutputStream(it) }
+            shareMapImage.compress(Bitmap.CompressFormat.PNG, 100, fos)
+            fos?.flush()
+            fos?.close()
+
+            contentValues.clear()
+            contentValues.put(MediaStore.Images.Media.IS_PENDING, 0)
+            resolver.update(imageUri!!, contentValues, null, null)
+
+            shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri)
+            shareIntent.type = "image/*"
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            startActivity(Intent.createChooser(shareIntent, "Select the app"))
+        } else {
+            val path: String = MediaStore.Images.Media.insertImage(
+                requireActivity().contentResolver,
+                shareMapImage,
+                null,
+                null
+            )
+            if (path.isNotEmpty()) {
+                shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(path))
+                shareIntent.type = "image/*"
+                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                startActivity(Intent.createChooser(shareIntent, "Select the app"))
+            }
+
+        }
+    }
+
+    private fun createBitmapForSharing(position: Int): Bitmap {
+
+        val mapImage: Bitmap = listOfRides[position].mapImg
+
+        val shareMapImage = mapImage.copy(mapImage.config, true)
+
+        val canvas = Canvas(shareMapImage)
+        val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        fillPaint.style = Paint.Style.FILL
+        fillPaint.color = resources.getColor(R.color.middle_blue)
+        fillPaint.textSize = 48f
+//        fillPaint.setShadowLayer(2f, 0f, 1f, Color.BLACK)
+
+        val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        strokePaint.style = Paint.Style.STROKE
+        strokePaint.color = resources.getColor(R.color.white)
+        strokePaint.strokeWidth = 0.5f
+        strokePaint.textSize = 48f
+        fillPaint.setShadowLayer(2f, 0f, 1f, Color.BLACK)
+
+
+        val horizontalMargin = 40f
+        val verticalMargin = 30f
+        val distanceTextBounds = Rect()
+        val distance = "Distance ${listOfRides[position].distance} km"
+        fillPaint.getTextBounds(
+            distance,
+            0,
+            listOfRides[position].distance.toString().length,
+            distanceTextBounds
+        )
+        var distanceX: Float = horizontalMargin
+        val y: Float = verticalMargin + distanceTextBounds.height()
+        canvas.drawText(distance, distanceX, y, fillPaint)
+        canvas.drawText(distance, distanceX, y, strokePaint)
+
+        val timeTextBounds = Rect()
+        val duration: String =
+            "Duration ${DataFormatter.formatTime(listOfRides[position].duration)}"
+        fillPaint.getTextBounds(duration, 0, duration.length, timeTextBounds)
+        val timeX = (shareMapImage.width - horizontalMargin - timeTextBounds.width())
+        canvas.drawText(duration, timeX, y, fillPaint)
+        canvas.drawText(duration, timeX, y, strokePaint)
+        return shareMapImage
     }
 
     private val itemTouchHelperCallBack =

@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.andrewsozonov.urbanride.database.RideDAO
 import com.andrewsozonov.urbanride.database.RidingDatabase
 import com.andrewsozonov.urbanride.repository.BaseRepository
+import com.andrewsozonov.urbanride.repository.Converter
 import com.andrewsozonov.urbanride.repository.MainRepository
 import com.andrewsozonov.urbanride.util.ISchedulersProvider
 import com.andrewsozonov.urbanride.util.SchedulersProvider
@@ -23,9 +24,9 @@ class AppModule(var application: Application) {
     @Singleton
     @Provides
     fun provideRepository(
-        rideDAO: RideDAO,
+        rideDAO: RideDAO, converter: Converter
     ): BaseRepository {
-        return MainRepository(rideDAO)
+        return MainRepository(rideDAO, converter)
     }
 
     @Singleton
@@ -37,6 +38,11 @@ class AppModule(var application: Application) {
             "room_database"
         ).build()
         return appDatabase.getRideDAO()
+    }
+
+    @Provides
+    fun provideConverter(): Converter {
+        return Converter()
     }
 
     @Provides

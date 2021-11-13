@@ -205,9 +205,8 @@ class LocationService : LifecycleService() {
 
     private fun addTrackingPoint(location: Location?) {
         location?.let {
-//            val position = LatLng(location.latitude, location.longitude)
             val position =
-                LocationPoint(location.latitude, location.longitude, location.speed, rideTime.value!!)
+                LocationPoint(location.latitude, location.longitude, location.speed, rideTime.value!!, 0f)
             trackingPoints.value?.apply {
                 Log.d("addTrackingPoint", "lat: ${position.latitude}  long: ${position.longitude}  speed: ${position.speed}  time: ${position.time}")
                 last().add(position)
