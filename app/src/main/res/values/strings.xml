@@ -19,6 +19,9 @@
     <string name="max_speed">Max speed</string>
     <string name="avg_speed">Avg. speed</string>
 
+    <string name="distance_share_image">Distance %1$s km</string>
+    <string name="duration_share_image">Duration %1$s</string>
+
     <string name="units_kilometers">Kilometers</string>
     <string name="units_miles">Miles</string>
 
@@ -28,8 +31,13 @@
     <string name="history_time_pattern">HH:mm</string>
     <string name="permission_toast">This application require Location permission to work properly</string>
     <string name="graph_time_axis">time (minutes)</string>
-    <string name="graph_speed_axis">speed (km/h)</string>
+    <string name="graph_speed_axis_km">speed (km/h)</string>
+    <string name="graph_speed_axis_mile">speed (mile/h)</string>
     <string name="start">Start</string>
     <string name="finish">Finish</string>
-    <string name="graph_distance_axis">distance (km)</string>
+    <string name="graph_distance_axis_km">distance (km)</string>
+    <string name="graph_distance_axis_mile">distance (mile)</string>
+
+    <string name="content_values_mime_type">image/jpeg</string>
+    <string name="share_intent_type">image/*</string>
 </resources>

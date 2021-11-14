@@ -4,12 +4,10 @@ import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.andrewsozonov.urbanride.database.Ride
-import com.andrewsozonov.urbanride.model.RideDataModel
-import com.andrewsozonov.urbanride.presentation.model.LocationPoint
-import com.andrewsozonov.urbanride.repository.BaseRepository
+import com.andrewsozonov.urbanride.data.database.RideDBModel
+import com.andrewsozonov.urbanride.domain.interactor.RideInteractor
+import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
 import com.andrewsozonov.urbanride.util.ISchedulersProvider
-import com.google.android.gms.maps.model.LatLng
 import io.reactivex.Completable
 import io.reactivex.disposables.Disposable
 
@@ -18,37 +16,45 @@ import io.reactivex.disposables.Disposable
  * Получает данные из фрагмента, вычисляет расстояние и скорость.
  * Сохраняет в базу данных.
  *
- * @param repository интерфейс репозитория
+ * @param interactor интерактор экрана Ride
  * @param schedulersProvider интерфейс предоставляющий потоки
  *
  * @author Андрей Созонов
  */
-class RideViewModel(val repository: BaseRepository, val schedulersProvider: ISchedulersProvider) :
+class RideViewModel(private val interactor: RideInteractor, val schedulersProvider: ISchedulersProvider) :
     ViewModel() {
 
     private var disposable: Disposable? = null
 
-    val serviceStatus: LiveData<String> = repository.getServiceStatus()
+    val serviceStatus: LiveData<String> = interactor.getServiceStatus()
 
     /**
      * [MutableLiveData] хранит значение таймера для обновления во фрагменте
      */
-    val timerLiveData: LiveData<String> = repository.getTimerValue()
-
-
-    /**
-     * [MutableLiveData] хранит модель данных: скорость, расстояние и среднюю скорость для отображения во фрагменте
-     */
-    val data: MutableLiveData<RideDataModel> = repository.getTrackingData()
+    val timerLiveData: LiveData<String> = interactor.getTimerValue()
 
     /**
-     * Собирает модель данных [Ride] для БД
+     * Устанавливает значение единиц измерения мили или км
+     * полученное из preferences
      *
+     * @param isUnitsMetric если true - км, false - мили
+     */
+    fun setUnits(isUnitsMetric: Boolean) {
+        interactor.setUnits(isUnitsMetric)
+    }
+
+    /**
+     * [MutableLiveData] хранит модель данных: скорость, расстояние, среднюю скорость и координаты для отображения во фрагменте
+     */
+    val data: LiveData<RideModel> = interactor.getTrackingData()
+
+    /**
+     * Сохраняет поездку в БД
      * @param mapImage изображение карты с конечным маршрутом
      */
     fun saveRide(mapImage: Bitmap) {
         val observable = Completable.fromCallable {
-            repository.addRide(mapImage)
+            interactor.addRide(mapImage)
         }
 
         disposable = observable

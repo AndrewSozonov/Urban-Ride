@@ -212,7 +212,7 @@
                     app:layout_constraintTop_toBottomOf="@id/max_speed_field_name" />
 
                 <ImageButton
-                    android:id="@+id/show_graph_textView"
+                    android:id="@+id/show_graph_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_between_name_and_field"

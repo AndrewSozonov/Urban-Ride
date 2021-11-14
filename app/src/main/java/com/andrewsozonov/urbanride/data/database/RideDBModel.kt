@@ -1,10 +1,9 @@
-package com.andrewsozonov.urbanride.database
+package com.andrewsozonov.urbanride.data.database
 
 import android.graphics.Bitmap
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.andrewsozonov.urbanride.presentation.model.LocationPoint
-import com.google.android.gms.maps.model.LatLng
+import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
 
 /**
  * Модель данных для добавления в БД
@@ -20,7 +19,7 @@ import com.google.android.gms.maps.model.LatLng
  * @author Андрей Созонов
  */
 @Entity(tableName = "riding_table")
-data class Ride(
+data class RideDBModel(
     var startTime: Long,
     var finishTime: Long,
     var duration: Long,

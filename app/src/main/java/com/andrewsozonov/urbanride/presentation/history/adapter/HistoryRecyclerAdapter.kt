@@ -12,7 +12,8 @@ import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.andrewsozonov.urbanride.R
-import com.andrewsozonov.urbanride.database.Ride
+import com.andrewsozonov.urbanride.data.database.RideDBModel
+import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
 
 /**
  * Адаптер для списка истории поездок во фрагменте HistoryFragment
@@ -21,7 +22,7 @@ import com.andrewsozonov.urbanride.database.Ride
  */
 class HistoryRecyclerAdapter(private val listener : IHistoryRecyclerListener) : RecyclerView.Adapter<HistoryViewHolder>() {
 
-    private var data: List<Ride> = mutableListOf()
+    private var data: List<HistoryModel> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
         val view =
@@ -34,12 +35,12 @@ class HistoryRecyclerAdapter(private val listener : IHistoryRecyclerListener) : 
 
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(holder.itemView.context)
         val unitsKm = holder.itemView.context.getString(R.string.units_kilometers)
-        val isMetricUnits = (sharedPrefs.getString(holder.itemView.context.getString(R.string.unit_system_pref_key), unitsKm) == unitsKm)
+        val isUnitsMetric = (sharedPrefs.getString(holder.itemView.context.getString(R.string.unit_system_pref_key), unitsKm) == unitsKm)
 
-        holder.bind(data[position], isMetricUnits)
+        holder.bind(data[position], isUnitsMetric)
 
         holder.itemView.setOnClickListener {
-            if (holder.expandableView.visibility == GONE) {
+            if (holder.binding.expandableRootItem.visibility == GONE) {
                 expandItemView(holder)
             } else {
                 closeItemView(holder)
@@ -47,15 +48,15 @@ class HistoryRecyclerAdapter(private val listener : IHistoryRecyclerListener) : 
             }
         }
 
-        holder.mapImageView.setOnClickListener {
-            data[position].id?.let { id -> listener.onMapClick(id) }
+        holder.binding.historyMap.setOnClickListener {
+            data[position].id.let { id -> listener.onMapClick(id) }
         }
 
-        holder.showGraphButton.setOnClickListener {
+        holder.binding.showGraphButton.setOnClickListener {
             showGraph(holder)
         }
 
-        holder.shareButton.setOnClickListener {
+        holder.binding.shareButton.setOnClickListener {
             listener.onShareClick(position)
         }
     }
@@ -67,16 +68,16 @@ class HistoryRecyclerAdapter(private val listener : IHistoryRecyclerListener) : 
     /**
      * Устанавливает список поездок в адаптер
      *
-     * @param list список поездок [Ride]
+     * @param list список поездок [RideDBModel]
      */
-    fun setData(list : List<Ride>) {
+    fun setData(list : List<HistoryModel>) {
         data = list
         notifyDataSetChanged()
     }
 
     private fun expandItemView(holder: HistoryViewHolder) {
-        TransitionManager.beginDelayedTransition(holder.cardView, AutoTransition())
-        holder.expandableView.visibility = VISIBLE
+        TransitionManager.beginDelayedTransition(holder.binding.itemCardView, AutoTransition())
+        holder.binding.expandableRootItem.visibility = VISIBLE
 
         val theme: Resources.Theme = holder.itemView.context.theme
 
@@ -87,44 +88,44 @@ class HistoryRecyclerAdapter(private val listener : IHistoryRecyclerListener) : 
         val typedValueColorOnSurface = TypedValue()
         theme.resolveAttribute(R.attr.colorOnSurface, typedValueColorOnSurface, true)
         val textFieldColor = typedValueColorOnSurface.data
-        holder.cardView.background.setTint(cardViewColor)
+        holder.binding.itemCardView.background.setTint(cardViewColor)
 
-        holder.arrowButton.animate().rotationBy(180F).start()
-        holder.dateFieldName.setTextColor(textFieldColor)
-        holder.startFieldName.setTextColor(textFieldColor)
-        holder.finishFieldName.setTextColor(textFieldColor)
-        holder.durationFieldName.setTextColor(textFieldColor)
-        holder.distanceFieldName.setTextColor(textFieldColor)
-        holder.averageSpeedFieldName.setTextColor(textFieldColor)
-        holder.maxSpeedFieldName.setTextColor(textFieldColor)
+        holder.binding.arrowButton.animate().rotationBy(180F).start()
+        holder.binding.dateFieldName.setTextColor(textFieldColor)
+        holder.binding.startFieldName.setTextColor(textFieldColor)
+        holder.binding.finishFieldName.setTextColor(textFieldColor)
+        holder.binding.durationFieldName.setTextColor(textFieldColor)
+        holder.binding.distanceFieldName.setTextColor(textFieldColor)
+        holder.binding.averageSpeedFieldName.setTextColor(textFieldColor)
+        holder.binding.maxSpeedFieldName.setTextColor(textFieldColor)
     }
 
     private fun closeItemView(holder: HistoryViewHolder) {
-        TransitionManager.beginDelayedTransition(holder.cardView, AutoTransition())
-        holder.expandableView.visibility = GONE
-        holder.cardView.background.setTint(ContextCompat.getColor(holder.itemView.context, R.color.light_cyan))
-        holder.arrowButton.animate().rotationBy(180.0F).start()
-        holder.dateFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
-        holder.startFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
-        holder.finishFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
-        holder.durationFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
-        holder.distanceFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
-        holder.averageSpeedFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
-        holder.maxSpeedFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
+        TransitionManager.beginDelayedTransition(holder.binding.itemCardView, AutoTransition())
+        holder.binding.expandableRootItem.visibility = GONE
+        holder.binding.itemCardView.background.setTint(ContextCompat.getColor(holder.itemView.context, R.color.light_cyan))
+        holder.binding.arrowButton.animate().rotationBy(180.0F).start()
+        holder.binding.dateFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
+        holder.binding.startFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
+        holder.binding.finishFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
+        holder.binding.durationFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
+        holder.binding.distanceFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
+        holder.binding.averageSpeedFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
+        holder.binding.maxSpeedFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
     }
 
     private fun showGraph(holder: HistoryViewHolder) {
-        if (holder.graphRootView.visibility == GONE) {
-            TransitionManager.beginDelayedTransition(holder.cardView, AutoTransition())
-            holder.graphRootView.visibility = VISIBLE
-            holder.timeSpeedRadioButton.performClick()
+        if (holder.binding.graphRootView.visibility == GONE) {
+            TransitionManager.beginDelayedTransition(holder.binding.itemCardView, AutoTransition())
+            holder.binding.graphRootView.visibility = VISIBLE
+            holder.binding.timeSpeedGraph.performClick()
         } else {
             closeGraph(holder)
         }
     }
 
     private fun closeGraph(holder: HistoryViewHolder) {
-        TransitionManager.beginDelayedTransition(holder.cardView, AutoTransition())
-        holder.graphRootView.visibility = GONE
+        TransitionManager.beginDelayedTransition(holder.binding.itemCardView, AutoTransition())
+        holder.binding.graphRootView.visibility = GONE
     }
 }

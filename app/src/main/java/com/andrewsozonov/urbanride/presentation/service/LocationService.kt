@@ -21,7 +21,7 @@ import androidx.lifecycle.MutableLiveData
 import com.andrewsozonov.urbanride.R
 import com.andrewsozonov.urbanride.app.App
 import com.andrewsozonov.urbanride.presentation.MainActivity
-import com.andrewsozonov.urbanride.presentation.model.LocationPoint
+import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
 import com.andrewsozonov.urbanride.util.Constants.ACTION_SHOW_RIDING_FRAGMENT
 import com.andrewsozonov.urbanride.util.Constants.LOCATION_UPDATE_INTERVAL
 import com.andrewsozonov.urbanride.util.Constants.NOTIFICATION_CHANNEL_ID
@@ -73,7 +73,7 @@ class LocationService : LifecycleService() {
 
     private val trackingPoints = MutableLiveData<MutableList<MutableList<LocationPoint>>>()
     private val rideTime = MutableLiveData<Long>()
-    private val currentSpeed = MutableLiveData<Float>()
+//    private val currentSpeed = MutableLiveData<Float>()
 
     override fun onCreate() {
         super.onCreate()
@@ -187,16 +187,11 @@ class LocationService : LifecycleService() {
     private val locationCallBack = object : LocationCallback() {
         override fun onLocationResult(p0: LocationResult) {
             super.onLocationResult(p0)
-            if (isTracking.value!!) {
+            if (isTracking.value == true) {
                 p0.locations.let { locations ->
                     for (location in locations) {
                         addTrackingPoint(location)
-                        currentSpeed.value = location.speed / 1000 * 3600
-                        /*Log.d("LocationCallBack", " currentSpeed: ${currentSpeed.value}")
-                        Log.d(
-                            "locationCallback",
-                            "latitude: ${location.latitude}  longitude: ${location.longitude}"
-                        )*/
+//                        currentSpeed.value = location.speed / 1000 * 3600
                     }
                 }
             }

@@ -1,4 +1,4 @@
-package com.andrewsozonov.urbanride.database
+package com.andrewsozonov.urbanride.data.database
 
 
 

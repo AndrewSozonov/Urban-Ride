@@ -18,6 +18,12 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.*
 import javax.inject.Inject
 
+/**
+ * Фрагмент с картой. Открывается при нажатии на картинку с картой на экране History.
+ * Отображает GoogleMap на полный экран. Рисует маршрут поездки.
+ *
+ * @author Андрей Созонов
+ */
 class MapFragment : Fragment() {
 
     private lateinit var viewModel: MapViewModel

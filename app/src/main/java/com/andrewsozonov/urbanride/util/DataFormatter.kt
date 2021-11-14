@@ -28,21 +28,4 @@ object DataFormatter {
                 "${if (minutes < 10) "0" else ""}$minutes:" +
                 "${if (seconds < 10) "0" else ""}$seconds"
     }
-
-    /**
-     * Конвертирует из километров в мили
-     *
-     * @return возращает значение в милях
-     */
-    fun convertKilometersToMiles(kilometers: Float): Double {
-        val miles = kilometers * 0.62
-
-        val df = DecimalFormat("###.##")
-        return df.format(miles).toDouble()
-    }
-
-    fun convertMillisecondsToMinutes(milliseconds: Long): Double {
-        val df = DecimalFormat("###.##")
-        return df.format(milliseconds / 1000.0 / 60.0).toDouble()
-    }
 }

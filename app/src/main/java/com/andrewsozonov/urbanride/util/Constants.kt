@@ -16,12 +16,18 @@ object Constants {
     const val SERVICE_STATUS_PAUSED = "Paused"
 
     const val POLYLINE_WIDTH = 12f
+    const val GRAPH_PADDING = 20
 
     const val LOCATION_UPDATE_INTERVAL = 5000L
     const val TIMER_DELAY = 1000L
     const val RECYCLER_ITEMS_SPACING = 20
 
     const val BUNDLE_RIDE_ID_KEY = "id_key"
+
+    const val SHARE_IMAGE_TEXT_SIZE = 48f
+    const val SHARE_IMAGE_STROKE_WIDTH = 0.5f
+    const val SHARE_IMAGE_TEXT_HORIZONTAL_MARGIN = 40f
+    const val SHARE_IMAGE_TEXT_VERTICAL_MARGIN = 30f
 
 
 }

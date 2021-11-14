@@ -1,10 +1,9 @@
-package com.andrewsozonov.urbanride.database
+package com.andrewsozonov.urbanride.data.database
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.room.TypeConverter
-import com.andrewsozonov.urbanride.presentation.model.LocationPoint
-import com.google.android.gms.maps.model.LatLng
+import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.ByteArrayOutputStream

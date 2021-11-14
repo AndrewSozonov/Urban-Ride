@@ -1,14 +1,13 @@
-package com.andrewsozonov.urbanride.repository
+package com.andrewsozonov.urbanride.data.repository
 
 import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.andrewsozonov.urbanride.database.LocationPointDB
-import com.andrewsozonov.urbanride.database.Ride
-import com.andrewsozonov.urbanride.database.RideDAO
-import com.andrewsozonov.urbanride.model.RideDataModel
-import com.andrewsozonov.urbanride.presentation.model.LocationPoint
+import com.andrewsozonov.urbanride.data.RideDataModel
+import com.andrewsozonov.urbanride.data.database.RideDAO
+import com.andrewsozonov.urbanride.data.database.RideDBModel
+import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
 import com.andrewsozonov.urbanride.util.DataFormatter
 import java.util.*
 import javax.inject.Inject
@@ -18,16 +17,20 @@ import javax.inject.Inject
  * Главный репозиторий приложения
  *
  * @param rideDAO интерфейс предоставляющий доступ к БД
+ * @param converter репозитория
  *
  * @author Андрей Созонов
  */
-class MainRepository @Inject constructor(private val rideDAO: RideDAO, private val converter: Converter) : BaseRepository {
+class MainRepository @Inject constructor(
+    private val rideDAO: RideDAO,
+    private val converter: RepositoryConverter
+) : BaseRepository {
 
     private var trackingPoints: List<List<LocationPoint>> = mutableListOf()
-    private var ridingTime: Long = 0L
-    private var distance: Float = 0f
-    private var speed: Float = 0f
-    private var averageSpeed: Float = 0f
+    private var ridingTime: Long = 0L  // миллисекунды
+    private var distance: Float = 0f  // метры
+    private var speed: Float = 0f // метры в сек
+    private var averageSpeed: Float = 0f // метры в сек
 
     private val serviceStatusLiveData: MutableLiveData<String> = MutableLiveData()
     private val timerLiveData: MutableLiveData<String> = MutableLiveData()
@@ -50,7 +53,7 @@ class MainRepository @Inject constructor(private val rideDAO: RideDAO, private v
     }
 
     /**
-     * Добавляет поездку в БД
+     * Добавляет поездку [RideDBModel] в БД
      *
      * @param mapImage изображение карты с конечным маршрутом
      */
@@ -59,7 +62,7 @@ class MainRepository @Inject constructor(private val rideDAO: RideDAO, private v
         val rideFinishTimeInMillis = Calendar.getInstance().timeInMillis
         val rideStartTimeInMillis = rideFinishTimeInMillis - ridingTime
 
-        val currentRide = Ride(
+        val currentRide = RideDBModel(
             rideStartTimeInMillis,
             rideFinishTimeInMillis,
             ridingTime,
@@ -67,7 +70,7 @@ class MainRepository @Inject constructor(private val rideDAO: RideDAO, private v
             averageSpeed,
             0.0f,
             mapImage,
-            converter.convertSpeedOfList(trackingPoints)
+            trackingPoints
         )
         rideDAO.addRide(currentRide)
     }
@@ -75,28 +78,44 @@ class MainRepository @Inject constructor(private val rideDAO: RideDAO, private v
     /**
      * Удаляет поездку из БД
      *
-     * @param ride модель данных поездки [Ride]
+     * @param id id элемента для удаления
      */
-    override fun deleteRide(ride: Ride) = rideDAO.deleteRide(ride)
+    override fun deleteRide(id: Int) = rideDAO.deleteRide(id)
 
     /**
      * Получает список всех поездок из БД
      *
-     * @return спиок поездок [Ride]
+     * @return список поездок [RideDBModel]
      */
-    override fun getAllRides(): List<Ride> {
+    override fun getAllRides(): List<RideDBModel> {
         return rideDAO.getAllRides()
     }
 
-    override fun getRideById(id: Int): RideDataModel {
-        return converter.convertFromRideToRideDataModel(rideDAO.getRideByID(id))
+    /**
+     * Получает поездку из БД
+     *
+     * @param id id элемента
+     * @return модель поездки [RideDBModel]
+     */
+    override fun getRideById(id: Int): RideDBModel {
+        return rideDAO.getRideByID(id)
     }
 
+    /**
+     * Обновляет значение таймера в репозитории
+     *
+     * @param time время в миллисекундах
+     */
     override fun updateTimerValue(time: Long) {
         ridingTime = time
         timerLiveData.value = DataFormatter.formatTime(ridingTime)
     }
 
+    /**
+     * Обновляет список с координатами в репозитории
+     *
+     * @param trackingPoints список [LocationPoint]
+     */
     override fun updateLocation(trackingPoints: MutableList<MutableList<LocationPoint>>) {
 
         this.trackingPoints = trackingPoints
@@ -105,12 +124,9 @@ class MainRepository @Inject constructor(private val rideDAO: RideDAO, private v
 
     /**
      * Вычисляет из списка с координатами расстояние, скорость и среднюю скорость
-     * обновляет в [data]
-     *
-     * @param trackingPoints список координат
+     * Собирает модель данных [RideDataModel]
+     * обновляет в LiveData[data]
      */
-
-
     private fun calculateData() {
         val rideDataModel = converter.convertDataToRideDataModel(trackingPoints, ridingTime)
         distance = rideDataModel.distance

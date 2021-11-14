@@ -1,4 +1,4 @@
-package com.andrewsozonov.urbanride.database
+package com.andrewsozonov.urbanride.data.database
 
 import androidx.room.*
 
@@ -13,29 +13,29 @@ interface RideDAO {
     /**
      * Добавить поездку в БД
      *
-     * @param ride модель данных поездки [Ride]
+     * @param rideDBModel модель данных поездки [RideDBModel]
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addRide(ride: Ride)
+    fun addRide(rideDBModel: RideDBModel)
 
     /**
      * Удалить поездку из БД
      *
-     * @param ride модель данных поездки [Ride]
+     * @param ride модель данных поездки [RideDBModel]
      */
-    @Delete
-    fun deleteRide(ride: Ride)
+    @Query("DELETE FROM riding_table WHERE id = :id")
+    fun deleteRide(id: Int)
 
 
     /**
      * Получит список поездок из БД
      *
-     * @return список моделей [Ride]
+     * @return список моделей [RideDBModel]
      */
     @Query("SELECT * FROM riding_table")
-    fun getAllRides(): List<Ride>
+    fun getAllRides(): List<RideDBModel>
 
 
     @Query("SELECT * FROM riding_table WHERE id = :id")
-    fun getRideByID(id: Int): Ride
+    fun getRideByID(id: Int): RideDBModel
 }

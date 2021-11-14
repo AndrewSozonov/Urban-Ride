@@ -13,19 +13,19 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.andrewsozonov.urbanride.R
 import com.andrewsozonov.urbanride.app.App
-import com.andrewsozonov.urbanride.database.Ride
 import com.andrewsozonov.urbanride.databinding.FragmentHistoryBinding
 import com.andrewsozonov.urbanride.presentation.history.adapter.HistoryItemDecoration
 import com.andrewsozonov.urbanride.presentation.history.adapter.HistoryRecyclerAdapter
 import com.andrewsozonov.urbanride.presentation.history.adapter.IHistoryRecyclerListener
+import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
 import com.andrewsozonov.urbanride.util.Constants.BUNDLE_RIDE_ID_KEY
 import com.andrewsozonov.urbanride.util.Constants.RECYCLER_ITEMS_SPACING
-import com.andrewsozonov.urbanride.util.DataFormatter
 import java.io.OutputStream
 import javax.inject.Inject
 
@@ -42,8 +42,9 @@ class HistoryFragment : Fragment() {
     private var _binding: FragmentHistoryBinding? = null
     private var historyRecyclerView: RecyclerView? = null
     private var historyRecyclerAdapter: HistoryRecyclerAdapter? = null
-    private var listOfRides: List<Ride> = mutableListOf()
+    private var listOfRides: List<HistoryModel> = mutableListOf()
     private lateinit var itemTouchHelper: ItemTouchHelper
+    private var isUnitsMetric = true
 
     private val binding get() = _binding!!
 
@@ -65,8 +66,9 @@ class HistoryFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        checkPreferences()
         initRecyclerView()
-        historyViewModel.getRidesFromDB()
+        historyViewModel.getRidesFromDB(isUnitsMetric)
         historyViewModel.listOfRides.observe(viewLifecycleOwner, {
             setData(it)
             listOfRides = it
@@ -76,6 +78,14 @@ class HistoryFragment : Fragment() {
     private fun createViewModel() {
         App.getAppComponent()?.activityComponent()?.inject(this)
         historyViewModel = viewModelFactory.create(HistoryViewModel::class.java)
+    }
+
+    private fun checkPreferences() {
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        isUnitsMetric = sharedPrefs.getString(
+            getString(R.string.unit_system_pref_key),
+            getString(R.string.units_kilometers)
+        ) == getString(R.string.units_kilometers)
     }
 
     private fun initRecyclerView() {
@@ -103,7 +113,7 @@ class HistoryFragment : Fragment() {
         historyRecyclerView?.adapter = historyRecyclerAdapter
     }
 
-    private fun setData(rides: List<Ride>) {
+    private fun setData(rides: List<HistoryModel>) {
         historyRecyclerAdapter?.setData(rides)
     }
 
@@ -114,20 +124,21 @@ class HistoryFragment : Fragment() {
     }
 
     private fun showShareSheet(position: Int) {
-
-        val shareMapImage = createBitmapForSharing(position)
+        val bitmapConstructor = BitmapConstructor(requireContext())
+        val shareMapImage = bitmapConstructor.constructBitmapForSharing(listOfRides[position])
 
         val shareIntent = Intent().apply {
             action = Intent.ACTION_SEND
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val contentValues = ContentValues()
-            contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+            contentValues.put(MediaStore.Images.Media.MIME_TYPE, resources.getString(R.string.content_values_mime_type))
             contentValues.put(MediaStore.Images.Media.IS_PENDING, 1)
 
             val resolver = requireActivity().contentResolver
-            val imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+            val imageUri =
+                resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
             val fos: OutputStream? = imageUri?.let { resolver.openOutputStream(it) }
             shareMapImage.compress(Bitmap.CompressFormat.PNG, 100, fos)
             fos?.flush()
@@ -138,9 +149,9 @@ class HistoryFragment : Fragment() {
             resolver.update(imageUri!!, contentValues, null, null)
 
             shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri)
-            shareIntent.type = "image/*"
+            shareIntent.type = resources.getString(R.string.share_intent_type)
             shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            startActivity(Intent.createChooser(shareIntent, "Select the app"))
+            startActivity(Intent.createChooser(shareIntent, null))
         } else {
             val path: String = MediaStore.Images.Media.insertImage(
                 requireActivity().contentResolver,
@@ -150,58 +161,11 @@ class HistoryFragment : Fragment() {
             )
             if (path.isNotEmpty()) {
                 shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(path))
-                shareIntent.type = "image/*"
+                shareIntent.type = resources.getString(R.string.share_intent_type)
                 shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                startActivity(Intent.createChooser(shareIntent, "Select the app"))
+                startActivity(Intent.createChooser(shareIntent, null))
             }
-
         }
-    }
-
-    private fun createBitmapForSharing(position: Int): Bitmap {
-
-        val mapImage: Bitmap = listOfRides[position].mapImg
-
-        val shareMapImage = mapImage.copy(mapImage.config, true)
-
-        val canvas = Canvas(shareMapImage)
-        val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        fillPaint.style = Paint.Style.FILL
-        fillPaint.color = resources.getColor(R.color.middle_blue)
-        fillPaint.textSize = 48f
-//        fillPaint.setShadowLayer(2f, 0f, 1f, Color.BLACK)
-
-        val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        strokePaint.style = Paint.Style.STROKE
-        strokePaint.color = resources.getColor(R.color.white)
-        strokePaint.strokeWidth = 0.5f
-        strokePaint.textSize = 48f
-        fillPaint.setShadowLayer(2f, 0f, 1f, Color.BLACK)
-
-
-        val horizontalMargin = 40f
-        val verticalMargin = 30f
-        val distanceTextBounds = Rect()
-        val distance = "Distance ${listOfRides[position].distance} km"
-        fillPaint.getTextBounds(
-            distance,
-            0,
-            listOfRides[position].distance.toString().length,
-            distanceTextBounds
-        )
-        var distanceX: Float = horizontalMargin
-        val y: Float = verticalMargin + distanceTextBounds.height()
-        canvas.drawText(distance, distanceX, y, fillPaint)
-        canvas.drawText(distance, distanceX, y, strokePaint)
-
-        val timeTextBounds = Rect()
-        val duration: String =
-            "Duration ${DataFormatter.formatTime(listOfRides[position].duration)}"
-        fillPaint.getTextBounds(duration, 0, duration.length, timeTextBounds)
-        val timeX = (shareMapImage.width - horizontalMargin - timeTextBounds.width())
-        canvas.drawText(duration, timeX, y, fillPaint)
-        canvas.drawText(duration, timeX, y, strokePaint)
-        return shareMapImage
     }
 
     private val itemTouchHelperCallBack =
@@ -215,7 +179,10 @@ class HistoryFragment : Fragment() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                historyViewModel.deleteRide(listOfRides[viewHolder.adapterPosition])
+                historyViewModel.deleteRide(
+                    listOfRides[viewHolder.adapterPosition].id,
+                    isUnitsMetric
+                )
             }
         }
 
