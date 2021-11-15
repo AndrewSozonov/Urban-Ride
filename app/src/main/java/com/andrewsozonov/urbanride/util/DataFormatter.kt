@@ -1,6 +1,5 @@
 package com.andrewsozonov.urbanride.util
 
-import java.text.DecimalFormat
 import java.util.concurrent.TimeUnit
 
 /**

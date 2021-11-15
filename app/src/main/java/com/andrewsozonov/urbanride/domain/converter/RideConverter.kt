@@ -1,6 +1,6 @@
 package com.andrewsozonov.urbanride.domain.converter
 
-import com.andrewsozonov.urbanride.data.RideDataModel
+import com.andrewsozonov.urbanride.data.model.RideDataModel
 import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
 import java.text.DecimalFormat
 

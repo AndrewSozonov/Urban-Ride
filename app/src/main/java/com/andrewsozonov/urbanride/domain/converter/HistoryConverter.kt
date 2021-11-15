@@ -32,6 +32,7 @@ class HistoryConverter {
         val duration = DataFormatter.formatTime(rideDBModel.duration)
         var distance = rideDBModel.distance / 1000.0
         var averageSpeed = convertSpeedToKmH(rideDBModel.averageSpeed)
+        var maxSpeed = findMaxSpeed(rideDBModel)
         val map = rideDBModel.mapImg
         val trackingPoints: List<List<HistoryLocationPoint>> =
             convertToListHistoryLocationPoint(rideDBModel.trackingPoints, isUnitsMetric)
@@ -39,9 +40,10 @@ class HistoryConverter {
         if (!isUnitsMetric) {
             distance = convertKilometersToMiles(distance)
             averageSpeed = convertKilometersToMiles(averageSpeed)
+            maxSpeed = convertKilometersToMiles(maxSpeed)
         }
 
-        return HistoryModel(id!!, date, startTime, finishTime, duration, distance, averageSpeed, 0f, map, trackingPoints)
+        return HistoryModel(id!!, date, startTime, finishTime, duration, distance, averageSpeed, maxSpeed, map, trackingPoints)
     }
 
     private fun formatDate(time: Long): String {
@@ -105,5 +107,12 @@ class HistoryConverter {
         val miles = kilometers * 0.62
         val df = DecimalFormat("###.##")
         return df.format(miles).toDouble()
+    }
+
+    private fun findMaxSpeed(rideDBModel: RideDBModel): Double {
+        val maxSpeed = rideDBModel.trackingPoints.maxOf {
+            it.maxOf { it.speed }
+        }
+        return convertSpeedToKmH(maxSpeed)
     }
 }

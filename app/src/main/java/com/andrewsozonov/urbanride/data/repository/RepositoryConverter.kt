@@ -1,13 +1,10 @@
 package com.andrewsozonov.urbanride.data.repository
 
 import android.location.Location
-import com.andrewsozonov.urbanride.data.database.RideDBModel
-import com.andrewsozonov.urbanride.data.RideDataModel
-import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
+import com.andrewsozonov.urbanride.data.model.RideDataModel
 import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
 import com.google.android.gms.maps.model.LatLng
 import java.math.RoundingMode
-import java.text.DecimalFormat
 
 
 /**

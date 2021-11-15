@@ -40,36 +40,29 @@ class Converter {
         return outputStream.toByteArray()
     }
 
-    /*@TypeConverter
-    fun fromLatLng(list : List<List<LatLng>>) : String {
-        val gson = Gson()
-        return gson.toJson(list)
-    }*/
-
+    /**
+     * Конвертирует модель [LocationPoint] в String для записи в БД
+     *
+     * @param list список координат [LocationPoint]
+     * @return возвращает String для записи в БД
+     */
     @TypeConverter
     fun fromLatLng(list : List<List<LocationPoint>>) : String {
         val gson = Gson()
         return gson.toJson(list)
     }
 
-    /*@TypeConverter
-    fun fromStringToLatLng(jsonString: String) : List<List<LatLng>> {
-        val gson = Gson()
-
-        val type: Type = object : TypeToken<ArrayList<ArrayList<LatLng>>>(){}.type
-        val trackingPoints: List<List<LatLng>> = Gson().fromJson(jsonString, type)
-
-        return trackingPoints
-    }*/
-
+    /**
+     * Конвертирует String в модель [LocationPoint]
+     *
+     * @param jsonString String из БД
+     * @return возвращает список координат [LocationPoint]
+     */
     @TypeConverter
-    fun fromStringToLatLng(jsonString: String) : List<List<LocationPoint>> {
-        val gson = Gson()
+    fun fromStringToLatLng(jsonString: String): List<List<LocationPoint>> {
 
-        val type: Type = object : TypeToken<ArrayList<ArrayList<LocationPoint>>>(){}.type
-        val trackingPoints: List<List<LocationPoint>> = Gson().fromJson(jsonString, type)
-
-        return trackingPoints
+        val type: Type = object : TypeToken<ArrayList<ArrayList<LocationPoint>>>() {}.type
+        return Gson().fromJson(jsonString, type)
     }
 
 }

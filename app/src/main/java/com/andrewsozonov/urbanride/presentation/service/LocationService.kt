@@ -62,18 +62,14 @@ class LocationService : LifecycleService() {
 
 
     private var isServiceResumed = false
-    private var serviceStopped = false
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    private var isTimerEnabled = false
     private var intervalTime = 0L
     private var totalTime = 0L
     private var timeStarted = 0L
 
     private val isTracking = MutableLiveData<Boolean>()
-
     private val trackingPoints = MutableLiveData<MutableList<MutableList<LocationPoint>>>()
     private val rideTime = MutableLiveData<Long>()
-//    private val currentSpeed = MutableLiveData<Float>()
 
     override fun onCreate() {
         super.onCreate()
@@ -105,7 +101,6 @@ class LocationService : LifecycleService() {
     private fun createViewModel() {
         App.getAppComponent()?.activityComponent()?.inject(this)
         locationViewModel = viewModelFactory.create(LocationServiceViewModel::class.java)
-
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -136,7 +131,6 @@ class LocationService : LifecycleService() {
     }
 
     private fun stopService() {
-        serviceStopped = true
         isServiceResumed = false
         pauseService()
         stopForeground(true)
@@ -145,14 +139,12 @@ class LocationService : LifecycleService() {
 
     private fun pauseService() {
         isTracking.postValue(false)
-        isTimerEnabled = false
     }
 
     private fun startTimer() {
         addEmptyPath()
         isTracking.postValue(true)
         timeStarted = System.currentTimeMillis()
-        isTimerEnabled = true
         CoroutineScope(Dispatchers.Main).launch {
             while (isTracking.value == true) {
                 intervalTime = System.currentTimeMillis() - timeStarted
@@ -191,7 +183,6 @@ class LocationService : LifecycleService() {
                 p0.locations.let { locations ->
                     for (location in locations) {
                         addTrackingPoint(location)
-//                        currentSpeed.value = location.speed / 1000 * 3600
                     }
                 }
             }

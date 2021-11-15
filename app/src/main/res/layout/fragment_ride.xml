@@ -26,7 +26,9 @@
         android:textColor="?colorOnSurface"
         android:textSize="@dimen/field_name_text_size"
         app:layout_constraintStart_toStartOf="@id/mapView"
-        app:layout_constraintTop_toBottomOf="@id/mapView" />
+        app:layout_constraintTop_toBottomOf="@id/mapView"
+        app:drawableStartCompat="@drawable/ic_distance_icon"
+        android:drawablePadding="5dp"/>
 
     <TextView
         android:id="@+id/distance_textView"

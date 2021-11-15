@@ -11,9 +11,8 @@ import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
  * @param startTime время начала поездки в миллисекундах
  * @param finishTime время конца поездки в миллисекундах
  * @param duration длительность поездки в миллисекундах
- * @param distance расстояние поездки в км
- * @param averageSpeed средняя скорость в км/ч
- * @param maxSpeed максимальная скорость в км/ч
+ * @param distance расстояние поездки в метрах
+ * @param averageSpeed средняя скорость в м/с
  * @param mapImg изображение с конечным маршрутом на карте
  *
  * @author Андрей Созонов
@@ -25,7 +24,6 @@ data class RideDBModel(
     var duration: Long,
     var distance: Float,
     var averageSpeed: Float,
-    var maxSpeed: Float,
     var mapImg: Bitmap,
     var trackingPoints: List<List<LocationPoint>>
 ) {

@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.andrewsozonov.urbanride.data.RideDataModel
+import com.andrewsozonov.urbanride.data.model.RideDataModel
 import com.andrewsozonov.urbanride.data.database.RideDAO
 import com.andrewsozonov.urbanride.data.database.RideDBModel
 import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
@@ -68,7 +68,6 @@ class MainRepository @Inject constructor(
             ridingTime,
             distance,
             averageSpeed,
-            0.0f,
             mapImage,
             trackingPoints
         )
