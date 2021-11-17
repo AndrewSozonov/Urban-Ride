@@ -8,7 +8,7 @@ import androidx.room.*
  * @author Андрей Созонов
  */
 @Dao
-interface RideDAO {
+interface RideDao {
 
     /**
      * Добавить поездку в БД

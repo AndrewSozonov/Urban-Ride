@@ -71,6 +71,8 @@ class HistoryViewModel(
                 .observeOn(schedulersProvider.ui())
                 .subscribe({
                     listOfRides.value = it
+                    Log.d("historyViewModel", "rides: ${listOfRides.value!!.last()}")
+
                 }, {})
         )
     }

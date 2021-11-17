@@ -2,7 +2,7 @@ package com.andrewsozonov.urbanride.di.app
 
 import android.app.Application
 import androidx.room.Room
-import com.andrewsozonov.urbanride.data.database.RideDAO
+import com.andrewsozonov.urbanride.data.database.RideDao
 import com.andrewsozonov.urbanride.data.database.RidingDatabase
 import com.andrewsozonov.urbanride.domain.converter.RideConverter
 import com.andrewsozonov.urbanride.domain.interactor.RideInteractor
@@ -30,14 +30,14 @@ class AppModule(var application: Application) {
     @Singleton
     @Provides
     fun provideRepository(
-        rideDAO: RideDAO, repositoryConverter: RepositoryConverter
+        rideDao: RideDao, repositoryConverter: RepositoryConverter
     ): BaseRepository {
-        return MainRepository(rideDAO, repositoryConverter)
+        return MainRepository(rideDao, repositoryConverter)
     }
 
     @Singleton
     @Provides
-    fun provideRideDao(): RideDAO {
+    fun provideRideDao(): RideDao {
         val appDatabase: RidingDatabase = Room.databaseBuilder(
             application.applicationContext,
             RidingDatabase::class.java,

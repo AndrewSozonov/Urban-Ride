@@ -28,7 +28,7 @@ class BitmapConstructor(val context: Context) {
         val mapImage: Bitmap = ride.mapImg
         val shareMapImage = mapImage.copy(mapImage.config, true)
 
-        val canvas = Canvas(shareMapImage)
+        val canvas = shareMapImage.let { Canvas(it) }
         val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         fillPaint.style = Paint.Style.FILL
         fillPaint.color = ContextCompat.getColor(context, R.color.middle_blue)

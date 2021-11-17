@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.andrewsozonov.urbanride.data.model.RideDataModel
-import com.andrewsozonov.urbanride.data.database.RideDAO
+import com.andrewsozonov.urbanride.data.database.RideDao
 import com.andrewsozonov.urbanride.data.database.RideDBModel
 import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
 import com.andrewsozonov.urbanride.util.DataFormatter
@@ -16,13 +16,13 @@ import javax.inject.Inject
 /**
  * Главный репозиторий приложения
  *
- * @param rideDAO интерфейс предоставляющий доступ к БД
+ * @param rideDao интерфейс предоставляющий доступ к БД
  * @param converter репозитория
  *
  * @author Андрей Созонов
  */
 class MainRepository @Inject constructor(
-    private val rideDAO: RideDAO,
+    private val rideDao: RideDao,
     private val converter: RepositoryConverter
 ) : BaseRepository {
 
@@ -71,7 +71,7 @@ class MainRepository @Inject constructor(
             mapImage,
             trackingPoints
         )
-        rideDAO.addRide(currentRide)
+        rideDao.addRide(currentRide)
     }
 
     /**
@@ -79,7 +79,7 @@ class MainRepository @Inject constructor(
      *
      * @param id id элемента для удаления
      */
-    override fun deleteRide(id: Int) = rideDAO.deleteRide(id)
+    override fun deleteRide(id: Int) = rideDao.deleteRide(id)
 
     /**
      * Получает список всех поездок из БД
@@ -87,7 +87,8 @@ class MainRepository @Inject constructor(
      * @return список поездок [RideDBModel]
      */
     override fun getAllRides(): List<RideDBModel> {
-        return rideDAO.getAllRides()
+        Log.d("repository", "rides: ${rideDao.getAllRides().last()}")
+        return rideDao.getAllRides()
     }
 
     /**
@@ -97,7 +98,7 @@ class MainRepository @Inject constructor(
      * @return модель поездки [RideDBModel]
      */
     override fun getRideById(id: Int): RideDBModel {
-        return rideDAO.getRideByID(id)
+        return rideDao.getRideByID(id)
     }
 
     /**
@@ -127,7 +128,10 @@ class MainRepository @Inject constructor(
      * обновляет в LiveData[data]
      */
     private fun calculateData() {
+        Log.d("mainRepository", " trackingPoints: $trackingPoints  ridingTime: $ridingTime")
         val rideDataModel = converter.convertDataToRideDataModel(trackingPoints, ridingTime)
+        Log.d("mainRepository", " rideDataModel: $rideDataModel")
+
         distance = rideDataModel.distance
         speed = rideDataModel.speed
         averageSpeed = rideDataModel.averageSpeed
@@ -136,6 +140,7 @@ class MainRepository @Inject constructor(
             Log.d("calculate data", " distance: ${trackingPoints.last().last().distance}")
         }
         Log.d("calculate data", " speed: $speed")
+        Log.d("calculateData", "rideDataModel ${rideDataModel.trackingPoints}")
         data.value = rideDataModel
     }
 }

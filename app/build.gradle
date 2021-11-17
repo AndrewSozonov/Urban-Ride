@@ -103,9 +103,13 @@ dependencies {
 
     implementation 'com.jjoe64:graphview:4.2.2'
 
+    implementation "androidx.test:core:1.4.0"
     testImplementation "io.mockk:mockk:1.10.6"
     testImplementation "io.mockk:mockk-android:1.10.6"
+    androidTestImplementation "io.mockk:mockk-android:1.10.6"
     testImplementation "androidx.arch.core:core-testing:2.1.0"
-    androidTestImplementation "android.arch.core:core-testing:2.1.0"
+    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
+    androidTestImplementation "com.google.truth:truth:1.0.1"
+    testImplementation "com.google.truth:truth:1.0.1"
 
 }

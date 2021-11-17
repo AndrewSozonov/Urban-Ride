@@ -1,5 +1,6 @@
 package com.andrewsozonov.urbanride.domain.converter
 
+import android.graphics.Bitmap
 import com.andrewsozonov.urbanride.data.database.RideDBModel
 import com.andrewsozonov.urbanride.presentation.history.model.HistoryLocationPoint
 import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
@@ -33,7 +34,7 @@ class HistoryConverter {
         var distance = rideDBModel.distance / 1000.0
         var averageSpeed = convertSpeedToKmH(rideDBModel.averageSpeed)
         var maxSpeed = findMaxSpeed(rideDBModel)
-        val map = rideDBModel.mapImg
+        val map: Bitmap = rideDBModel.mapImg
         val trackingPoints: List<List<HistoryLocationPoint>> =
             convertToListHistoryLocationPoint(rideDBModel.trackingPoints, isUnitsMetric)
 
@@ -90,13 +91,12 @@ class HistoryConverter {
 
     private fun convertSpeedToKmH(speedMetersPerSecond: Float): Double {
         val speed = speedMetersPerSecond / 1000 * 3600
-        val df = DecimalFormat("###.##")
-        return df.format(speed).toDouble()
+        return formatValue(speed)
     }
 
     private fun convertMillisecondsToMinutes(milliseconds: Long): Double {
-        val df = DecimalFormat("###.##")
-        return df.format(milliseconds / 1000.0 / 60.0).toDouble()
+        val minutes = milliseconds / 1000.0 / 60.0
+        return formatValue(minutes.toFloat())
     }
 
     private fun convertMetersToKilometers(meters: Float): Double {
@@ -105,8 +105,7 @@ class HistoryConverter {
 
     private fun convertKilometersToMiles(kilometers: Double): Double {
         val miles = kilometers * 0.62
-        val df = DecimalFormat("###.##")
-        return df.format(miles).toDouble()
+        return formatValue(miles.toFloat())
     }
 
     private fun findMaxSpeed(rideDBModel: RideDBModel): Double {
@@ -114,5 +113,16 @@ class HistoryConverter {
             it.maxOf { it.speed }
         }
         return convertSpeedToKmH(maxSpeed)
+    }
+
+    private fun formatValue(value: Float): Double {
+        val df = DecimalFormat("###.##")
+        val formattedValue = df.format(value)
+
+        return if (formattedValue.contains(',')) {
+            formattedValue.replace(',', '.').toDouble()
+        } else {
+            formattedValue.toDouble()
+        }
     }
 }

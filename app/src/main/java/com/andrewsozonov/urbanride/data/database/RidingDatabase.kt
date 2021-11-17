@@ -12,5 +12,5 @@ import androidx.room.TypeConverters
 @TypeConverters(Converter::class)
 abstract class RidingDatabase : RoomDatabase() {
 
-    abstract fun getRideDAO(): RideDAO
+    abstract fun getRideDAO(): RideDao
 }

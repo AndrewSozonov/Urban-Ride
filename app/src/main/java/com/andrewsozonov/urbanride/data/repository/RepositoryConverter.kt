@@ -39,7 +39,7 @@ class RepositoryConverter {
         )
     }
 
-    private fun calculateDistance(trackingPoints: List<List<LocationPoint>>): Float {
+    fun calculateDistance(trackingPoints: List<List<LocationPoint>>): Float {
         var distance = 0.0
         for (path in trackingPoints) {
             for (i in 0..path.size - 2) {

@@ -16,25 +16,32 @@ class RideConverter {
         var averageSpeed: Float = convertSpeedToKmH(modelModel.averageSpeed)
 
         if (!isUnitsMetric) {
-            distance = convertKilometersToMiles(distance).toFloat()
-            speed = convertKilometersToMiles(speed).toFloat()
-            averageSpeed = convertKilometersToMiles(averageSpeed).toFloat()
+            distance = convertKilometersToMiles(distance)
+            speed = convertKilometersToMiles(speed)
+            averageSpeed = convertKilometersToMiles(averageSpeed)
         }
 
         return RideModel(distance, speed, averageSpeed, modelModel.trackingPoints)
     }
 
-
     private fun convertSpeedToKmH(speedMetersPerSecond: Float): Float {
         val speed = speedMetersPerSecond / 1000 * 3600
-        val df = DecimalFormat("###.##")
-        return df.format(speed).toDouble().toFloat()
+        return formatValue(speed)
     }
 
-    private fun convertKilometersToMiles(kilometers: Float): Double {
+    private fun convertKilometersToMiles(kilometers: Float): Float {
         val miles = kilometers * 0.62
+        return formatValue(miles.toFloat())
+    }
 
+    private fun formatValue(value: Float): Float {
         val df = DecimalFormat("###.##")
-        return df.format(miles).toDouble()
+        val formattedValue = df.format(value)
+
+        return if (formattedValue.contains(',')) {
+            formattedValue.replace(',', '.').toFloat()
+        } else {
+            formattedValue.toFloat()
+        }
     }
 }

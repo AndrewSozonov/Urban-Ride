@@ -51,8 +51,8 @@ class RideInteractor(val repository: BaseRepository, val converter: RideConverte
      * Получает модель данных для отображения во фрагменте из репозитория
      */
     fun getTrackingData(): LiveData<RideModel> {
-        val domainData = repository.getTrackingData()
-        return domainData.map {
+        val data = repository.getTrackingData()
+        return data.map {
             converter.convertFromRideDataModelToRideModel(
                 it,
                 isUnitsMetric
