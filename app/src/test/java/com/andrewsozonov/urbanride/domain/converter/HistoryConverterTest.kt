@@ -63,6 +63,7 @@ import com.andrewsozonov.urbanride.util.TestConstants.TIME4_MIN
 import com.andrewsozonov.urbanride.util.TestConstants.TIME4_MS
 import com.google.common.truth.Truth
 import io.mockk.mockk
+import org.junit.Before
 import org.junit.Test
 
 class HistoryConverterTest {
@@ -70,74 +71,16 @@ class HistoryConverterTest {
     private val converter = HistoryConverter()
     private val mapImage: Bitmap = mockk()
 
-    private val trackingPoints: MutableList<MutableList<LocationPoint>> = mutableListOf(
-        mutableListOf(
-            LocationPoint(LAT1, LONG1, SPEED1_M_S, TIME1_MS, DISTANCE1_METERS),
-            LocationPoint(LAT2, LONG2, SPEED2_M_S, TIME2_MS, DISTANCE2_METERS),
-        ), mutableListOf(
-            LocationPoint(LAT3, LONG3, SPEED3_M_S, TIME3_MS, DISTANCE3_METERS),
-            LocationPoint(LAT4, LONG4, SPEED4_M_S, TIME4_MS, DISTANCE4_METERS),
-        )
-    )
+    private lateinit var rideDBModel: RideDBModel
+    private lateinit var historyModelKm: HistoryModel
+    private lateinit var historyModelMiles: HistoryModel
 
-    private val rideDBModel =
-        RideDBModel(
-            START_TIME_MS,
-            FINISH_TIME_MS,
-            DURATION_MS,
-            DISTANCE_METERS,
-            AVG_SPEED_M_S,
-            mapImage,
-            trackingPoints
-        )
-
-    private val historyTrackingPointsKm: MutableList<MutableList<HistoryLocationPoint>> =
-        mutableListOf(
-            mutableListOf(
-                HistoryLocationPoint(LAT1, LONG1, SPEED1_KM_H, TIME1_MIN, DISTANCE1_KM),
-                HistoryLocationPoint(LAT2, LONG2, SPEED2_KM_H, TIME2_MIN, DISTANCE2_KM)
-            ), mutableListOf(
-                HistoryLocationPoint(LAT3, LONG3, SPEED3_KM_H, TIME3_MIN, DISTANCE3_KM),
-                HistoryLocationPoint(LAT4, LONG4, SPEED4_KM_H, TIME4_MIN, DISTANCE4_KM)
-            )
-        )
-
-    private val historyModelKm = HistoryModel(
-        ID,
-        START_DATE_STRING,
-        START_TIME_STRING,
-        FINISH_TIME_STRING,
-        DURATION_STRING,
-        DISTANCE_KM_DB,
-        AVG_SPEED_KM_H_DB,
-        MAX_SPEED_KM_H,
-        mapImage,
-        historyTrackingPointsKm
-    )
-
-    private val historyTrackingPointsMiles: MutableList<MutableList<HistoryLocationPoint>> =
-        mutableListOf(
-            mutableListOf(
-                HistoryLocationPoint(LAT1, LONG1, SPEED1_ML_H, TIME1_MIN, DISTANCE1_ML),
-                HistoryLocationPoint(LAT2, LONG2, SPEED2_ML_H, TIME2_MIN, DISTANCE2_ML)
-            ), mutableListOf(
-                HistoryLocationPoint(LAT3, LONG3, SPEED3_ML_H, TIME3_MIN, DISTANCE3_ML),
-                HistoryLocationPoint(LAT4, LONG4, SPEED4_ML_H, TIME4_MIN, DISTANCE4_ML)
-            )
-        )
-
-    private val historyModelMiles = HistoryModel(
-        ID,
-        START_DATE_STRING,
-        START_TIME_STRING,
-        FINISH_TIME_STRING,
-        DURATION_STRING,
-        DISTANCE_ML_DB,
-        AVG_SPEED_ML_H_DB,
-        MAX_SPEED_ML_H,
-        mapImage,
-        historyTrackingPointsMiles
-    )
+    @Before
+    fun setUp() {
+        rideDBModel = createRideDBModel()
+        historyModelKm = createHistoryModelKm()
+        historyModelMiles = createHistoryModelMiles()
+    }
 
     @Test
     fun `test convertFromRideToHistoryModel units kilometers`() {
@@ -155,5 +98,83 @@ class HistoryConverterTest {
         val expectedResult = historyModelMiles
 
         Truth.assertThat(result).isEqualTo(expectedResult)
+    }
+
+    private fun createTrackingPoints(): MutableList<MutableList<LocationPoint>> {
+        return mutableListOf(
+            mutableListOf(
+                LocationPoint(LAT1, LONG1, SPEED1_M_S, TIME1_MS, DISTANCE1_METERS),
+                LocationPoint(LAT2, LONG2, SPEED2_M_S, TIME2_MS, DISTANCE2_METERS),
+            ), mutableListOf(
+                LocationPoint(LAT3, LONG3, SPEED3_M_S, TIME3_MS, DISTANCE3_METERS),
+                LocationPoint(LAT4, LONG4, SPEED4_M_S, TIME4_MS, DISTANCE4_METERS),
+            )
+        )
+    }
+
+    private fun createRideDBModel(): RideDBModel {
+        return RideDBModel(
+            START_TIME_MS,
+            FINISH_TIME_MS,
+            DURATION_MS,
+            DISTANCE_METERS,
+            AVG_SPEED_M_S,
+            mapImage,
+            createTrackingPoints()
+        )
+    }
+
+    private fun createHistoryTrackingPointsKm(): MutableList<MutableList<HistoryLocationPoint>> {
+        return mutableListOf(
+            mutableListOf(
+                HistoryLocationPoint(LAT1, LONG1, SPEED1_KM_H, TIME1_MIN, DISTANCE1_KM),
+                HistoryLocationPoint(LAT2, LONG2, SPEED2_KM_H, TIME2_MIN, DISTANCE2_KM)
+            ), mutableListOf(
+                HistoryLocationPoint(LAT3, LONG3, SPEED3_KM_H, TIME3_MIN, DISTANCE3_KM),
+                HistoryLocationPoint(LAT4, LONG4, SPEED4_KM_H, TIME4_MIN, DISTANCE4_KM)
+            )
+        )
+    }
+
+    private fun createHistoryModelKm(): HistoryModel {
+        return HistoryModel(
+            ID,
+            START_DATE_STRING,
+            START_TIME_STRING,
+            FINISH_TIME_STRING,
+            DURATION_STRING,
+            DISTANCE_KM_DB,
+            AVG_SPEED_KM_H_DB,
+            MAX_SPEED_KM_H,
+            mapImage,
+            createHistoryTrackingPointsKm()
+        )
+    }
+
+    private fun createHistoryTrackingPointsMiles(): MutableList<MutableList<HistoryLocationPoint>> {
+        return mutableListOf(
+            mutableListOf(
+                HistoryLocationPoint(LAT1, LONG1, SPEED1_ML_H, TIME1_MIN, DISTANCE1_ML),
+                HistoryLocationPoint(LAT2, LONG2, SPEED2_ML_H, TIME2_MIN, DISTANCE2_ML)
+            ), mutableListOf(
+                HistoryLocationPoint(LAT3, LONG3, SPEED3_ML_H, TIME3_MIN, DISTANCE3_ML),
+                HistoryLocationPoint(LAT4, LONG4, SPEED4_ML_H, TIME4_MIN, DISTANCE4_ML)
+            )
+        )
+    }
+
+    private fun createHistoryModelMiles(): HistoryModel {
+        return HistoryModel(
+            ID,
+            START_DATE_STRING,
+            START_TIME_STRING,
+            FINISH_TIME_STRING,
+            DURATION_STRING,
+            DISTANCE_ML_DB,
+            AVG_SPEED_ML_H_DB,
+            MAX_SPEED_ML_H,
+            mapImage,
+            createHistoryTrackingPointsMiles()
+        )
     }
 }

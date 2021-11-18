@@ -12,7 +12,6 @@ import com.google.android.gms.maps.model.LatLng
  */
 class MapConverter {
 
-
     /**
      * Конвертирует из модели [RideDBModel] в модель [RideModel]
      * @param rideDBModel модель данных из БД
@@ -20,7 +19,7 @@ class MapConverter {
      */
     fun convertFromRideDBModelToRideModel(rideDBModel: RideDBModel): RideModel {
         return RideModel(
-            rideDBModel.distance,
+            rideDBModel.distance / 1000,
             rideDBModel.trackingPoints.last().last().speed,
             rideDBModel.averageSpeed,
             convertLocationPointToLatLng(rideDBModel.trackingPoints)

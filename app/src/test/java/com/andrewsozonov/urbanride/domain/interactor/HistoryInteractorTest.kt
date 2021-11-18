@@ -7,7 +7,6 @@ import com.andrewsozonov.urbanride.domain.converter.HistoryConverter
 import com.andrewsozonov.urbanride.presentation.history.model.HistoryLocationPoint
 import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
 import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
-import com.andrewsozonov.urbanride.util.TestConstants.AVG_SPEED_KM_H
 import com.andrewsozonov.urbanride.util.TestConstants.AVG_SPEED_KM_H_DB
 import com.andrewsozonov.urbanride.util.TestConstants.AVG_SPEED_M_S
 import com.andrewsozonov.urbanride.util.TestConstants.DISTANCE1_KM
@@ -18,7 +17,6 @@ import com.andrewsozonov.urbanride.util.TestConstants.DISTANCE3_KM
 import com.andrewsozonov.urbanride.util.TestConstants.DISTANCE3_METERS
 import com.andrewsozonov.urbanride.util.TestConstants.DISTANCE4_KM
 import com.andrewsozonov.urbanride.util.TestConstants.DISTANCE4_METERS
-import com.andrewsozonov.urbanride.util.TestConstants.DISTANCE_KM
 import com.andrewsozonov.urbanride.util.TestConstants.DISTANCE_KM_DB
 import com.andrewsozonov.urbanride.util.TestConstants.DISTANCE_METERS
 import com.andrewsozonov.urbanride.util.TestConstants.DURATION_MS
@@ -65,21 +63,60 @@ class HistoryInteractorTest {
     private val converter: HistoryConverter = mockk()
     private val interactor = HistoryInteractor(repository, converter)
     private val mapImage: Bitmap = mockk()
-    private val trackingPoints: MutableList<MutableList<LocationPoint>> = mutableListOf(
-        mutableListOf(
-            LocationPoint(LAT1, LONG1, SPEED1_M_S, TIME1_MS, DISTANCE1_METERS),
-            LocationPoint(LAT2, LONG2, SPEED2_M_S, TIME2_MS, DISTANCE2_METERS),
-        ), mutableListOf(
-            LocationPoint(LAT3, LONG3, SPEED3_M_S, TIME3_MS, DISTANCE3_METERS),
-            LocationPoint(LAT4, LONG4, SPEED4_M_S, TIME4_MS, DISTANCE4_METERS),
-            )
-    )
-    private val rideDBModel =
-        RideDBModel(START_TIME_MS, FINISH_TIME_MS, DURATION_MS, DISTANCE_METERS, AVG_SPEED_M_S, mapImage, trackingPoints)
-    private val listOfRidesFromDB = mutableListOf(rideDBModel)
+    private lateinit var rideDBModel: RideDBModel
+    private lateinit var historyModel: HistoryModel
+    private val id = ID
 
-    private val historyTrackingPoints: MutableList<MutableList<HistoryLocationPoint>> =
-        mutableListOf(
+    @Before
+    fun setUp() {
+        rideDBModel = createRideDBModel()
+        historyModel = createHistoryModel()
+        val listOfRidesFromDB = mutableListOf(rideDBModel)
+
+        every { repository.getAllRides() } returns listOfRidesFromDB
+        every { converter.convertFromRideToHistoryModel(rideDBModel, true) } returns historyModel
+        every { repository.deleteRide(any()) } just runs
+    }
+
+    @Test
+    fun `test getAllRides`() {
+        val listOfRidesConverted = mutableListOf(historyModel)
+
+        val result = interactor.getAllRides(true)
+
+        Truth.assertThat(result).isEqualTo(listOfRidesConverted)
+    }
+
+    @Test
+    fun `test deleteRide`() {
+        interactor.deleteRide(id)
+        verifySequence { repository.deleteRide(id) }
+    }
+
+    private fun createRideDBModel(): RideDBModel {
+
+        val trackingPoints = mutableListOf(
+            mutableListOf(
+                LocationPoint(LAT1, LONG1, SPEED1_M_S, TIME1_MS, DISTANCE1_METERS),
+                LocationPoint(LAT2, LONG2, SPEED2_M_S, TIME2_MS, DISTANCE2_METERS),
+            ), mutableListOf(
+                LocationPoint(LAT3, LONG3, SPEED3_M_S, TIME3_MS, DISTANCE3_METERS),
+                LocationPoint(LAT4, LONG4, SPEED4_M_S, TIME4_MS, DISTANCE4_METERS),
+            )
+        )
+        return RideDBModel(
+            START_TIME_MS,
+            FINISH_TIME_MS,
+            DURATION_MS,
+            DISTANCE_METERS,
+            AVG_SPEED_M_S,
+            mapImage,
+            trackingPoints
+        )
+    }
+
+    private fun createHistoryModel(): HistoryModel {
+        val historyTrackingPoints = mutableListOf(
             mutableListOf(
                 HistoryLocationPoint(LAT1, LONG1, SPEED1_KM_H, TIME1_MIN, DISTANCE1_KM),
                 HistoryLocationPoint(LAT2, LONG2, SPEED2_KM_H, TIME2_MIN, DISTANCE2_KM)
@@ -88,40 +125,18 @@ class HistoryInteractorTest {
                 HistoryLocationPoint(LAT4, LONG4, SPEED4_KM_H, TIME4_MIN, DISTANCE4_KM)
             )
         )
-    private val historyModel = HistoryModel(
-        ID,
-        START_DATE_STRING,
-        START_TIME_STRING,
-        FINISH_TIME_STRING,
-        DURATION_STRING,
-        DISTANCE_KM_DB,
-        AVG_SPEED_KM_H_DB,
-        MAX_SPEED_KM_H,
-        mapImage,
-        historyTrackingPoints
-    )
-    private val listOfRidesConverted = mutableListOf(historyModel)
-    private val id = ID
-
-    @Before
-    fun setUp() {
-        every { repository.getAllRides() } returns listOfRidesFromDB
-        every { converter.convertFromRideToHistoryModel(rideDBModel, true) } returns historyModel
-        every { repository.deleteRide(any()) } just runs
-    }
-
-    @Test
-    fun `test getAllRides`() {
-        val result = interactor.getAllRides(true)
-        val expectedResult = listOfRidesConverted
-
-        Truth.assertThat(result).isEqualTo(expectedResult)
-    }
-
-    @Test
-    fun `test deleteRide`() {
-        interactor.deleteRide(id)
-        verifySequence { repository.deleteRide(id) }
+        return HistoryModel(
+            ID,
+            START_DATE_STRING,
+            START_TIME_STRING,
+            FINISH_TIME_STRING,
+            DURATION_STRING,
+            DISTANCE_KM_DB,
+            AVG_SPEED_KM_H_DB,
+            MAX_SPEED_KM_H,
+            mapImage,
+            historyTrackingPoints
+        )
     }
 }
 

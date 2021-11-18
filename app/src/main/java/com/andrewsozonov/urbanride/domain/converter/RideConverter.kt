@@ -4,16 +4,26 @@ import com.andrewsozonov.urbanride.data.model.RideDataModel
 import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
 import java.text.DecimalFormat
 
+/**
+ * Конвертирует из модели данных data в модель для отображения на главном экране
+ *
+ * @author Андрей Созонов
+ */
 class RideConverter {
 
+    /**
+     * Конвертирует из модели [RideDataModel] в модель [RideModel]
+     * @param  dataModel модель данных data слоя
+     * @return модель данных [RideModel]
+     */
     fun convertFromRideDataModelToRideModel(
-        modelModel: RideDataModel,
+        dataModel: RideDataModel,
         isUnitsMetric: Boolean
     ): RideModel {
 
-        var distance: Float = modelModel.distance / 1000
-        var speed: Float = convertSpeedToKmH(modelModel.speed)
-        var averageSpeed: Float = convertSpeedToKmH(modelModel.averageSpeed)
+        var distance: Float = dataModel.distance / 1000
+        var speed: Float = convertSpeedToKmH(dataModel.speed)
+        var averageSpeed: Float = convertSpeedToKmH(dataModel.averageSpeed)
 
         if (!isUnitsMetric) {
             distance = convertKilometersToMiles(distance)
@@ -21,7 +31,7 @@ class RideConverter {
             averageSpeed = convertKilometersToMiles(averageSpeed)
         }
 
-        return RideModel(distance, speed, averageSpeed, modelModel.trackingPoints)
+        return RideModel(distance, speed, averageSpeed, dataModel.trackingPoints)
     }
 
     private fun convertSpeedToKmH(speedMetersPerSecond: Float): Float {

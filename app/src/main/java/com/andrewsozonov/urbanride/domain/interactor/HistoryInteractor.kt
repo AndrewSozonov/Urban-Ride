@@ -1,6 +1,5 @@
 package com.andrewsozonov.urbanride.domain.interactor
 
-import android.util.Log
 import com.andrewsozonov.urbanride.data.repository.BaseRepository
 import com.andrewsozonov.urbanride.domain.converter.HistoryConverter
 import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
@@ -30,7 +29,8 @@ class HistoryInteractor(val repository: BaseRepository, val converter: HistoryCo
      *
      * @param isUnitsMetric единицы измерения из preferences
      */
-     fun getAllRides(isUnitsMetric: Boolean) : List<HistoryModel> {
-        return repository.getAllRides().map { converter.convertFromRideToHistoryModel(it, isUnitsMetric) }
-     }
+    fun getAllRides(isUnitsMetric: Boolean): List<HistoryModel> {
+        return repository.getAllRides()
+            .map { converter.convertFromRideToHistoryModel(it, isUnitsMetric) }
+    }
 }

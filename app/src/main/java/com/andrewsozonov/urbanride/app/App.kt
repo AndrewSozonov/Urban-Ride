@@ -19,10 +19,6 @@ class App : Application() {
         fun getAppComponent(): AppComponent? {
             return appComponent
         }
-
-        /*fun setComponent(component: AppComponent?) {
-            appComponent = component
-        }*/
     }
 
     private fun generateAppComponent(): AppComponent {

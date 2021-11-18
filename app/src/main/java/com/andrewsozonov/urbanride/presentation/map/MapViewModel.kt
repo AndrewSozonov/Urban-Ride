@@ -26,6 +26,11 @@ class MapViewModel(val interactor: MapInteractor, val schedulersProvider: ISched
     var trackingPoints: MutableLiveData<List<List<LatLng>>> = MutableLiveData()
 
     /**
+     * [MutableLiveData] хранит значение загружаются ли данные в этот момент
+     */
+    val isLoading = MutableLiveData<Boolean>()
+
+    /**
      * Получить поездку из БД
      *
      * @param id id элемента
@@ -37,8 +42,10 @@ class MapViewModel(val interactor: MapInteractor, val schedulersProvider: ISched
         }
 
         disposable = singleObservable
+            .doOnSubscribe { isLoading.postValue(true) }
             .subscribeOn(schedulersProvider.io())
             .observeOn(schedulersProvider.ui())
+            .doAfterTerminate { isLoading.value = false }
             .subscribe({
                 trackingPoints.value = it.trackingPoints
             }, {})

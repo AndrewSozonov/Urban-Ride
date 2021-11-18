@@ -22,7 +22,6 @@ class MapInteractor(val repository: BaseRepository, val converter: MapConverter)
      * @return модель поездки [RideModel]
      */
     fun getRideById(id: Int): RideModel {
-//        Log.d("MapInteractor", " model: ${converter.convertFromRideDBModelToRideModel(repository.getRideById(id))}")
         return converter.convertFromRideDBModelToRideModel(repository.getRideById(id))
     }
 }

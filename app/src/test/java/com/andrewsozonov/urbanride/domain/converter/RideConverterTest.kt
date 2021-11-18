@@ -26,24 +26,14 @@ import org.junit.Test
 class RideConverterTest {
 
     private val converter: RideConverter = RideConverter()
-    private val trackingPoints: MutableList<MutableList<LatLng>> = mutableListOf(
-        mutableListOf(
-            LatLng(LAT1, LONG1),
-            LatLng(LAT2, LONG2)
-        ), mutableListOf(
-            LatLng(LAT3, LONG3),
-            LatLng(LAT4, LONG4)
-        )
-    )
-    private val rideDataModel =
-        RideDataModel(DISTANCE_METERS, SPEED_M_S, AVG_SPEED_M_S, trackingPoints)
-    private val rideModelMetric =
-        RideModel(DISTANCE_KM, SPEED_KM_H, AVG_SPEED_KM_H, trackingPoints)
-    private val rideModelMiles =
-        RideModel(DISTANCE_ML, SPEED_ML_H, AVG_SPEED_ML_H, trackingPoints)
+    private lateinit var rideDataModel: RideDataModel
+    private lateinit var rideModelMetric: RideModel
+    private lateinit var rideModelMiles: RideModel
 
     @Test
     fun `test ConvertFromRideDataModelToRideModel unitsMetric`() {
+        rideDataModel = createRideDataModel()
+        rideModelMetric = createRideModelMetric()
         val result = converter.convertFromRideDataModelToRideModel(rideDataModel, true)
         val expectedResult = rideModelMetric
 
@@ -52,9 +42,35 @@ class RideConverterTest {
 
     @Test
     fun `test ConvertFromRideDataModelToRideModel unitsMiles`() {
+        rideDataModel = createRideDataModel()
+        rideModelMiles = createRideModelMiles()
         val result = converter.convertFromRideDataModelToRideModel(rideDataModel, false)
         val expectedResult = rideModelMiles
 
         Truth.assertThat(result).isEqualTo(expectedResult)
+    }
+
+    private fun createTrackingPoints(): MutableList<MutableList<LatLng>> {
+        return mutableListOf(
+            mutableListOf(
+                LatLng(LAT1, LONG1),
+                LatLng(LAT2, LONG2)
+            ), mutableListOf(
+                LatLng(LAT3, LONG3),
+                LatLng(LAT4, LONG4)
+            )
+        )
+    }
+
+    private fun createRideDataModel(): RideDataModel {
+        return RideDataModel(DISTANCE_METERS, SPEED_M_S, AVG_SPEED_M_S, createTrackingPoints())
+    }
+
+    private fun createRideModelMetric(): RideModel {
+        return RideModel(DISTANCE_KM, SPEED_KM_H, AVG_SPEED_KM_H, createTrackingPoints())
+    }
+
+    private fun createRideModelMiles(): RideModel {
+        return RideModel(DISTANCE_ML, SPEED_ML_H, AVG_SPEED_ML_H, createTrackingPoints())
     }
 }

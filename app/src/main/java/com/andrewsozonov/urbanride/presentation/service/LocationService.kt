@@ -181,24 +181,75 @@ class LocationService : LifecycleService() {
             super.onLocationResult(p0)
             if (isTracking.value == true) {
                 p0.locations.let { locations ->
-                    for (location in locations) {
-                        addTrackingPoint(location)
+                    if (!checkLocationsEquals(locations.last())) {
+//                        addTrackingPoint(locations.last())
+                        locations.map {
+                            if (!checkLocationsEquals(it)) {
+                                addTrackingPoint(it)
+                            }
+                        }
                     }
                 }
             }
         }
     }
 
+    private fun checkLocationsEquals(location: Location): Boolean {
+        if (trackingPoints.value?.size!! >= 2) {
+
+            val points = trackingPoints.value
+            val lastLatitude = points?.get(points.size - 2)?.last()?.latitude
+            val lastLongitude = points?.get(points.size - 2)?.last()?.longitude
+            Log.d(
+                "CheckLocationEquals",
+                " lastLatitude: $lastLatitude  currentLatitude: ${location.latitude}  lastLongitude: $lastLongitude  currentLongitude: ${location.longitude}"
+            )
+            return (location.latitude == lastLatitude && location.longitude == lastLongitude)
+        }
+        return false
+    }
+
     private fun addTrackingPoint(location: Location?) {
         location?.let {
             val position =
-                LocationPoint(location.latitude, location.longitude, location.speed, rideTime.value!!, 0f)
+                LocationPoint(
+                    location.latitude,
+                    location.longitude,
+                    location.speed,
+                    rideTime.value!!,
+                    0f
+                )
             trackingPoints.value?.apply {
-                Log.d("addTrackingPoint", "lat: ${position.latitude}  long: ${position.longitude}  speed: ${position.speed}  time: ${position.time}")
                 last().add(position)
+                val distance = calculateDistance(this)
+                this.last().last().distance = distance
                 trackingPoints.postValue(this)
+                Log.d(
+                    "addTrackingPoint",
+                    "lat: ${position.latitude}  long: ${position.longitude}  speed: ${position.speed}  time: ${position.time}  distance: ${position.distance}"
+                )
             }
         }
+    }
+
+    private fun calculateDistance(trackingPoints: List<List<LocationPoint>>): Float {
+        var distance = 0.0
+        for (path in trackingPoints) {
+            for (i in 0..path.size - 2) {
+                val point1 = path[i]
+                val point2 = path[i + 1]
+                val result = FloatArray(1)
+                Location.distanceBetween(
+                    point1.latitude,
+                    point1.longitude,
+                    point2.latitude,
+                    point2.longitude,
+                    result
+                )
+                distance += result[0]
+            }
+        }
+        return distance.toInt().toFloat()
     }
 
     private fun addEmptyPath() = trackingPoints.value?.apply {

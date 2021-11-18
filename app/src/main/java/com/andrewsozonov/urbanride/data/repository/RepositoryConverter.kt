@@ -1,6 +1,5 @@
 package com.andrewsozonov.urbanride.data.repository
 
-import android.location.Location
 import com.andrewsozonov.urbanride.data.model.RideDataModel
 import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
 import com.google.android.gms.maps.model.LatLng
@@ -25,7 +24,9 @@ class RepositoryConverter {
         trackingPoints: List<List<LocationPoint>>,
         ridingTime: Long
     ): RideDataModel {
-        val distance = calculateDistance(trackingPoints)
+        val distance = if (trackingPoints.last().isNotEmpty()) {
+            trackingPoints.last().last().distance
+        } else 0f
         val speed = if (trackingPoints.last().isNotEmpty()) {
             trackingPoints.last().last().speed
         } else 0f
@@ -37,26 +38,6 @@ class RepositoryConverter {
             averageSpeed,  // метры в сек
             convertLocationPointToLatLng(trackingPoints)
         )
-    }
-
-    fun calculateDistance(trackingPoints: List<List<LocationPoint>>): Float {
-        var distance = 0.0
-        for (path in trackingPoints) {
-            for (i in 0..path.size - 2) {
-                val point1 = path[i]
-                val point2 = path[i + 1]
-                val result = FloatArray(1)
-                Location.distanceBetween(
-                    point1.latitude,
-                    point1.longitude,
-                    point2.latitude,
-                    point2.longitude,
-                    result
-                )
-                distance += result[0]
-            }
-        }
-        return distance.toInt().toFloat()
     }
 
     private fun calculateAverageSpeed(ridingTime: Long, distance: Float): Float {

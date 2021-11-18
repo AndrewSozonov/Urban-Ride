@@ -11,21 +11,21 @@ object TestConstants {
     const val LONG3 = 30.3205178
     const val LONG4 = 30.32131
 
-    const val DISTANCE_METERS = 486.0f
-    const val DISTANCE_KM = 0.486f
-    const val DISTANCE_KM_DB = 0.486
-    const val DISTANCE_ML = 0.3f
-    const val DISTANCE_ML_DB = 0.3
+    const val DISTANCE_METERS = 254.0f
+    const val DISTANCE_KM = 0.254f
+    const val DISTANCE_KM_DB = 0.254
+    const val DISTANCE_ML = 0.16f
+    const val DISTANCE_ML_DB = 0.16
 
-    const val SPEED_M_S = 16.009497f
-    const val SPEED_KM_H = 57.63f
-    const val SPEED_ML_H = 35.73f
+    const val SPEED_M_S = 16.123486f
+    const val SPEED_KM_H = 58.04f
+    const val SPEED_ML_H = 35.98f
 
-    const val AVG_SPEED_M_S = 12.31f
-    const val AVG_SPEED_KM_H = 44.32f
-    const val AVG_SPEED_KM_H_DB = 44.32
-    const val AVG_SPEED_ML_H = 27.48f
-    const val AVG_SPEED_ML_H_DB = 27.48
+    const val AVG_SPEED_M_S = 6.27f
+    const val AVG_SPEED_KM_H = 22.57f
+    const val AVG_SPEED_KM_H_DB = 22.57
+    const val AVG_SPEED_ML_H = 13.99f
+    const val AVG_SPEED_ML_H_DB = 13.99
 
     const val TIMER_VALUE = "23:59:59"
     const val STATUS = "SERVICE_STARTED"

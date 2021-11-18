@@ -68,6 +68,22 @@ class MapFragment : Fragment() {
             trackingPoints = it
             drawFinalRoute()
         })
+
+        viewModel.isLoading.observe(viewLifecycleOwner, {
+            if (it) {
+                showProgressBar()
+            } else {
+                hideProgressBar()
+            }
+        })
+    }
+
+    private fun showProgressBar() {
+        binding.mapProgressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideProgressBar() {
+        binding.mapProgressBar.visibility = View.GONE
     }
 
     private fun drawFinalRoute() {

@@ -32,13 +32,10 @@ class MainActivity : AppCompatActivity() {
         setColorTheme()
 
         setContentView(binding.root)
-        navigateToRideFragment(intent)
 
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_ride, R.id.navigation_history, R.id.navigation_settings
@@ -46,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         )
 //        setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        navigateToRideFragment(intent)
     }
 
     private fun setColorTheme() {

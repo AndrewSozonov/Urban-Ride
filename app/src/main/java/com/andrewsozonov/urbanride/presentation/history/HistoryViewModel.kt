@@ -32,6 +32,12 @@ class HistoryViewModel(
      */
     val listOfRides = MutableLiveData<List<HistoryModel>>()
 
+
+    /**
+     * [MutableLiveData] хранит значение загружаются ли данные в этот момент
+     */
+    val isLoading = MutableLiveData<Boolean>()
+
     /**
      * Удаляет поездку из БД
      *
@@ -43,11 +49,13 @@ class HistoryViewModel(
             interactor.deleteRide(id)
         }
         compositeDisposable.add(observable
+            .doOnSubscribe { isLoading.postValue(true) }
             .andThen(
                 Single.fromCallable { interactor.getAllRides(isUnitsMetric) }
             )
             .subscribeOn(schedulersProvider.io())
             .observeOn(schedulersProvider.ui())
+            .doAfterTerminate { isLoading.value = false }
             .subscribe { t1, t2 ->
                 t1?.let(listOfRides::setValue)
                 Log.d("getRidesFromDB", " listOfRides $t1")
@@ -67,12 +75,12 @@ class HistoryViewModel(
         }
         compositeDisposable.add(
             singleObservable
+                .doOnSubscribe { isLoading.postValue(true) }
                 .subscribeOn(schedulersProvider.io())
                 .observeOn(schedulersProvider.ui())
+                .doAfterTerminate { isLoading.value = false }
                 .subscribe({
                     listOfRides.value = it
-                    Log.d("historyViewModel", "rides: ${listOfRides.value!!.last()}")
-
                 }, {})
         )
     }

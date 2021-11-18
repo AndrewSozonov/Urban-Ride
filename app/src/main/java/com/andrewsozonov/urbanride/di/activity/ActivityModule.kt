@@ -14,7 +14,8 @@ import dagger.Provides
 
 
 /**
- * Модуль предоставляет зависимости [RideViewModelFactory], [HistoryViewModelFactory]
+ * Модуль предоставляет зависимости [RideViewModelFactory], [HistoryViewModelFactory],
+ * [LocationViewModelFactory], [MapViewModelFactory]
  *
  * @author Андрей Созонов
  */

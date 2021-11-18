@@ -46,44 +46,52 @@ class MapInteractorTest {
     private val repository: BaseRepository = mockk()
     private val converter: MapConverter = mockk()
     private val interactor = MapInteractor(repository, converter)
-
     private val mapImage: Bitmap = mockk()
-    private val trackingPoints: MutableList<MutableList<LocationPoint>> = mutableListOf(
-        mutableListOf(
-            LocationPoint(LAT1, LONG1, SPEED1_M_S, TIME1_MS, DISTANCE1_METERS),
-            LocationPoint(LAT2, LONG2, SPEED2_M_S, TIME2_MS, DISTANCE2_METERS),
-        ), mutableListOf(
-            LocationPoint(LAT3, LONG3, SPEED3_M_S, TIME3_MS, DISTANCE3_METERS),
-            LocationPoint(LAT4, LONG4, SPEED4_M_S, TIME4_MS, DISTANCE4_METERS),
-        )
-    )
-    private val rideDBModel =
-        RideDBModel(START_TIME_MS, FINISH_TIME_MS, DURATION_MS, DISTANCE_METERS, AVG_SPEED_M_S, mapImage, trackingPoints)
-
-    private val testTrackingPoints: MutableList<MutableList<LatLng>> = mutableListOf(
-        mutableListOf(
-            LatLng(LAT1, LONG1), LatLng(LAT2, LONG2),
-        ), mutableListOf(
-            LatLng(LAT3, LONG3), LatLng(LAT4, LONG4),
-            )
-    )
-
-    private val testRideModel = RideModel(DISTANCE_KM, SPEED4_M_S, AVG_SPEED_KM_H, testTrackingPoints)
+    private lateinit var rideDBModel: RideDBModel
+    private lateinit var rideModel: RideModel
     private val id = ID
 
     @Before
     fun setUp() {
+        rideDBModel = createRideDBModel()
+        rideModel = createRideModel()
         every { repository.getRideById(id) } returns rideDBModel
         rideDBModel.id = ID
-        every { converter.convertFromRideDBModelToRideModel(rideDBModel) } returns testRideModel
+        every { converter.convertFromRideDBModelToRideModel(rideDBModel) } returns rideModel
     }
 
     @Test
     fun `test getRideById`() {
         val result = interactor.getRideById(id)
-        val expectedResult = testRideModel
+        val expectedResult = rideModel
 
         Truth.assertThat(result).isEqualTo(expectedResult)
+    }
+
+    private fun createRideDBModel(): RideDBModel {
+
+        val locationPoints: MutableList<MutableList<LocationPoint>> = mutableListOf(
+            mutableListOf(
+                LocationPoint(LAT1, LONG1, SPEED1_M_S, TIME1_MS, DISTANCE1_METERS),
+                LocationPoint(LAT2, LONG2, SPEED2_M_S, TIME2_MS, DISTANCE2_METERS),
+            ), mutableListOf(
+                LocationPoint(LAT3, LONG3, SPEED3_M_S, TIME3_MS, DISTANCE3_METERS),
+                LocationPoint(LAT4, LONG4, SPEED4_M_S, TIME4_MS, DISTANCE4_METERS),
+            )
+        )
+        return RideDBModel(START_TIME_MS, FINISH_TIME_MS, DURATION_MS, DISTANCE_METERS, AVG_SPEED_M_S, mapImage, locationPoints)
+    }
+
+    private fun createRideModel(): RideModel {
+
+        val trackingPoints: MutableList<MutableList<LatLng>> = mutableListOf(
+            mutableListOf(
+                LatLng(LAT1, LONG1), LatLng(LAT2, LONG2),
+            ), mutableListOf(
+                LatLng(LAT3, LONG3), LatLng(LAT4, LONG4),
+            )
+        )
+        return RideModel(DISTANCE_KM, SPEED4_M_S, AVG_SPEED_KM_H, trackingPoints)
     }
 
 }

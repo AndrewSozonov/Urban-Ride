@@ -47,7 +47,7 @@ class AppModule(var application: Application) {
     }
 
     @Provides
-    fun provideConverter(): RepositoryConverter {
+    fun provideRepositoryConverter(): RepositoryConverter {
         return RepositoryConverter()
     }
 

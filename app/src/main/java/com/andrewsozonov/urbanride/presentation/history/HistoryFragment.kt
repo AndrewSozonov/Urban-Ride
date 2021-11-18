@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.findNavController
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -24,6 +25,7 @@ import com.andrewsozonov.urbanride.presentation.history.adapter.HistoryItemDecor
 import com.andrewsozonov.urbanride.presentation.history.adapter.HistoryRecyclerAdapter
 import com.andrewsozonov.urbanride.presentation.history.adapter.IHistoryRecyclerListener
 import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
+import com.andrewsozonov.urbanride.presentation.map.MapFragment
 import com.andrewsozonov.urbanride.util.Constants.BUNDLE_RIDE_ID_KEY
 import com.andrewsozonov.urbanride.util.Constants.RECYCLER_ITEMS_SPACING
 import java.io.OutputStream
@@ -40,7 +42,6 @@ class HistoryFragment : Fragment() {
 
     private lateinit var historyViewModel: HistoryViewModel
     private var _binding: FragmentHistoryBinding? = null
-    private var historyRecyclerView: RecyclerView? = null
     private var historyRecyclerAdapter: HistoryRecyclerAdapter? = null
     private var listOfRides: List<HistoryModel> = mutableListOf()
     private lateinit var itemTouchHelper: ItemTouchHelper
@@ -59,19 +60,28 @@ class HistoryFragment : Fragment() {
         createViewModel()
 
         _binding = FragmentHistoryBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-        historyRecyclerView = binding.historyRecyclerView
-
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         checkPreferences()
         initRecyclerView()
         historyViewModel.getRidesFromDB(isUnitsMetric)
+        subscribeToObservers()
+    }
+
+    private fun subscribeToObservers() {
         historyViewModel.listOfRides.observe(viewLifecycleOwner, {
             setData(it)
             listOfRides = it
+        })
+
+        historyViewModel.isLoading.observe(viewLifecycleOwner, {
+            if (it) {
+                showProgressBar()
+            } else {
+                hideProgressBar()
+            }
         })
     }
 
@@ -89,8 +99,8 @@ class HistoryFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
-        historyRecyclerView?.setHasFixedSize(true)
-        historyRecyclerView?.layoutManager = LinearLayoutManager(requireContext())
+        binding.historyRecyclerView.setHasFixedSize(true)
+        binding.historyRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         historyRecyclerAdapter = HistoryRecyclerAdapter(object : IHistoryRecyclerListener {
             override fun onMapClick(position: Int) {
                 openMapFragment(position)
@@ -101,7 +111,7 @@ class HistoryFragment : Fragment() {
             }
 
         })
-        historyRecyclerView?.addItemDecoration(
+        binding.historyRecyclerView.addItemDecoration(
             HistoryItemDecoration(
                 requireContext(),
                 R.drawable.recycler_item_divider,
@@ -109,8 +119,8 @@ class HistoryFragment : Fragment() {
             )
         )
         itemTouchHelper = ItemTouchHelper(itemTouchHelperCallBack)
-        itemTouchHelper.attachToRecyclerView(historyRecyclerView)
-        historyRecyclerView?.adapter = historyRecyclerAdapter
+        itemTouchHelper.attachToRecyclerView(binding.historyRecyclerView)
+        binding.historyRecyclerView.adapter = historyRecyclerAdapter
     }
 
     private fun setData(rides: List<HistoryModel>) {
@@ -121,6 +131,14 @@ class HistoryFragment : Fragment() {
         val bundle = bundleOf(BUNDLE_RIDE_ID_KEY to position)
         val navController = activity?.findNavController(R.id.nav_host_fragment_activity_main)
         navController?.navigate(R.id.action_navigation_history_to_mapFragment, bundle)
+    }
+
+    private fun showProgressBar() {
+        binding.historyProgressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideProgressBar() {
+        binding.historyProgressBar.visibility = View.GONE
     }
 
     private fun showShareSheet(position: Int) {

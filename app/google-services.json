@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "498038796695",
+    "project_id": "urban-ride-328110",
+    "storage_bucket": "urban-ride-328110.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:498038796695:android:1810085e3e3d4d51fe54d2",
+        "android_client_info": {
+          "package_name": "com.andrewsozonov.urbanride"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "498038796695-fjvam9qmi6aptsrjd5jc1o21pe859gic.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCf6tttyq0mVTpl5BSx_5MC_eSuQq9ySPY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "498038796695-fjvam9qmi6aptsrjd5jc1o21pe859gic.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

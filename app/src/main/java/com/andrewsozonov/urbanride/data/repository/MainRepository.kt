@@ -4,13 +4,12 @@ import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.andrewsozonov.urbanride.data.model.RideDataModel
-import com.andrewsozonov.urbanride.data.database.RideDao
 import com.andrewsozonov.urbanride.data.database.RideDBModel
+import com.andrewsozonov.urbanride.data.database.RideDao
+import com.andrewsozonov.urbanride.data.model.RideDataModel
 import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
 import com.andrewsozonov.urbanride.util.DataFormatter
 import java.util.*
-import javax.inject.Inject
 
 
 /**
@@ -21,7 +20,7 @@ import javax.inject.Inject
  *
  * @author Андрей Созонов
  */
-class MainRepository @Inject constructor(
+class MainRepository(
     private val rideDao: RideDao,
     private val converter: RepositoryConverter
 ) : BaseRepository {
@@ -128,18 +127,11 @@ class MainRepository @Inject constructor(
      * обновляет в LiveData[data]
      */
     private fun calculateData() {
-        Log.d("mainRepository", " trackingPoints: $trackingPoints  ridingTime: $ridingTime")
         val rideDataModel = converter.convertDataToRideDataModel(trackingPoints, ridingTime)
-        Log.d("mainRepository", " rideDataModel: $rideDataModel")
 
         distance = rideDataModel.distance
         speed = rideDataModel.speed
         averageSpeed = rideDataModel.averageSpeed
-        if (trackingPoints.last().isNotEmpty()) {
-            trackingPoints.last().last().distance = distance
-            Log.d("calculate data", " distance: ${trackingPoints.last().last().distance}")
-        }
-        Log.d("calculate data", " speed: $speed")
         Log.d("calculateData", "rideDataModel ${rideDataModel.trackingPoints}")
         data.value = rideDataModel
     }
