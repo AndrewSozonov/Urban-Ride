@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.andrewsozonov.urbanride.R
 import com.andrewsozonov.urbanride.app.App
 import com.andrewsozonov.urbanride.databinding.MapFragmentBinding
@@ -55,6 +56,10 @@ class MapFragment : Fragment() {
             arguments?.getInt(BUNDLE_RIDE_ID_KEY)?.let { id -> viewModel.getRide(id) }
             subscribeToObservers()
         }
+
+        binding.closeMapButton.setOnClickListener {
+            closeMap()
+        }
     }
 
     private fun createViewModel() {
@@ -86,6 +91,11 @@ class MapFragment : Fragment() {
         binding.mapProgressBar.visibility = View.GONE
     }
 
+    private fun closeMap() {
+        val navController = activity?.findNavController(R.id.nav_host_fragment_activity_main)
+        navController?.navigate(R.id.action_mapFragment_to_navigation_history)
+    }
+
     private fun drawFinalRoute() {
         if (trackingPoints.isNotEmpty()) {
             clearMap()
@@ -99,11 +109,11 @@ class MapFragment : Fragment() {
             map.addPolyline(polylineOptions)
 
         }
-        addMarkers(map)
+        addStartAndFinishMarkers(map)
         zoomMap()
     }
 
-    private fun addMarkers(googleMap: GoogleMap) {
+    private fun addStartAndFinishMarkers(googleMap: GoogleMap) {
         googleMap.addMarker(
             MarkerOptions()
                 .title(getString(R.string.start))

@@ -39,7 +39,7 @@ class RideInteractor(val repository: BaseRepository, val converter: RideConverte
     /**
      * Получает значение таймера из репозитория
      */
-    fun getTimerValue(): MutableLiveData<String> = repository.getTimerValue()
+    fun getTimerValue(): LiveData<String> = repository.getTimerValue()
 
     /**
      * Добавить поездку в БД

@@ -35,7 +35,7 @@ class MainRepository(
     private val timerLiveData: MutableLiveData<String> = MutableLiveData()
     private val data: MutableLiveData<RideDataModel> = MutableLiveData()
 
-    override fun getTimerValue(): MutableLiveData<String> {
+    override fun getTimerValue(): LiveData<String> {
         return timerLiveData
     }
 
@@ -47,7 +47,7 @@ class MainRepository(
         return serviceStatusLiveData
     }
 
-    override fun getTrackingData(): MutableLiveData<RideDataModel> {
+    override fun getTrackingData(): LiveData<RideDataModel> {
         return data
     }
 

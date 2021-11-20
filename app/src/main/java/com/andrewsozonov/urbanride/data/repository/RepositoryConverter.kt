@@ -24,10 +24,10 @@ class RepositoryConverter {
         trackingPoints: List<List<LocationPoint>>,
         ridingTime: Long
     ): RideDataModel {
-        val distance = if (trackingPoints.last().isNotEmpty()) {
+        val distance = if (trackingPoints.isNotEmpty() && trackingPoints.last().isNotEmpty()) {
             trackingPoints.last().last().distance
         } else 0f
-        val speed = if (trackingPoints.last().isNotEmpty()) {
+        val speed = if (trackingPoints.isNotEmpty() && trackingPoints.last().isNotEmpty()) {
             trackingPoints.last().last().speed
         } else 0f
         val averageSpeed = calculateAverageSpeed(ridingTime, distance)

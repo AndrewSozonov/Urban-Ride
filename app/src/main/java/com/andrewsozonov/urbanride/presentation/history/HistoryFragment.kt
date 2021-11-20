@@ -2,7 +2,7 @@ package com.andrewsozonov.urbanride.presentation.history
 
 import android.content.ContentValues
 import android.content.Intent
-import android.graphics.*
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -12,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.findNavController
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -25,7 +24,6 @@ import com.andrewsozonov.urbanride.presentation.history.adapter.HistoryItemDecor
 import com.andrewsozonov.urbanride.presentation.history.adapter.HistoryRecyclerAdapter
 import com.andrewsozonov.urbanride.presentation.history.adapter.IHistoryRecyclerListener
 import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
-import com.andrewsozonov.urbanride.presentation.map.MapFragment
 import com.andrewsozonov.urbanride.util.Constants.BUNDLE_RIDE_ID_KEY
 import com.andrewsozonov.urbanride.util.Constants.RECYCLER_ITEMS_SPACING
 import java.io.OutputStream
@@ -150,26 +148,30 @@ class HistoryFragment : Fragment() {
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val contentValues = ContentValues()
-            contentValues.put(MediaStore.Images.Media.MIME_TYPE, resources.getString(R.string.content_values_mime_type))
-            contentValues.put(MediaStore.Images.Media.IS_PENDING, 1)
+        val contentValues = ContentValues()
+        contentValues.put(
+            MediaStore.Images.Media.MIME_TYPE,
+            resources.getString(R.string.content_values_mime_type)
+        )
+        contentValues.put(MediaStore.Images.Media.IS_PENDING, 1)
 
-            val resolver = requireActivity().contentResolver
-            val imageUri =
-                resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-            val fos: OutputStream? = imageUri?.let { resolver.openOutputStream(it) }
-            shareMapImage.compress(Bitmap.CompressFormat.PNG, 100, fos)
-            fos?.flush()
-            fos?.close()
+        val resolver = requireActivity().contentResolver
+        val imageUri =
+            resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+        val fos: OutputStream? = imageUri?.let { resolver.openOutputStream(it) }
+        shareMapImage.compress(Bitmap.CompressFormat.PNG, 100, fos)
+        fos?.flush()
+        fos?.close()
 
-            contentValues.clear()
-            contentValues.put(MediaStore.Images.Media.IS_PENDING, 0)
-            resolver.update(imageUri!!, contentValues, null, null)
+        contentValues.clear()
+        contentValues.put(MediaStore.Images.Media.IS_PENDING, 0)
+        resolver.update(imageUri!!, contentValues, null, null)
 
-            shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri)
-            shareIntent.type = resources.getString(R.string.share_intent_type)
-            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            startActivity(Intent.createChooser(shareIntent, null))
+        shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri)
+        shareIntent.type = resources.getString(R.string.share_intent_type)
+        shareIntent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        shareIntent.flags = Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        startActivity(Intent.createChooser(shareIntent, null))
         } else {
             val path: String = MediaStore.Images.Media.insertImage(
                 requireActivity().contentResolver,

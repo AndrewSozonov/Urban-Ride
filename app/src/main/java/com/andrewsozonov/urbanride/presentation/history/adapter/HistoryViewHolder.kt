@@ -2,6 +2,7 @@ package com.andrewsozonov.urbanride.presentation.history.adapter
 
 import android.content.res.Resources
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.andrewsozonov.urbanride.R
 import com.andrewsozonov.urbanride.databinding.RecyclerItemHistoryBinding
@@ -111,8 +112,10 @@ class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private fun showGraph(graph: GraphView, series: LineGraphSeries<DataPoint>) {
         graph.removeAllSeries()
+        graph.onDataChanged(false, false)
+        graph.viewport.setMaxX(series.highestValueX * 1.1)
         graph.addSeries(series)
-        graph.onDataChanged(true, false)
         graph.viewport.isScalable = true
+        graph.viewport.isScrollable = true
     }
 }

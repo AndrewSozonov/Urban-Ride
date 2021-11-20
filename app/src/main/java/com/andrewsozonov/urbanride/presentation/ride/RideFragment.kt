@@ -253,35 +253,37 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
             map.addPolyline(polylineOptions)
 
         }
-        addMarkers(map)
+        addStartAndFinishMarkers(map)
         moveCameraToCurrentLocation()
     }
 
-    private fun addMarkers(googleMap: GoogleMap) {
-        googleMap.addMarker(
-            MarkerOptions()
-                .title(getString(R.string.start))
-                .position(trackingPoints.first().first())
-                .icon(
-                    BitmapHelper.vectorToBitmap(
-                        requireContext(),
-                        R.drawable.ic_start_flag,
-                        ContextCompat.getColor(requireContext(), R.color.dark_blue )
+    private fun addStartAndFinishMarkers(googleMap: GoogleMap) {
+        if (trackingPoints.first().isNotEmpty()) {
+            googleMap.addMarker(
+                MarkerOptions()
+                    .title(getString(R.string.start))
+                    .position(trackingPoints.first().first())
+                    .icon(
+                        BitmapHelper.vectorToBitmap(
+                            requireContext(),
+                            R.drawable.ic_start_flag,
+                            ContextCompat.getColor(requireContext(), R.color.dark_blue)
+                        )
                     )
-                )
-        )
-        googleMap.addMarker(
-            MarkerOptions()
-                .title(getString(R.string.finish))
-                .position(trackingPoints.last().last())
-                .icon(
-                    BitmapHelper.vectorToBitmap(
-                        requireContext(),
-                        R.drawable.ic_finish_flag,
-                        ContextCompat.getColor(requireContext(), R.color.dark_blue )
+            )
+            googleMap.addMarker(
+                MarkerOptions()
+                    .title(getString(R.string.finish))
+                    .position(trackingPoints.last().last())
+                    .icon(
+                        BitmapHelper.vectorToBitmap(
+                            requireContext(),
+                            R.drawable.ic_finish_flag,
+                            ContextCompat.getColor(requireContext(), R.color.dark_blue)
+                        )
                     )
-                )
-        )
+            )
+        }
     }
 
     private fun clearMap() {
@@ -393,7 +395,9 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
                 requestMultiplePermissions.launch(
                     arrayOf(
                         Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_FINE_LOCATION
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+
                     )
                 )
             } else {

@@ -30,10 +30,15 @@
         android:name="com.andrewsozonov.urbanride.presentation.settings.SettingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
+
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.andrewsozonov.urbanride.presentation.map.MapFragment"
         android:label="map_fragment"
-        tools:layout="@layout/map_fragment" />
+        tools:layout="@layout/map_fragment" >
+        <action
+            android:id="@+id/action_mapFragment_to_navigation_history"
+            app:destination="@id/navigation_history" />
+    </fragment>
 
 </navigation>

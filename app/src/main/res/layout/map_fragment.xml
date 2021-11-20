@@ -10,6 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <ImageButton
+        android:id="@+id/close_map_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:background="@drawable/ic_baseline_close_24"
+        android:layout_margin="20dp"/>
+
     <ProgressBar
         android:id="@+id/map_progressBar"
         android:layout_width="60dp"

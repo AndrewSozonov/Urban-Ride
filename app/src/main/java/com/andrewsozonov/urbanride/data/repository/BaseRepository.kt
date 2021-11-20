@@ -64,7 +64,7 @@ interface BaseRepository {
      *
      * @return LiveData со значением таймера
      */
-    fun getTimerValue(): MutableLiveData<String>
+    fun getTimerValue(): LiveData<String>
 
     /**
      * Обновляет статус сервиса геолокации
@@ -81,5 +81,5 @@ interface BaseRepository {
     /**
      * Возвращает LiveData со списком координат
      */
-    fun getTrackingData(): MutableLiveData<RideDataModel>
+    fun getTrackingData(): LiveData<RideDataModel>
 }

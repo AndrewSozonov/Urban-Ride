@@ -18,7 +18,7 @@ object Constants {
     const val POLYLINE_WIDTH = 12f
     const val GRAPH_PADDING = 20
 
-    const val LOCATION_UPDATE_INTERVAL = 5000L
+    const val LOCATION_UPDATE_INTERVAL = 2000L
     const val TIMER_DELAY = 1000L
     const val RECYCLER_ITEMS_SPACING = 20
 

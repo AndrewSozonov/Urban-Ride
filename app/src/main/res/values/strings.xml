@@ -40,4 +40,8 @@
 
     <string name="content_values_mime_type">image/jpeg</string>
     <string name="share_intent_type">image/*</string>
+    <string name="check_internet_connection">Check Internet connection</string>
+    <string name="location_option_required">This application requires location option turned on</string>
+    <string name="open_settings">Open settings</string>
+    <string name="cancel">Cancel</string>
 </resources>

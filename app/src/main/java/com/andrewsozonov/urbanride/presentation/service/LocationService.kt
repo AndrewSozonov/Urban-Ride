@@ -162,8 +162,9 @@ class LocationService : LifecycleService() {
             if (PermissionsUtil.checkPermissions(this)) {
                 val request = LocationRequest().apply {
                     interval = LOCATION_UPDATE_INTERVAL
-                    fastestInterval = 2000L
+//                    fastestInterval = 2000L
                     priority = PRIORITY_HIGH_ACCURACY
+                    isWaitForAccurateLocation = true
                 }
                 fusedLocationProviderClient.requestLocationUpdates(
                     request,
