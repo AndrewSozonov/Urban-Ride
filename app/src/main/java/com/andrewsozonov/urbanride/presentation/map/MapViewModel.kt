@@ -2,14 +2,12 @@ package com.andrewsozonov.urbanride.presentation.map
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.andrewsozonov.urbanride.data.repository.BaseRepository
 import com.andrewsozonov.urbanride.domain.interactor.MapInteractor
-import com.andrewsozonov.urbanride.presentation.history.HistoryFragment
+import com.andrewsozonov.urbanride.presentation.BaseViewModel
 import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
 import com.andrewsozonov.urbanride.util.ISchedulersProvider
 import com.google.android.gms.maps.model.LatLng
 import io.reactivex.Single
-import io.reactivex.disposables.Disposable
 
 /**
  * [ViewModel] прикреплена к [MapFragment]
@@ -20,9 +18,9 @@ import io.reactivex.disposables.Disposable
  *
  * @author Андрей Созонов
  */
-class MapViewModel(val interactor: MapInteractor, val schedulersProvider: ISchedulersProvider) : ViewModel() {
+class MapViewModel(val interactor: MapInteractor, val schedulersProvider: ISchedulersProvider) :
+    BaseViewModel() {
 
-    private var disposable: Disposable? = null
     var trackingPoints: MutableLiveData<List<List<LatLng>>> = MutableLiveData()
 
     /**
@@ -41,7 +39,7 @@ class MapViewModel(val interactor: MapInteractor, val schedulersProvider: ISched
             interactor.getRideById(id)
         }
 
-        disposable = singleObservable
+        compositeDisposable.add(singleObservable
             .doOnSubscribe { isLoading.postValue(true) }
             .subscribeOn(schedulersProvider.io())
             .observeOn(schedulersProvider.ui())
@@ -49,10 +47,6 @@ class MapViewModel(val interactor: MapInteractor, val schedulersProvider: ISched
             .subscribe({
                 trackingPoints.value = it.trackingPoints
             }, {})
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        disposable?.dispose()
+        )
     }
 }

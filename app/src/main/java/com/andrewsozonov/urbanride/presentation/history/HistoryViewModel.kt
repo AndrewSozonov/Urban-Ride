@@ -4,11 +4,11 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.andrewsozonov.urbanride.domain.interactor.HistoryInteractor
+import com.andrewsozonov.urbanride.presentation.BaseViewModel
 import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
 import com.andrewsozonov.urbanride.util.ISchedulersProvider
 import io.reactivex.Completable
 import io.reactivex.Single
-import io.reactivex.disposables.CompositeDisposable
 
 
 /**
@@ -23,9 +23,7 @@ import io.reactivex.disposables.CompositeDisposable
 class HistoryViewModel(
     val interactor: HistoryInteractor,
     val schedulersProvider: ISchedulersProvider
-) : ViewModel() {
-
-    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
+) : BaseViewModel() {
 
     /**
      * [MutableLiveData] хранит модель данных для отображения во фрагменте
@@ -83,10 +81,5 @@ class HistoryViewModel(
                     listOfRides.value = it
                 }, {})
         )
-    }
-
-    override fun onCleared() {
-        compositeDisposable.dispose()
-        super.onCleared()
     }
 }

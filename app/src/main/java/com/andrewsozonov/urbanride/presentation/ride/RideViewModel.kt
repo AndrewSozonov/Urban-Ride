@@ -4,12 +4,11 @@ import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.andrewsozonov.urbanride.data.database.RideDBModel
 import com.andrewsozonov.urbanride.domain.interactor.RideInteractor
+import com.andrewsozonov.urbanride.presentation.BaseViewModel
 import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
 import com.andrewsozonov.urbanride.util.ISchedulersProvider
 import io.reactivex.Completable
-import io.reactivex.disposables.Disposable
 
 /**
  * [ViewModel] прикреплена к [RideFragment]
@@ -21,10 +20,11 @@ import io.reactivex.disposables.Disposable
  *
  * @author Андрей Созонов
  */
-class RideViewModel(private val interactor: RideInteractor, val schedulersProvider: ISchedulersProvider) :
-    ViewModel() {
-
-    private var disposable: Disposable? = null
+class RideViewModel(
+    private val interactor: RideInteractor,
+    val schedulersProvider: ISchedulersProvider
+) :
+    BaseViewModel() {
 
     val serviceStatus: LiveData<String> = interactor.getServiceStatus()
 
@@ -56,15 +56,11 @@ class RideViewModel(private val interactor: RideInteractor, val schedulersProvid
         val observable = Completable.fromCallable {
             interactor.addRide(mapImage)
         }
-
-        disposable = observable
-            .subscribeOn(schedulersProvider.io())
-            .observeOn(schedulersProvider.ui())
-            .subscribe()
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        disposable?.dispose()
+        compositeDisposable.add(
+            observable
+                .subscribeOn(schedulersProvider.io())
+                .observeOn(schedulersProvider.ui())
+                .subscribe()
+        )
     }
 }
