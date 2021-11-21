@@ -147,7 +147,8 @@ class HistoryConverterTest {
             AVG_SPEED_KM_H_DB,
             MAX_SPEED_KM_H,
             mapImage,
-            createHistoryTrackingPointsKm()
+            createHistoryTrackingPointsKm(),
+            true
         )
     }
 
@@ -174,7 +175,8 @@ class HistoryConverterTest {
             AVG_SPEED_ML_H_DB,
             MAX_SPEED_ML_H,
             mapImage,
-            createHistoryTrackingPointsMiles()
+            createHistoryTrackingPointsMiles(),
+            false
         )
     }
 }

@@ -71,7 +71,8 @@ class MapViewModelTest {
         return RideModel(
             TestConstants.DISTANCE_KM,
             TestConstants.SPEED4_M_S,
-            TestConstants.AVG_SPEED_KM_H, trackingPoints
+            TestConstants.AVG_SPEED_KM_H, trackingPoints,
+            true
         )
     }
 

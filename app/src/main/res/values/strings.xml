@@ -26,7 +26,7 @@
     <string name="units_miles">Miles</string>
 
     <string name="dark_theme_pref_key">dark_theme_pref_key</string>
-    <string name="unit_system_pref_key">unit_system_pref_key</string>
+    <string name="unit_system_pref_key">"UNITS_KEY"</string>
     <string name="history_date_pattern">dd.MM.yy</string>
     <string name="history_time_pattern">HH:mm</string>
     <string name="permission_toast">This application require Location permission to work properly</string>

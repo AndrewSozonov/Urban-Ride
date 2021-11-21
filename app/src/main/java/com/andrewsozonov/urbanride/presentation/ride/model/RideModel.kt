@@ -10,7 +10,8 @@ import com.google.android.gms.maps.model.LatLng
  * @param speed текущая скорость в км/ч или или мили/ч
  * @param averageSpeed средняя скорость в км/ч или милях
  * @param trackingPoints список координат для отображения на карте
+ * @param isUnitsMetric единиицы измерения из preferences true - метры, false - мили
  *
  * @author Андрей Созонов
  */
-data class RideModel (val distance: Float, val speed: Float, val averageSpeed: Float, val trackingPoints: List<List<LatLng>>)
+data class RideModel (val distance: Float, val speed: Float, val averageSpeed: Float, val trackingPoints: List<List<LatLng>>, val isUnitsMetric: Boolean)

@@ -22,7 +22,8 @@ class MapConverter {
             rideDBModel.distance / 1000,
             rideDBModel.trackingPoints.last().last().speed,
             rideDBModel.averageSpeed,
-            convertLocationPointToLatLng(rideDBModel.trackingPoints)
+            convertLocationPointToLatLng(rideDBModel.trackingPoints),
+            true
         )
     }
 

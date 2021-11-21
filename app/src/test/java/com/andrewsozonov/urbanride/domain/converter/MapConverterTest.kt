@@ -88,6 +88,6 @@ class MapConverterTest {
                 LatLng(LAT3, LONG3), LatLng(LAT4, LONG4),
             )
         )
-        return RideModel(DISTANCE_KM, SPEED4_M_S, AVG_SPEED_M_S, trackingPoints)
+        return RideModel(DISTANCE_KM, SPEED4_M_S, AVG_SPEED_M_S, trackingPoints, true)
     }
 }

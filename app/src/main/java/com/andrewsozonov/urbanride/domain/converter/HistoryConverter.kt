@@ -44,7 +44,7 @@ class HistoryConverter {
             maxSpeed = convertKilometersToMiles(maxSpeed)
         }
 
-        return HistoryModel(id!!, date, startTime, finishTime, duration, distance, averageSpeed, maxSpeed, map, trackingPoints)
+        return HistoryModel(id!!, date, startTime, finishTime, duration, distance, averageSpeed, maxSpeed, map, trackingPoints, isUnitsMetric)
     }
 
     private fun formatDate(time: Long): String {

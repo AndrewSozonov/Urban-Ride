@@ -3,6 +3,7 @@ package com.andrewsozonov.urbanride.domain.interactor
 import android.graphics.Bitmap
 import com.andrewsozonov.urbanride.data.database.RideDBModel
 import com.andrewsozonov.urbanride.data.repository.BaseRepository
+import com.andrewsozonov.urbanride.data.repository.SettingsRepository
 import com.andrewsozonov.urbanride.domain.converter.HistoryConverter
 import com.andrewsozonov.urbanride.presentation.history.model.HistoryLocationPoint
 import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
@@ -61,7 +62,8 @@ class HistoryInteractorTest {
 
     private val repository: BaseRepository = mockk()
     private val converter: HistoryConverter = mockk()
-    private val interactor = HistoryInteractor(repository, converter)
+    private val settings: SettingsRepository = mockk()
+    private val interactor = HistoryInteractor(repository, settings, converter)
     private val mapImage: Bitmap = mockk()
     private lateinit var rideDBModel: RideDBModel
     private lateinit var historyModel: HistoryModel
@@ -76,13 +78,15 @@ class HistoryInteractorTest {
         every { repository.getAllRides() } returns listOfRidesFromDB
         every { converter.convertFromRideToHistoryModel(rideDBModel, true) } returns historyModel
         every { repository.deleteRide(any()) } just runs
+        every { settings.getUnits() } returns true
+
     }
 
     @Test
     fun `test getAllRides`() {
         val listOfRidesConverted = mutableListOf(historyModel)
 
-        val result = interactor.getAllRides(true)
+        val result = interactor.getAllRides()
 
         Truth.assertThat(result).isEqualTo(listOfRidesConverted)
     }
@@ -135,7 +139,8 @@ class HistoryInteractorTest {
             AVG_SPEED_KM_H_DB,
             MAX_SPEED_KM_H,
             mapImage,
-            historyTrackingPoints
+            historyTrackingPoints,
+            true
         )
     }
 }

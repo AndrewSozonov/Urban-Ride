@@ -1,6 +1,5 @@
 package com.andrewsozonov.urbanride.domain.interactor
 
-import android.util.Log
 import com.andrewsozonov.urbanride.data.repository.BaseRepository
 import com.andrewsozonov.urbanride.domain.converter.MapConverter
 import com.andrewsozonov.urbanride.presentation.ride.model.RideModel

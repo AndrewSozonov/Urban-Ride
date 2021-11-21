@@ -91,7 +91,7 @@ class MapInteractorTest {
                 LatLng(LAT3, LONG3), LatLng(LAT4, LONG4),
             )
         )
-        return RideModel(DISTANCE_KM, SPEED4_M_S, AVG_SPEED_KM_H, trackingPoints)
+        return RideModel(DISTANCE_KM, SPEED4_M_S, AVG_SPEED_KM_H, trackingPoints, true)
     }
 
 }

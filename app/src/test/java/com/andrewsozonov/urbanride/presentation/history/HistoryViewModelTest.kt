@@ -67,11 +67,11 @@ class HistoryViewModelTest {
     @Test
     fun `test getRidesFromDB`() {
 
-        every { interactor.getAllRides(any()) } returns createHistoryModel()
+        every { interactor.getAllRides() } returns createHistoryModel()
         every { dataObserver.onChanged(any()) } just Runs
         every { isLoadingObserver.onChanged(any()) } just Runs
 
-        historyViewModel.getRidesFromDB(true)
+        historyViewModel.getRidesFromDB()
 
         verifySequence {
             isLoadingObserver.onChanged(true)
@@ -83,19 +83,17 @@ class HistoryViewModelTest {
 
     @Test
     fun `test deleteRide`() {
-        val isUnitsMetric = true
-
         every { interactor.deleteRide(any()) } just Runs
-        every { interactor.getAllRides(any()) } returns createHistoryModel()
+        every { interactor.getAllRides() } returns createHistoryModel()
         every { dataObserver.onChanged(any()) } just Runs
         every { isLoadingObserver.onChanged(any()) } just Runs
 
-        historyViewModel.deleteRide(ID, isUnitsMetric)
+        historyViewModel.deleteRide(ID)
 
         verifySequence {
             isLoadingObserver.onChanged(true)
             interactor.deleteRide(ID)
-            interactor.getAllRides(isUnitsMetric)
+            interactor.getAllRides()
             dataObserver.onChanged(createHistoryModel())
             isLoadingObserver.onChanged(false)
         }
@@ -122,7 +120,8 @@ class HistoryViewModelTest {
             AVG_SPEED_KM_H_DB,
             MAX_SPEED_KM_H,
             mapImage,
-            historyTrackingPoints
+            historyTrackingPoints,
+            true
         )
         return mutableListOf(historyModel, historyModel)
     }

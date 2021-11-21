@@ -43,7 +43,6 @@ class HistoryFragment : Fragment() {
     private var historyRecyclerAdapter: HistoryRecyclerAdapter? = null
     private var listOfRides: List<HistoryModel> = mutableListOf()
     private lateinit var itemTouchHelper: ItemTouchHelper
-    private var isUnitsMetric = true
 
     private val binding get() = _binding!!
 
@@ -62,9 +61,8 @@ class HistoryFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        checkPreferences()
         initRecyclerView()
-        historyViewModel.getRidesFromDB(isUnitsMetric)
+        historyViewModel.getRidesFromDB()
         subscribeToObservers()
     }
 
@@ -86,14 +84,6 @@ class HistoryFragment : Fragment() {
     private fun createViewModel() {
         App.getAppComponent()?.activityComponent()?.inject(this)
         historyViewModel = viewModelFactory.create(HistoryViewModel::class.java)
-    }
-
-    private fun checkPreferences() {
-        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        isUnitsMetric = sharedPrefs.getString(
-            getString(R.string.unit_system_pref_key),
-            getString(R.string.units_kilometers)
-        ) == getString(R.string.units_kilometers)
     }
 
     private fun initRecyclerView() {
@@ -201,7 +191,6 @@ class HistoryFragment : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 historyViewModel.deleteRide(
                     listOfRides[viewHolder.adapterPosition].id,
-                    isUnitsMetric
                 )
             }
         }

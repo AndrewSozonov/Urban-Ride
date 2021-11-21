@@ -1,14 +1,14 @@
 package com.andrewsozonov.urbanride.di.app
 
 import android.app.Application
+import android.content.SharedPreferences
+import androidx.preference.PreferenceManager
 import androidx.room.Room
 import com.andrewsozonov.urbanride.data.database.RideDao
 import com.andrewsozonov.urbanride.data.database.RidingDatabase
+import com.andrewsozonov.urbanride.data.repository.*
 import com.andrewsozonov.urbanride.domain.converter.RideConverter
 import com.andrewsozonov.urbanride.domain.interactor.RideInteractor
-import com.andrewsozonov.urbanride.data.repository.BaseRepository
-import com.andrewsozonov.urbanride.data.repository.RepositoryConverter
-import com.andrewsozonov.urbanride.data.repository.MainRepository
 import com.andrewsozonov.urbanride.domain.converter.HistoryConverter
 import com.andrewsozonov.urbanride.domain.converter.MapConverter
 import com.andrewsozonov.urbanride.domain.interactor.HistoryInteractor
@@ -57,8 +57,8 @@ class AppModule(var application: Application) {
     }
 
     @Provides
-    fun provideRideInteractor(repository: BaseRepository, converter: RideConverter): RideInteractor {
-        return RideInteractor(repository, converter)
+    fun provideRideInteractor(repository: BaseRepository, settings: SettingsRepository, converter: RideConverter): RideInteractor {
+        return RideInteractor(repository, settings, converter)
     }
 
     @Provides
@@ -67,8 +67,8 @@ class AppModule(var application: Application) {
     }
 
     @Provides
-    fun provideHistoryInteractor(repository: BaseRepository, converter: HistoryConverter): HistoryInteractor {
-        return HistoryInteractor(repository, converter)
+    fun provideHistoryInteractor(repository: BaseRepository, settings: SettingsRepository, converter: HistoryConverter): HistoryInteractor {
+        return HistoryInteractor(repository, settings, converter)
     }
 
     @Provides
@@ -84,5 +84,15 @@ class AppModule(var application: Application) {
     @Provides
     fun provideMapConverter(): MapConverter {
         return MapConverter()
+    }
+
+    @Provides
+    fun provideSettingsRepository(sharedPreferences: SharedPreferences): SettingsRepository {
+        return SettingsRepositoryImpl(sharedPreferences)
+    }
+
+    @Provides
+    fun provideSharedPrefs(): SharedPreferences {
+        return PreferenceManager.getDefaultSharedPreferences(application)
     }
 }

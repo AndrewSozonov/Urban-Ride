@@ -34,16 +34,6 @@ class RideViewModel(
     val timerLiveData: LiveData<String> = interactor.getTimerValue()
 
     /**
-     * Устанавливает значение единиц измерения мили или км
-     * полученное из preferences
-     *
-     * @param isUnitsMetric если true - км, false - мили
-     */
-    fun setUnits(isUnitsMetric: Boolean) {
-        interactor.setUnits(isUnitsMetric)
-    }
-
-    /**
      * [MutableLiveData] хранит модель данных: скорость, расстояние, среднюю скорость и координаты для отображения во фрагменте
      */
     val data: LiveData<RideModel> = interactor.getTrackingData()

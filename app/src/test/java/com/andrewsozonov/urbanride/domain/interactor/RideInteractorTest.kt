@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import com.andrewsozonov.urbanride.data.model.RideDataModel
 import com.andrewsozonov.urbanride.data.repository.BaseRepository
+import com.andrewsozonov.urbanride.data.repository.SettingsRepository
 import com.andrewsozonov.urbanride.domain.converter.RideConverter
 import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
 import com.andrewsozonov.urbanride.util.TestConstants.AVG_SPEED_KM_H
@@ -39,7 +40,8 @@ class RideInteractorTest {
 
     private val repository: BaseRepository = mockk()
     private val converter: RideConverter = mockk()
-    private val rideInteractor = RideInteractor(repository, converter)
+    private val settings: SettingsRepository = mockk()
+    private val rideInteractor = RideInteractor(repository, settings, converter)
 
 
 //    private val rideDataModel = RideDataModel(DISTANCE_METERS, SPEED_M_S, AVG_SPEED_M_S, testTrackingPoints)
@@ -60,6 +62,7 @@ class RideInteractorTest {
                 any()
             )
         } returns rideModel
+        every { settings.getUnits() } returns true
 
         every { repository.getTimerValue() } returns MutableLiveData(testTimerValue)
         every { repository.getServiceStatus() } returns MutableLiveData(testServiceStatus)
@@ -106,7 +109,7 @@ class RideInteractorTest {
     }
 
     private fun createRideModel(): RideModel {
-        return RideModel(DISTANCE_KM, SPEED_KM_H, AVG_SPEED_KM_H, createTrackingPoints())
+        return RideModel(DISTANCE_KM, SPEED_KM_H, AVG_SPEED_KM_H, createTrackingPoints(), true)
     }
 }
 

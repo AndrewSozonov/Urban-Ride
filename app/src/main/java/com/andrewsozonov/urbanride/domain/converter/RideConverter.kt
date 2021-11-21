@@ -31,7 +31,7 @@ class RideConverter {
             averageSpeed = convertKilometersToMiles(averageSpeed)
         }
 
-        return RideModel(distance, speed, averageSpeed, dataModel.trackingPoints)
+        return RideModel(distance, speed, averageSpeed, dataModel.trackingPoints, isUnitsMetric)
     }
 
     private fun convertSpeedToKmH(speedMetersPerSecond: Float): Float {

@@ -42,14 +42,14 @@ class HistoryViewModel(
      * @param id id элемента для удаления
      * @param isUnitsMetric единицы измерения переданные из preferences
      */
-    fun deleteRide(id: Int, isUnitsMetric: Boolean) {
+    fun deleteRide(id: Int) {
         val observable = Completable.fromCallable {
             interactor.deleteRide(id)
         }
         compositeDisposable.add(observable
             .doOnSubscribe { isLoading.postValue(true) }
             .andThen(
-                Single.fromCallable { interactor.getAllRides(isUnitsMetric) }
+                Single.fromCallable { interactor.getAllRides() }
             )
             .subscribeOn(schedulersProvider.io())
             .observeOn(schedulersProvider.ui())
@@ -65,11 +65,10 @@ class HistoryViewModel(
      * Получает список поездок [HistoryModel] из БД
      * передает в liveData [listOfRides]
      *
-     * @param isUnitsMetric единицы измерения переданные из preferences
      */
-    fun getRidesFromDB(isUnitsMetric: Boolean) {
+    fun getRidesFromDB() {
         val singleObservable = Single.fromCallable {
-            interactor.getAllRides(isUnitsMetric)
+            interactor.getAllRides()
         }
         compositeDisposable.add(
             singleObservable

@@ -8,28 +8,18 @@ import androidx.lifecycle.map
 import com.andrewsozonov.urbanride.domain.converter.RideConverter
 import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
 import com.andrewsozonov.urbanride.data.repository.BaseRepository
+import com.andrewsozonov.urbanride.data.repository.SettingsRepository
 
 /**
  * Интерактор экрана Ride
  *
  * @param repository ссылка на интерфейс главного репозитория
+ * @param settings интерфейс с настройками
  * @param converter конвертер модели данных
  *
  * @author Андрей Созонов
  */
-class RideInteractor(val repository: BaseRepository, val converter: RideConverter) {
-
-    private var isUnitsMetric: Boolean = true
-
-    /**
-     * Устанавливает значение единиц измерения мили или км
-     * полученное из preferences
-     *
-     * @param isUnitsMetric если true - км, false - мили
-     */
-    fun setUnits(isUnitsMetric: Boolean) {
-        this.isUnitsMetric = isUnitsMetric
-    }
+class RideInteractor(val repository: BaseRepository, private val settings: SettingsRepository, val converter: RideConverter) {
 
     /**
      * Получает статус сервиса геолокации из репозитория
@@ -53,10 +43,11 @@ class RideInteractor(val repository: BaseRepository, val converter: RideConverte
      */
     fun getTrackingData(): LiveData<RideModel> {
         val data = repository.getTrackingData()
+        Log.d("RideInteractor", " unitsMetric: ${settings.getUnits()}")
         return data.map {
             converter.convertFromRideDataModelToRideModel(
                 it,
-                isUnitsMetric
+                settings.getUnits()
             )
         }
     }

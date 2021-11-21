@@ -33,11 +33,7 @@ class HistoryRecyclerAdapter(private val listener : IHistoryRecyclerListener) : 
 
     override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
 
-        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(holder.itemView.context)
-        val unitsKm = holder.itemView.context.getString(R.string.units_kilometers)
-        val isUnitsMetric = (sharedPrefs.getString(holder.itemView.context.getString(R.string.unit_system_pref_key), unitsKm) == unitsKm)
-
-        holder.bind(data[position], isUnitsMetric)
+        holder.bind(data[position])
 
         holder.itemView.setOnClickListener {
             if (holder.binding.expandableRootItem.visibility == GONE) {

@@ -16,7 +16,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.preference.PreferenceManager
 import com.andrewsozonov.urbanride.R
 import com.andrewsozonov.urbanride.app.App
 import com.andrewsozonov.urbanride.databinding.FragmentRideBinding
@@ -57,7 +56,6 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
 
     private var trackingStatus: String = SERVICE_STATUS_STOPPED
     private var trackingPoints = listOf<List<LatLng>>()
-    private var isUnitsMetric = true
 
     @Inject
     lateinit var viewModelFactory: RideViewModelFactory
@@ -84,8 +82,6 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
             map = it
             map.setOnMyLocationButtonClickListener(this)
             map.setOnMyLocationClickListener(this)
-
-            checkPreferences()
             subscribeToObservers()
 
             if (trackingStatus == SERVICE_STATUS_STOPPED && trackingPoints.isNotEmpty()) {
@@ -150,14 +146,6 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
         })
     }
 
-    private fun checkPreferences() {
-        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        isUnitsMetric = sharedPrefs.getString(
-            getString(R.string.unit_system_pref_key),
-            getString(R.string.units_kilometers)
-        ) == getString(R.string.units_kilometers)
-    }
-
     private fun operateService(action: String) {
         val intent = Intent(requireContext(), LocationService::class.java)
         intent.action = action
@@ -198,14 +186,19 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
 
     private fun updateData(model: RideModel) {
 
-        if (isUnitsMetric) {
+        if (model.isUnitsMetric) {
             binding.speedTextView.text = resources.getString(R.string.km_h, model.speed.toString())
-            binding.distanceTextView.text = resources.getString(R.string.km, model.distance.toString())
-            binding.averageSpeedTextView.text = resources.getString(R.string.km_h, model.averageSpeed.toString())
+            binding.distanceTextView.text =
+                resources.getString(R.string.km, model.distance.toString())
+            binding.averageSpeedTextView.text =
+                resources.getString(R.string.km_h, model.averageSpeed.toString())
         } else {
-            binding.speedTextView.text = resources.getString(R.string.miles_h, (model.speed).toString())
-            binding.distanceTextView.text = resources.getString(R.string.miles, model.distance.toString())
-            binding.averageSpeedTextView.text = resources.getString(R.string.miles_h, model.averageSpeed.toString()
+            binding.speedTextView.text =
+                resources.getString(R.string.miles_h, (model.speed).toString())
+            binding.distanceTextView.text =
+                resources.getString(R.string.miles, model.distance.toString())
+            binding.averageSpeedTextView.text = resources.getString(
+                R.string.miles_h, model.averageSpeed.toString()
             )
         }
     }
@@ -218,7 +211,7 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
             if (trackingPoints.last() == line) {
                 val polylineOptions = PolylineOptions()
                     .width(POLYLINE_WIDTH)
-                    .color(ContextCompat.getColor(requireContext(), R.color.middle_blue ))
+                    .color(ContextCompat.getColor(requireContext(), R.color.middle_blue))
                     .jointType(JointType.ROUND)
                     .addAll(line)
                     .endCap(
@@ -230,7 +223,7 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
             } else {
                 val polylineOptions = PolylineOptions()
                     .width(POLYLINE_WIDTH)
-                    .color(ContextCompat.getColor(requireContext(), R.color.middle_blue ))
+                    .color(ContextCompat.getColor(requireContext(), R.color.middle_blue))
                     .jointType(JointType.ROUND)
                     .addAll(line)
                 map.addPolyline(polylineOptions)
@@ -247,7 +240,7 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
         for (line in trackingPoints) {
             val polylineOptions = PolylineOptions()
                 .width(POLYLINE_WIDTH)
-                .color(ContextCompat.getColor(requireContext(), R.color.middle_blue ))
+                .color(ContextCompat.getColor(requireContext(), R.color.middle_blue))
                 .jointType(JointType.ROUND)
                 .addAll(line)
             map.addPolyline(polylineOptions)
@@ -345,7 +338,6 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     override fun onResume() {
         super.onResume()
         mapView?.onResume()
-        rideViewModel.setUnits(isUnitsMetric)
         drawRoute()
     }
 

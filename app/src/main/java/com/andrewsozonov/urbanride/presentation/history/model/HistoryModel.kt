@@ -14,6 +14,7 @@ import android.graphics.Bitmap
  * @param maxSpeed средняя скорость в км/ч или милях/ч
  * @param mapImg картинка с маршрутом
  * @param trackingPoints список координат
+ * @param isUnitsMetric единиицы измерения из preferences true - метры, false - мили
  *
  * @author Андрей Созонов
  */
@@ -27,5 +28,6 @@ data class HistoryModel(
     var averageSpeed: Double,
     var maxSpeed: Double,
     var mapImg: Bitmap,
-    var trackingPoints: List<List<HistoryLocationPoint>>
+    var trackingPoints: List<List<HistoryLocationPoint>>,
+    val isUnitsMetric: Boolean
 )

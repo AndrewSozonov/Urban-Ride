@@ -29,5 +29,9 @@ object Constants {
     const val SHARE_IMAGE_TEXT_HORIZONTAL_MARGIN = 40f
     const val SHARE_IMAGE_TEXT_VERTICAL_MARGIN = 30f
 
+    const val UNITS_KEY = "UNITS_KEY"
+    const val UNITS_KILOMETERS = "Kilometers"
+    const val UNITS_MILES = "Miles"
+
 
 }

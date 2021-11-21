@@ -67,10 +67,10 @@ class RideConverterTest {
     }
 
     private fun createRideModelMetric(): RideModel {
-        return RideModel(DISTANCE_KM, SPEED_KM_H, AVG_SPEED_KM_H, createTrackingPoints())
+        return RideModel(DISTANCE_KM, SPEED_KM_H, AVG_SPEED_KM_H, createTrackingPoints(), true)
     }
 
     private fun createRideModelMiles(): RideModel {
-        return RideModel(DISTANCE_ML, SPEED_ML_H, AVG_SPEED_ML_H, createTrackingPoints())
+        return RideModel(DISTANCE_ML, SPEED_ML_H, AVG_SPEED_ML_H, createTrackingPoints(), false)
     }
 }

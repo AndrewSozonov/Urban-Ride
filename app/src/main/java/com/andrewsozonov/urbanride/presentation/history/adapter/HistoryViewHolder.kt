@@ -27,16 +27,15 @@ class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
      * Биндит данные во ViewHolder
      *
      * @param ride модель данных поездки [HistoryModel]
-     * @param isUnitsMetric значение единиц измерения из Preferences
-     * если значение true показывает данные в км, если false - в милях
+     *
      */
-    fun bind(ride: HistoryModel, isUnitsMetric: Boolean) {
+    fun bind(ride: HistoryModel) {
         binding.dateTextView.text = ride.date
         binding.startTextView.text = ride.startTime
         binding.finishTextView.text = ride.finishTime
         binding.durationTextView.text = ride.duration
 
-        if (isUnitsMetric) {
+        if (ride.isUnitsMetric) {
             binding.distanceTextView.text =
                 resources.getString(R.string.km, ride.distance.toString())
             binding.averageSpeedTextView.text =
@@ -56,10 +55,10 @@ class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .load(ride.mapImg)
             .into(binding.historyMap)
 
-        buildGraph(ride, isUnitsMetric)
+        buildGraph(ride)
     }
 
-    private fun buildGraph(ride: HistoryModel, isUnitsMetric: Boolean) {
+    private fun buildGraph(ride: HistoryModel) {
 
         binding.graph.gridLabelRenderer.padding = GRAPH_PADDING
         binding.graphRadioGroup.setOnCheckedChangeListener { _, checkedId ->
@@ -83,7 +82,7 @@ class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 R.id.time_speed_graph -> {
                     binding.graph.gridLabelRenderer.horizontalAxisTitle =
                         itemView.context.getString(R.string.graph_time_axis)
-                    if (isUnitsMetric) {
+                    if (ride.isUnitsMetric) {
                         binding.graph.gridLabelRenderer.verticalAxisTitle =
                             itemView.context.getString(R.string.graph_speed_axis_km)
                     } else {
@@ -93,7 +92,7 @@ class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     showGraph(binding.graph, speedTimeSeries)
                 }
                 R.id.dist_speed_graph -> {
-                    if (isUnitsMetric) {
+                    if (ride.isUnitsMetric) {
                         binding.graph.gridLabelRenderer.horizontalAxisTitle =
                             itemView.context.getString(R.string.graph_distance_axis_km)
                         binding.graph.gridLabelRenderer.verticalAxisTitle =
