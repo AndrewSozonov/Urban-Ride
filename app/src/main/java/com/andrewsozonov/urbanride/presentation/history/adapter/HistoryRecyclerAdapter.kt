@@ -1,14 +1,7 @@
 package com.andrewsozonov.urbanride.presentation.history.adapter
 
-import android.content.res.Resources
-import android.transition.AutoTransition
-import android.transition.TransitionManager
-import android.util.TypedValue
 import android.view.LayoutInflater
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.andrewsozonov.urbanride.R
 import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
@@ -34,21 +27,8 @@ class HistoryRecyclerAdapter(private val listener: IHistoryRecyclerListener) :
 
         holder.bind(data[position])
 
-        holder.itemView.setOnClickListener {
-            if (holder.binding.expandableRootItem.visibility == GONE) {
-                expandItemView(holder)
-            } else {
-                closeItemView(holder)
-                closeGraph(holder)
-            }
-        }
-
         holder.binding.historyMap.setOnClickListener {
             data[position].id.let { id -> listener.onMapClick(id) }
-        }
-
-        holder.binding.showGraphButton.setOnClickListener {
-            showGraph(holder)
         }
 
         holder.binding.shareButton.setOnClickListener {
@@ -70,97 +50,5 @@ class HistoryRecyclerAdapter(private val listener: IHistoryRecyclerListener) :
         notifyDataSetChanged()
     }
 
-    private fun expandItemView(holder: HistoryViewHolder) {
-        TransitionManager.beginDelayedTransition(holder.binding.itemCardView, AutoTransition())
-        holder.binding.expandableRootItem.visibility = VISIBLE
 
-        val theme: Resources.Theme = holder.itemView.context.theme
-
-        val typedValueColorSurface = TypedValue()
-        theme.resolveAttribute(R.attr.colorSurface, typedValueColorSurface, true)
-        val cardViewColor = typedValueColorSurface.data
-
-        val typedValueColorOnSurface = TypedValue()
-        theme.resolveAttribute(R.attr.colorOnSurface, typedValueColorOnSurface, true)
-        val textFieldColor = typedValueColorOnSurface.data
-        holder.binding.itemCardView.background.setTint(cardViewColor)
-
-        holder.binding.arrowButton.animate().rotationBy(180F).start()
-        holder.binding.dateFieldName.setTextColor(textFieldColor)
-        holder.binding.startFieldName.setTextColor(textFieldColor)
-        holder.binding.finishFieldName.setTextColor(textFieldColor)
-        holder.binding.durationFieldName.setTextColor(textFieldColor)
-        holder.binding.distanceFieldName.setTextColor(textFieldColor)
-        holder.binding.averageSpeedFieldName.setTextColor(textFieldColor)
-        holder.binding.maxSpeedFieldName.setTextColor(textFieldColor)
-    }
-
-    private fun closeItemView(holder: HistoryViewHolder) {
-        TransitionManager.beginDelayedTransition(holder.binding.itemCardView, AutoTransition())
-        holder.binding.expandableRootItem.visibility = GONE
-        holder.binding.itemCardView.background.setTint(
-            ContextCompat.getColor(
-                holder.itemView.context,
-                R.color.light_cyan
-            )
-        )
-        holder.binding.arrowButton.animate().rotationBy(180.0F).start()
-        holder.binding.dateFieldName.setTextColor(
-            ContextCompat.getColor(
-                holder.itemView.context,
-                R.color.white
-            )
-        )
-        holder.binding.startFieldName.setTextColor(
-            ContextCompat.getColor(
-                holder.itemView.context,
-                R.color.white
-            )
-        )
-        holder.binding.finishFieldName.setTextColor(
-            ContextCompat.getColor(
-                holder.itemView.context,
-                R.color.white
-            )
-        )
-        holder.binding.durationFieldName.setTextColor(
-            ContextCompat.getColor(
-                holder.itemView.context,
-                R.color.white
-            )
-        )
-        holder.binding.distanceFieldName.setTextColor(
-            ContextCompat.getColor(
-                holder.itemView.context,
-                R.color.white
-            )
-        )
-        holder.binding.averageSpeedFieldName.setTextColor(
-            ContextCompat.getColor(
-                holder.itemView.context,
-                R.color.white
-            )
-        )
-        holder.binding.maxSpeedFieldName.setTextColor(
-            ContextCompat.getColor(
-                holder.itemView.context,
-                R.color.white
-            )
-        )
-    }
-
-    private fun showGraph(holder: HistoryViewHolder) {
-        if (holder.binding.graphRootView.visibility == GONE) {
-            TransitionManager.beginDelayedTransition(holder.binding.itemCardView, AutoTransition())
-            holder.binding.graphRootView.visibility = VISIBLE
-            holder.binding.timeSpeedGraph.performClick()
-        } else {
-            closeGraph(holder)
-        }
-    }
-
-    private fun closeGraph(holder: HistoryViewHolder) {
-        TransitionManager.beginDelayedTransition(holder.binding.itemCardView, AutoTransition())
-        holder.binding.graphRootView.visibility = GONE
-    }
 }
