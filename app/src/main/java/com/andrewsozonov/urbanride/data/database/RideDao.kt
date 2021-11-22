@@ -3,7 +3,7 @@ package com.andrewsozonov.urbanride.data.database
 import androidx.room.*
 
 /**
- * Интерфейс описывающий методы доступа к БД
+ * Интерфейс описывающий методы доступа к таблице с историей поездок [RidingDatabase]
  *
  * @author Андрей Созонов
  */
@@ -21,7 +21,7 @@ interface RideDao {
     /**
      * Удалить поездку из БД
      *
-     * @param ride модель данных поездки [RideDBModel]
+     * @param id id поездки [RideDBModel]
      */
     @Query("DELETE FROM riding_table WHERE id = :id")
     fun deleteRide(id: Int)

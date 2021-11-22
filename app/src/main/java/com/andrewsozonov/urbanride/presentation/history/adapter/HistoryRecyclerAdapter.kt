@@ -9,10 +9,8 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.andrewsozonov.urbanride.R
-import com.andrewsozonov.urbanride.data.database.RideDBModel
 import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
 
 /**
@@ -20,7 +18,8 @@ import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
  *
  * @author Андрей Созонов
  */
-class HistoryRecyclerAdapter(private val listener : IHistoryRecyclerListener) : RecyclerView.Adapter<HistoryViewHolder>() {
+class HistoryRecyclerAdapter(private val listener: IHistoryRecyclerListener) :
+    RecyclerView.Adapter<HistoryViewHolder>() {
 
     private var data: List<HistoryModel> = mutableListOf()
 
@@ -64,9 +63,9 @@ class HistoryRecyclerAdapter(private val listener : IHistoryRecyclerListener) : 
     /**
      * Устанавливает список поездок в адаптер
      *
-     * @param list список поездок [RideDBModel]
+     * @param list список поездок [HistoryModel]
      */
-    fun setData(list : List<HistoryModel>) {
+    fun setData(list: List<HistoryModel>) {
         data = list
         notifyDataSetChanged()
     }
@@ -99,15 +98,55 @@ class HistoryRecyclerAdapter(private val listener : IHistoryRecyclerListener) : 
     private fun closeItemView(holder: HistoryViewHolder) {
         TransitionManager.beginDelayedTransition(holder.binding.itemCardView, AutoTransition())
         holder.binding.expandableRootItem.visibility = GONE
-        holder.binding.itemCardView.background.setTint(ContextCompat.getColor(holder.itemView.context, R.color.light_cyan))
+        holder.binding.itemCardView.background.setTint(
+            ContextCompat.getColor(
+                holder.itemView.context,
+                R.color.light_cyan
+            )
+        )
         holder.binding.arrowButton.animate().rotationBy(180.0F).start()
-        holder.binding.dateFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
-        holder.binding.startFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
-        holder.binding.finishFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
-        holder.binding.durationFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
-        holder.binding.distanceFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
-        holder.binding.averageSpeedFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
-        holder.binding.maxSpeedFieldName.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
+        holder.binding.dateFieldName.setTextColor(
+            ContextCompat.getColor(
+                holder.itemView.context,
+                R.color.white
+            )
+        )
+        holder.binding.startFieldName.setTextColor(
+            ContextCompat.getColor(
+                holder.itemView.context,
+                R.color.white
+            )
+        )
+        holder.binding.finishFieldName.setTextColor(
+            ContextCompat.getColor(
+                holder.itemView.context,
+                R.color.white
+            )
+        )
+        holder.binding.durationFieldName.setTextColor(
+            ContextCompat.getColor(
+                holder.itemView.context,
+                R.color.white
+            )
+        )
+        holder.binding.distanceFieldName.setTextColor(
+            ContextCompat.getColor(
+                holder.itemView.context,
+                R.color.white
+            )
+        )
+        holder.binding.averageSpeedFieldName.setTextColor(
+            ContextCompat.getColor(
+                holder.itemView.context,
+                R.color.white
+            )
+        )
+        holder.binding.maxSpeedFieldName.setTextColor(
+            ContextCompat.getColor(
+                holder.itemView.context,
+                R.color.white
+            )
+        )
     }
 
     private fun showGraph(holder: HistoryViewHolder) {

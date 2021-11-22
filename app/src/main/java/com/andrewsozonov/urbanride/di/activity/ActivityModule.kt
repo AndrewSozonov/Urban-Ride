@@ -1,9 +1,9 @@
 package com.andrewsozonov.urbanride.di.activity
 
 import com.andrewsozonov.urbanride.domain.interactor.RideInteractor
-import com.andrewsozonov.urbanride.data.repository.BaseRepository
+import com.andrewsozonov.urbanride.domain.RideRepository
 import com.andrewsozonov.urbanride.domain.interactor.HistoryInteractor
-import com.andrewsozonov.urbanride.domain.interactor.MapInteractor
+import com.andrewsozonov.urbanride.domain.interactor.MapScreenInteractor
 import com.andrewsozonov.urbanride.presentation.service.LocationViewModelFactory
 import com.andrewsozonov.urbanride.presentation.history.HistoryViewModelFactory
 import com.andrewsozonov.urbanride.presentation.map.MapViewModelFactory
@@ -41,16 +41,16 @@ class ActivityModule {
 
     @Provides
     fun provideLocationViewModelFactory(
-        repository: BaseRepository,
+        repository: RideRepository,
     ): LocationViewModelFactory {
         return LocationViewModelFactory(repository)
     }
 
     @Provides
     fun provideMapViewModelFactory(
-        interactor: MapInteractor,
+        screenInteractor: MapScreenInteractor,
         schedulersProvider: ISchedulersProvider
     ): MapViewModelFactory {
-        return MapViewModelFactory(interactor, schedulersProvider)
+        return MapViewModelFactory(screenInteractor, schedulersProvider)
     }
 }

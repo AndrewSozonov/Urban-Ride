@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.andrewsozonov.urbanride.data.database.RideDBModel
 import com.andrewsozonov.urbanride.data.database.RideDao
 import com.andrewsozonov.urbanride.data.model.RideDataModel
+import com.andrewsozonov.urbanride.domain.RideRepository
 import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
 import com.andrewsozonov.urbanride.util.DataFormatter
 import java.util.*
@@ -20,16 +21,16 @@ import java.util.*
  *
  * @author Андрей Созонов
  */
-class MainRepository(
+class RideRepositoryImpl(
     private val rideDao: RideDao,
     private val converter: RepositoryConverter
-) : BaseRepository {
+) : RideRepository {
 
     private var trackingPoints: List<List<LocationPoint>> = mutableListOf()
-    private var ridingTime: Long = 0L  // миллисекунды
-    private var distance: Float = 0f  // метры
-    private var speed: Float = 0f // метры в сек
-    private var averageSpeed: Float = 0f // метры в сек
+    private var ridingTimeInMillis: Long = 0L  // миллисекунды
+    private var distanceInMeters: Float = 0f  // метры
+    private var speedInMpS: Float = 0f // метры в сек
+    private var averageSpeedInMpS: Float = 0f // метры в сек
 
     private val serviceStatusLiveData: MutableLiveData<String> = MutableLiveData()
     private val timerLiveData: MutableLiveData<String> = MutableLiveData()
@@ -59,14 +60,14 @@ class MainRepository(
     override fun addRide(mapImage: Bitmap) {
 
         val rideFinishTimeInMillis = Calendar.getInstance().timeInMillis
-        val rideStartTimeInMillis = rideFinishTimeInMillis - ridingTime
+        val rideStartTimeInMillis = rideFinishTimeInMillis - ridingTimeInMillis
 
         val currentRide = RideDBModel(
             rideStartTimeInMillis,
             rideFinishTimeInMillis,
-            ridingTime,
-            distance,
-            averageSpeed,
+            ridingTimeInMillis,
+            distanceInMeters,
+            averageSpeedInMpS,
             mapImage,
             trackingPoints
         )
@@ -106,8 +107,8 @@ class MainRepository(
      * @param time время в миллисекундах
      */
     override fun updateTimerValue(time: Long) {
-        ridingTime = time
-        timerLiveData.value = DataFormatter.formatTime(ridingTime)
+        ridingTimeInMillis = time
+        timerLiveData.value = DataFormatter.formatTime(ridingTimeInMillis)
     }
 
     /**
@@ -127,11 +128,11 @@ class MainRepository(
      * обновляет в LiveData[data]
      */
     private fun calculateData() {
-        val rideDataModel = converter.convertDataToRideDataModel(trackingPoints, ridingTime)
+        val rideDataModel = converter.convertDataToRideDataModel(trackingPoints, ridingTimeInMillis)
 
-        distance = rideDataModel.distance
-        speed = rideDataModel.speed
-        averageSpeed = rideDataModel.averageSpeed
+        distanceInMeters = rideDataModel.distance
+        speedInMpS = rideDataModel.speed
+        averageSpeedInMpS = rideDataModel.averageSpeed
         Log.d("calculateData", "rideDataModel ${rideDataModel.trackingPoints}")
         data.value = rideDataModel
     }

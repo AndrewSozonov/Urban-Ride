@@ -11,8 +11,8 @@ import com.andrewsozonov.urbanride.R
 import com.andrewsozonov.urbanride.app.App
 import com.andrewsozonov.urbanride.databinding.MapFragmentBinding
 import com.andrewsozonov.urbanride.util.BitmapHelper
-import com.andrewsozonov.urbanride.util.Constants
-import com.andrewsozonov.urbanride.util.Constants.BUNDLE_RIDE_ID_KEY
+import com.andrewsozonov.urbanride.util.constants.UIConstants.BUNDLE_RIDE_ID_KEY
+import com.andrewsozonov.urbanride.util.constants.UIConstants.POLYLINE_WIDTH
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -102,7 +102,7 @@ class MapFragment : Fragment() {
         }
         for (line in trackingPoints) {
             val polylineOptions = PolylineOptions()
-                .width(Constants.POLYLINE_WIDTH)
+                .width(POLYLINE_WIDTH)
                 .color(ContextCompat.getColor(requireContext(), R.color.middle_blue ))
                 .jointType(JointType.ROUND)
                 .addAll(line)

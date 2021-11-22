@@ -2,6 +2,9 @@ package com.andrewsozonov.urbanride.data.repository
 
 import com.andrewsozonov.urbanride.data.model.RideDataModel
 import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
+import com.andrewsozonov.urbanride.util.constants.UnitsContants.MILLIS_IN_SECONDS
+import com.andrewsozonov.urbanride.util.constants.UnitsContants.MILLIS_IN_SECONDS_FLOAT
+import com.andrewsozonov.urbanride.util.constants.UnitsContants.SCALE
 import com.google.android.gms.maps.model.LatLng
 import java.math.RoundingMode
 
@@ -41,9 +44,9 @@ class RepositoryConverter {
     }
 
     private fun calculateAverageSpeed(ridingTime: Long, distance: Float): Float {
-        return if (ridingTime > 1000) {
-            (distance / (ridingTime / 1000f)).toBigDecimal()
-                .setScale(2, RoundingMode.HALF_UP).toFloat()
+        return if (ridingTime > MILLIS_IN_SECONDS) {
+            (distance / (ridingTime / MILLIS_IN_SECONDS_FLOAT)).toBigDecimal()
+                .setScale(SCALE, RoundingMode.HALF_UP).toFloat()
         } else 0.0f
     }
 

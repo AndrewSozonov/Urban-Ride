@@ -16,7 +16,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
 import com.andrewsozonov.urbanride.R
 import com.andrewsozonov.urbanride.databinding.ActivityMainBinding
-import com.andrewsozonov.urbanride.util.Constants.ACTION_SHOW_RIDING_FRAGMENT
+import com.andrewsozonov.urbanride.util.constants.LocationConstants.ACTION_SHOW_RIDING_FRAGMENT
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 
@@ -42,7 +42,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
 
-//        connectivityManager = getSystemService("ConnectivityManager::class.java")
         connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         registerNetworkListener()
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -88,7 +87,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun registerNetworkListener() {
         val snackBar =
-            Snackbar.make(binding.navView, getString(R.string.check_internet_connection), Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(
+                binding.navView,
+                getString(R.string.check_internet_connection),
+                Snackbar.LENGTH_INDEFINITE
+            )
 
         networkCallBack = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
@@ -120,17 +123,19 @@ class MainActivity : AppCompatActivity() {
     private fun checkIsLocationOn() {
 
         val gpsEnabled: Boolean = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-        val networkEnabled: Boolean = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-        
+        val networkEnabled: Boolean =
+            locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+
         if (!gpsEnabled && !networkEnabled) {
             AlertDialog.Builder(this)
                 .setMessage(getString(R.string.location_option_required))
-                .setPositiveButton(getString(R.string.open_settings)
+                .setPositiveButton(
+                    getString(R.string.open_settings)
                 ) { dialog, which ->
                     val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                     startActivity(intent)
                 }
-                .setNegativeButton(getString(R.string.cancel),null)
+                .setNegativeButton(getString(R.string.cancel), null)
                 .show()
         }
     }

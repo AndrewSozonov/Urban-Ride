@@ -1,10 +1,9 @@
-package com.andrewsozonov.urbanride.data.repository
+package com.andrewsozonov.urbanride.domain
 
 import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.andrewsozonov.urbanride.data.model.RideDataModel
 import com.andrewsozonov.urbanride.data.database.RideDBModel
+import com.andrewsozonov.urbanride.data.model.RideDataModel
 import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
 import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
 
@@ -13,7 +12,7 @@ import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
  *
  * @author Андрей Созонов
  */
-interface BaseRepository {
+interface RideRepository {
 
     /**
      * Добавить поездку в БД

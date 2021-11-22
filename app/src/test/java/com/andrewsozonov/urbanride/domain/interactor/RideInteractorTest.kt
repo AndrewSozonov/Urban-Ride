@@ -3,8 +3,8 @@ package com.andrewsozonov.urbanride.domain.interactor
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import com.andrewsozonov.urbanride.data.model.RideDataModel
-import com.andrewsozonov.urbanride.data.repository.BaseRepository
-import com.andrewsozonov.urbanride.data.repository.SettingsRepository
+import com.andrewsozonov.urbanride.domain.RideRepository
+import com.andrewsozonov.urbanride.domain.SettingsRepository
 import com.andrewsozonov.urbanride.domain.converter.RideConverter
 import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
 import com.andrewsozonov.urbanride.util.TestConstants.AVG_SPEED_KM_H
@@ -38,7 +38,7 @@ class RideInteractorTest {
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
 
-    private val repository: BaseRepository = mockk()
+    private val repository: RideRepository = mockk()
     private val converter: RideConverter = mockk()
     private val settings: SettingsRepository = mockk()
     private val rideInteractor = RideInteractor(repository, settings, converter)

@@ -1,7 +1,7 @@
 package com.andrewsozonov.urbanride.presentation.map
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.andrewsozonov.urbanride.domain.interactor.MapInteractor
+import com.andrewsozonov.urbanride.domain.interactor.MapScreenInteractor
 import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
 import com.andrewsozonov.urbanride.util.ISchedulersProvider
 import com.andrewsozonov.urbanride.util.TestConstants
@@ -19,12 +19,12 @@ class MapViewModelTest {
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
 
-    private val interactor: MapInteractor = mockk()
+    private val screenInteractor: MapScreenInteractor = mockk()
     private val schedulersProvider: ISchedulersProvider = mockk()
     private var isLoadingObserver: androidx.lifecycle.Observer<Boolean> = mockk()
     private var dataObserver: androidx.lifecycle.Observer<List<List<LatLng>>> = mockk()
 
-    private var mapViewModel = MapViewModel(interactor, schedulersProvider)
+    private var mapViewModel = MapViewModel(screenInteractor, schedulersProvider)
 
     @Before
     fun setUp() {
@@ -39,7 +39,7 @@ class MapViewModelTest {
 
     @Test
     fun `test getRide`() {
-        every { interactor.getRideById(ID) } returns createRideModel()
+        every { screenInteractor.getRideById(ID) } returns createRideModel()
         every { dataObserver.onChanged(any()) } just Runs
         every { isLoadingObserver.onChanged(any()) } just Runs
 

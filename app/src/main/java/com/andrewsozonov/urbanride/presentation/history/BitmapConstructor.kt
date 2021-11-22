@@ -5,10 +5,10 @@ import android.graphics.*
 import androidx.core.content.ContextCompat
 import com.andrewsozonov.urbanride.R
 import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
-import com.andrewsozonov.urbanride.util.Constants.SHARE_IMAGE_STROKE_WIDTH
-import com.andrewsozonov.urbanride.util.Constants.SHARE_IMAGE_TEXT_HORIZONTAL_MARGIN
-import com.andrewsozonov.urbanride.util.Constants.SHARE_IMAGE_TEXT_SIZE
-import com.andrewsozonov.urbanride.util.Constants.SHARE_IMAGE_TEXT_VERTICAL_MARGIN
+import com.andrewsozonov.urbanride.util.constants.UIConstants.SHARE_IMAGE_STROKE_WIDTH
+import com.andrewsozonov.urbanride.util.constants.UIConstants.SHARE_IMAGE_TEXT_HORIZONTAL_MARGIN
+import com.andrewsozonov.urbanride.util.constants.UIConstants.SHARE_IMAGE_TEXT_SIZE
+import com.andrewsozonov.urbanride.util.constants.UIConstants.SHARE_IMAGE_TEXT_VERTICAL_MARGIN
 
 /**
  * Класс собирающий изображение для sharing

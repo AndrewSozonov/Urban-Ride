@@ -4,7 +4,11 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
-
+/**
+ * База данных с историей поездок
+ *
+ * @author Андрей Созонов
+ */
 @Database(
     entities = [RideDBModel::class],
     version = 1

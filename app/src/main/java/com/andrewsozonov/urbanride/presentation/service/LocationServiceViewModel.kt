@@ -2,8 +2,7 @@ package com.andrewsozonov.urbanride.presentation.service
 
 import androidx.lifecycle.ViewModel
 import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
-import com.andrewsozonov.urbanride.data.repository.BaseRepository
-import com.andrewsozonov.urbanride.presentation.history.HistoryFragment
+import com.andrewsozonov.urbanride.domain.RideRepository
 
 
 /**
@@ -14,7 +13,7 @@ import com.andrewsozonov.urbanride.presentation.history.HistoryFragment
  *
  * @author Андрей Созонов
  */
-class LocationServiceViewModel(val repository: BaseRepository) : ViewModel() {
+class LocationServiceViewModel(val repository: RideRepository) : ViewModel() {
 
 
     /**

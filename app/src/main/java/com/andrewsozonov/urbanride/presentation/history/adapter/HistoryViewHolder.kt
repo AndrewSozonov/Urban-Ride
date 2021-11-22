@@ -2,12 +2,11 @@ package com.andrewsozonov.urbanride.presentation.history.adapter
 
 import android.content.res.Resources
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.andrewsozonov.urbanride.R
 import com.andrewsozonov.urbanride.databinding.RecyclerItemHistoryBinding
 import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
-import com.andrewsozonov.urbanride.util.Constants.GRAPH_PADDING
+import com.andrewsozonov.urbanride.util.constants.UIConstants.GRAPH_PADDING
 import com.bumptech.glide.Glide
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.series.DataPoint

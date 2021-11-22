@@ -3,12 +3,11 @@ package com.andrewsozonov.urbanride.domain.interactor
 import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
 import com.andrewsozonov.urbanride.domain.converter.RideConverter
 import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
-import com.andrewsozonov.urbanride.data.repository.BaseRepository
-import com.andrewsozonov.urbanride.data.repository.SettingsRepository
+import com.andrewsozonov.urbanride.domain.RideRepository
+import com.andrewsozonov.urbanride.domain.SettingsRepository
 
 /**
  * Интерактор экрана Ride
@@ -19,7 +18,7 @@ import com.andrewsozonov.urbanride.data.repository.SettingsRepository
  *
  * @author Андрей Созонов
  */
-class RideInteractor(val repository: BaseRepository, private val settings: SettingsRepository, val converter: RideConverter) {
+class RideInteractor(val repository: RideRepository, private val settings: SettingsRepository, val converter: RideConverter) {
 
     /**
      * Получает статус сервиса геолокации из репозитория

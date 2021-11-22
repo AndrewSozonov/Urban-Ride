@@ -19,13 +19,13 @@ import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
  */
 @Entity(tableName = "riding_table")
 data class RideDBModel(
-    var startTime: Long,
-    var finishTime: Long,
-    var duration: Long,
-    var distance: Float,
-    var averageSpeed: Float,
-    var mapImg: Bitmap,
-    var trackingPoints: List<List<LocationPoint>>
+    val startTime: Long,
+    val finishTime: Long,
+    val duration: Long,
+    val distance: Float,
+    val averageSpeed: Float,
+    val mapImg: Bitmap,
+    val trackingPoints: List<List<LocationPoint>>
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null

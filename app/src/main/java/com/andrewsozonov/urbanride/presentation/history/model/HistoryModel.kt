@@ -19,15 +19,15 @@ import android.graphics.Bitmap
  * @author Андрей Созонов
  */
 data class HistoryModel(
-    var id: Int,
-    var date: String,
-    var startTime: String,
-    var finishTime: String,
-    var duration: String,
-    var distance: Double,
-    var averageSpeed: Double,
-    var maxSpeed: Double,
-    var mapImg: Bitmap,
-    var trackingPoints: List<List<HistoryLocationPoint>>,
+    val id: Int,
+    val date: String,
+    val startTime: String,
+    val finishTime: String,
+    val duration: String,
+    val distance: Double,
+    val averageSpeed: Double,
+    val maxSpeed: Double,
+    val mapImg: Bitmap,
+    val trackingPoints: List<List<HistoryLocationPoint>>,
     val isUnitsMetric: Boolean
 )

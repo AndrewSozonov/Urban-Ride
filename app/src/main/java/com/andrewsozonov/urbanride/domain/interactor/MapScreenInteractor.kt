@@ -1,18 +1,18 @@
 package com.andrewsozonov.urbanride.domain.interactor
 
-import com.andrewsozonov.urbanride.data.repository.BaseRepository
-import com.andrewsozonov.urbanride.domain.converter.MapConverter
+import com.andrewsozonov.urbanride.domain.RideRepository
+import com.andrewsozonov.urbanride.domain.converter.MapScreenDataConverter
 import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
 
 /**
  * Интерактор экрана Map
  *
  * @param repository ссылка на интерфейс главного репозитория
- * @param converter конвертер модели данных
+ * @param screenDataConverter конвертер модели данных
  *
  * @author Андрей Созонов
  */
-class MapInteractor(val repository: BaseRepository, val converter: MapConverter) {
+class MapScreenInteractor(val repository: RideRepository, val screenDataConverter: MapScreenDataConverter) {
 
     /**
      * Получает поездку из БД
@@ -21,6 +21,6 @@ class MapInteractor(val repository: BaseRepository, val converter: MapConverter)
      * @return модель поездки [RideModel]
      */
     fun getRideById(id: Int): RideModel {
-        return converter.convertFromRideDBModelToRideModel(repository.getRideById(id))
+        return screenDataConverter.convertFromRideDBModelToRideModel(repository.getRideById(id))
     }
 }

@@ -1,4 +1,4 @@
-package com.andrewsozonov.urbanride.data.repository
+package com.andrewsozonov.urbanride.domain
 
 interface SettingsRepository {
 

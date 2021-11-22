@@ -2,8 +2,8 @@ package com.andrewsozonov.urbanride.domain.interactor
 
 import android.graphics.Bitmap
 import com.andrewsozonov.urbanride.data.database.RideDBModel
-import com.andrewsozonov.urbanride.data.repository.BaseRepository
-import com.andrewsozonov.urbanride.data.repository.SettingsRepository
+import com.andrewsozonov.urbanride.domain.RideRepository
+import com.andrewsozonov.urbanride.domain.SettingsRepository
 import com.andrewsozonov.urbanride.domain.converter.HistoryConverter
 import com.andrewsozonov.urbanride.presentation.history.model.HistoryLocationPoint
 import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
@@ -60,7 +60,7 @@ import org.junit.Test
 
 class HistoryInteractorTest {
 
-    private val repository: BaseRepository = mockk()
+    private val repository: RideRepository = mockk()
     private val converter: HistoryConverter = mockk()
     private val settings: SettingsRepository = mockk()
     private val interactor = HistoryInteractor(repository, settings, converter)

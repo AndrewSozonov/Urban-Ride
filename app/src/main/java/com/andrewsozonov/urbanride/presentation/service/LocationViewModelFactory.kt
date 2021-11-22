@@ -2,8 +2,7 @@ package com.andrewsozonov.urbanride.presentation.service
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.andrewsozonov.urbanride.data.repository.BaseRepository
-import com.andrewsozonov.urbanride.presentation.history.HistoryViewModel
+import com.andrewsozonov.urbanride.domain.RideRepository
 
 /**
  * Класс для создания [LocationServiceViewModel]
@@ -11,7 +10,7 @@ import com.andrewsozonov.urbanride.presentation.history.HistoryViewModel
  * @author Андрей Созонов
  */
 class LocationViewModelFactory (
-    private val repository: BaseRepository,
+    private val repository: RideRepository,
 ) : ViewModelProvider.Factory {
 
 

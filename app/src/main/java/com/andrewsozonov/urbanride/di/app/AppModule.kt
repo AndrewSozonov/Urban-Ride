@@ -7,12 +7,14 @@ import androidx.room.Room
 import com.andrewsozonov.urbanride.data.database.RideDao
 import com.andrewsozonov.urbanride.data.database.RidingDatabase
 import com.andrewsozonov.urbanride.data.repository.*
+import com.andrewsozonov.urbanride.domain.RideRepository
+import com.andrewsozonov.urbanride.domain.SettingsRepository
 import com.andrewsozonov.urbanride.domain.converter.RideConverter
 import com.andrewsozonov.urbanride.domain.interactor.RideInteractor
 import com.andrewsozonov.urbanride.domain.converter.HistoryConverter
-import com.andrewsozonov.urbanride.domain.converter.MapConverter
+import com.andrewsozonov.urbanride.domain.converter.MapScreenDataConverter
 import com.andrewsozonov.urbanride.domain.interactor.HistoryInteractor
-import com.andrewsozonov.urbanride.domain.interactor.MapInteractor
+import com.andrewsozonov.urbanride.domain.interactor.MapScreenInteractor
 import com.andrewsozonov.urbanride.util.ISchedulersProvider
 import com.andrewsozonov.urbanride.util.SchedulersProvider
 import dagger.Module
@@ -20,7 +22,7 @@ import dagger.Provides
 import javax.inject.Singleton
 
 /**
- * Модуль предоставляет зависимости [BaseRepository], [ISchedulersProvider]
+ * Модуль предоставляет зависимости [RideRepository], [ISchedulersProvider]
  *
  * @author Андрей Созонов
  */
@@ -31,8 +33,8 @@ class AppModule(var application: Application) {
     @Provides
     fun provideRepository(
         rideDao: RideDao, repositoryConverter: RepositoryConverter
-    ): BaseRepository {
-        return MainRepository(rideDao, repositoryConverter)
+    ): RideRepository {
+        return RideRepositoryImpl(rideDao, repositoryConverter)
     }
 
     @Singleton
@@ -57,7 +59,7 @@ class AppModule(var application: Application) {
     }
 
     @Provides
-    fun provideRideInteractor(repository: BaseRepository, settings: SettingsRepository, converter: RideConverter): RideInteractor {
+    fun provideRideInteractor(repository: RideRepository, settings: SettingsRepository, converter: RideConverter): RideInteractor {
         return RideInteractor(repository, settings, converter)
     }
 
@@ -67,7 +69,7 @@ class AppModule(var application: Application) {
     }
 
     @Provides
-    fun provideHistoryInteractor(repository: BaseRepository, settings: SettingsRepository, converter: HistoryConverter): HistoryInteractor {
+    fun provideHistoryInteractor(repository: RideRepository, settings: SettingsRepository, converter: HistoryConverter): HistoryInteractor {
         return HistoryInteractor(repository, settings, converter)
     }
 
@@ -77,13 +79,13 @@ class AppModule(var application: Application) {
     }
 
     @Provides
-    fun provideMapInteractor(repository: BaseRepository, converter: MapConverter): MapInteractor {
-        return MapInteractor(repository, converter)
+    fun provideMapInteractor(repository: RideRepository, screenDataConverter: MapScreenDataConverter): MapScreenInteractor {
+        return MapScreenInteractor(repository, screenDataConverter)
     }
 
     @Provides
-    fun provideMapConverter(): MapConverter {
-        return MapConverter()
+    fun provideMapConverter(): MapScreenDataConverter {
+        return MapScreenDataConverter()
     }
 
     @Provides

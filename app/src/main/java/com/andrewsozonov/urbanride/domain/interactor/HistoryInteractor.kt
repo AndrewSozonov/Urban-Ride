@@ -1,8 +1,7 @@
 package com.andrewsozonov.urbanride.domain.interactor
 
-import android.util.Log
-import com.andrewsozonov.urbanride.data.repository.BaseRepository
-import com.andrewsozonov.urbanride.data.repository.SettingsRepository
+import com.andrewsozonov.urbanride.domain.RideRepository
+import com.andrewsozonov.urbanride.domain.SettingsRepository
 import com.andrewsozonov.urbanride.domain.converter.HistoryConverter
 import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
 
@@ -15,7 +14,11 @@ import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
  *
  * @author Андрей Созонов
  */
-class HistoryInteractor(val repository: BaseRepository, private val settings: SettingsRepository, val converter: HistoryConverter) {
+class HistoryInteractor(
+    val repository: RideRepository,
+    private val settings: SettingsRepository,
+    val converter: HistoryConverter
+) {
 
     /**
      * Удаляет поездку из БД по id

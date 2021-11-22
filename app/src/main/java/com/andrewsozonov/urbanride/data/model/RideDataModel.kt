@@ -10,4 +10,8 @@ import com.google.android.gms.maps.model.LatLng
  * @param averageSpeed средняя скорость в м/c
  * @param trackingPoints список координат
  */
-data class RideDataModel(val distance: Float, val speed: Float, val averageSpeed: Float, val trackingPoints: List<List<LatLng>>)
+data class RideDataModel(
+    val distance: Float,
+    val speed: Float,
+    val averageSpeed: Float,
+    val trackingPoints: List<List<LatLng>>)

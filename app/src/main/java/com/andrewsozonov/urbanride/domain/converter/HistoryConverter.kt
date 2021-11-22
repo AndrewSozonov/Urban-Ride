@@ -6,6 +6,15 @@ import com.andrewsozonov.urbanride.presentation.history.model.HistoryLocationPoi
 import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
 import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
 import com.andrewsozonov.urbanride.util.DataFormatter
+import com.andrewsozonov.urbanride.util.constants.UnitsContants.DATE_FORMAT_PATTERN
+import com.andrewsozonov.urbanride.util.constants.UnitsContants.FORMAT_PATTERN
+import com.andrewsozonov.urbanride.util.constants.UnitsContants.METERS_IN_KM
+import com.andrewsozonov.urbanride.util.constants.UnitsContants.METERS_IN_KM_DOUBLE
+import com.andrewsozonov.urbanride.util.constants.UnitsContants.MILES_IN_KM
+import com.andrewsozonov.urbanride.util.constants.UnitsContants.MILLIS_IN_SECONDS_DOUBLE
+import com.andrewsozonov.urbanride.util.constants.UnitsContants.SECONDS_IN_HOUR
+import com.andrewsozonov.urbanride.util.constants.UnitsContants.SECONDS_IN_MINUTES
+import com.andrewsozonov.urbanride.util.constants.UnitsContants.TIME_FORMAT_PATTERN
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -24,31 +33,50 @@ class HistoryConverter {
      * @param rideDBModel модель данных из БД
      * @param isUnitsMetric единицы измерения из preferences
      */
-    fun convertFromRideToHistoryModel(rideDBModel: RideDBModel, isUnitsMetric: Boolean): HistoryModel {
+    fun convertFromRideToHistoryModel(
+        rideDBModel: RideDBModel,
+        isUnitsMetric: Boolean
+    ): HistoryModel {
 
         val id = rideDBModel.id
         val date = formatDate(rideDBModel.startTime)
         val startTime = formatTime(rideDBModel.startTime)
         val finishTime = formatTime(rideDBModel.finishTime)
         val duration = DataFormatter.formatTime(rideDBModel.duration)
-        var distance = rideDBModel.distance / 1000.0
-        var averageSpeed = convertSpeedToKmH(rideDBModel.averageSpeed)
-        var maxSpeed = findMaxSpeed(rideDBModel)
+        val distance: Double
+        val averageSpeed: Double
+        val maxSpeed: Double
         val map: Bitmap = rideDBModel.mapImg
         val trackingPoints: List<List<HistoryLocationPoint>> =
             convertToListHistoryLocationPoint(rideDBModel.trackingPoints, isUnitsMetric)
 
-        if (!isUnitsMetric) {
-            distance = convertKilometersToMiles(distance)
-            averageSpeed = convertKilometersToMiles(averageSpeed)
-            maxSpeed = convertKilometersToMiles(maxSpeed)
+        if (isUnitsMetric) {
+            distance = rideDBModel.distance / METERS_IN_KM_DOUBLE
+            averageSpeed = convertSpeedToKmH(rideDBModel.averageSpeed)
+            maxSpeed = findMaxSpeed(rideDBModel)
+        } else {
+            distance = convertKilometersToMiles(rideDBModel.distance / METERS_IN_KM_DOUBLE)
+            averageSpeed = convertKilometersToMiles(convertSpeedToKmH(rideDBModel.averageSpeed))
+            maxSpeed = convertKilometersToMiles(findMaxSpeed(rideDBModel))
         }
 
-        return HistoryModel(id!!, date, startTime, finishTime, duration, distance, averageSpeed, maxSpeed, map, trackingPoints, isUnitsMetric)
+        return HistoryModel(
+            id!!,
+            date,
+            startTime,
+            finishTime,
+            duration,
+            distance,
+            averageSpeed,
+            maxSpeed,
+            map,
+            trackingPoints,
+            isUnitsMetric
+        )
     }
 
     private fun formatDate(time: Long): String {
-        val dateFormat = SimpleDateFormat("dd.MM.yy", Locale.getDefault())
+        val dateFormat = SimpleDateFormat(DATE_FORMAT_PATTERN, Locale.getDefault())
         val startTime = Calendar.getInstance().apply {
             timeInMillis = time
         }
@@ -56,7 +84,7 @@ class HistoryConverter {
     }
 
     private fun formatTime(time: Long): String {
-        val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+        val timeFormat = SimpleDateFormat(TIME_FORMAT_PATTERN, Locale.getDefault())
         val startTime = Calendar.getInstance().apply {
             timeInMillis = time
         }
@@ -70,7 +98,7 @@ class HistoryConverter {
         val list: MutableList<MutableList<HistoryLocationPoint>> = mutableListOf()
         trackingPoints.map {
             val historyLine: MutableList<HistoryLocationPoint> = mutableListOf()
-            it.map {point ->
+            it.map { point ->
                 val historyPoint = HistoryLocationPoint(
                     point.latitude,
                     point.longitude,
@@ -90,21 +118,21 @@ class HistoryConverter {
     }
 
     private fun convertSpeedToKmH(speedMetersPerSecond: Float): Double {
-        val speed = speedMetersPerSecond / 1000 * 3600
+        val speed = speedMetersPerSecond / METERS_IN_KM * SECONDS_IN_HOUR
         return formatValue(speed)
     }
 
     private fun convertMillisecondsToMinutes(milliseconds: Long): Double {
-        val minutes = milliseconds / 1000.0 / 60.0
+        val minutes = milliseconds / MILLIS_IN_SECONDS_DOUBLE / SECONDS_IN_MINUTES
         return formatValue(minutes.toFloat())
     }
 
     private fun convertMetersToKilometers(meters: Float): Double {
-        return meters.toInt() / 1000.0
+        return meters.toInt() / METERS_IN_KM_DOUBLE
     }
 
     private fun convertKilometersToMiles(kilometers: Double): Double {
-        val miles = kilometers * 0.62
+        val miles = kilometers * MILES_IN_KM
         return formatValue(miles.toFloat())
     }
 
@@ -116,7 +144,7 @@ class HistoryConverter {
     }
 
     private fun formatValue(value: Float): Double {
-        val df = DecimalFormat("###.##")
+        val df = DecimalFormat(FORMAT_PATTERN)
         val formattedValue = df.format(value)
 
         return if (formattedValue.contains(',')) {

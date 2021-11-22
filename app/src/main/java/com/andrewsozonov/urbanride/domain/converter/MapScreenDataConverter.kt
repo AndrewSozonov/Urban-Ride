@@ -3,6 +3,7 @@ package com.andrewsozonov.urbanride.domain.converter
 import com.andrewsozonov.urbanride.data.database.RideDBModel
 import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
 import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
+import com.andrewsozonov.urbanride.util.constants.UnitsContants.METERS_IN_KM
 import com.google.android.gms.maps.model.LatLng
 
 /**
@@ -10,7 +11,7 @@ import com.google.android.gms.maps.model.LatLng
  *
  * @author Андрей Созонов
  */
-class MapConverter {
+class MapScreenDataConverter {
 
     /**
      * Конвертирует из модели [RideDBModel] в модель [RideModel]
@@ -19,7 +20,7 @@ class MapConverter {
      */
     fun convertFromRideDBModelToRideModel(rideDBModel: RideDBModel): RideModel {
         return RideModel(
-            rideDBModel.distance / 1000,
+            rideDBModel.distance / METERS_IN_KM,
             rideDBModel.trackingPoints.last().last().speed,
             rideDBModel.averageSpeed,
             convertLocationPointToLatLng(rideDBModel.trackingPoints),
