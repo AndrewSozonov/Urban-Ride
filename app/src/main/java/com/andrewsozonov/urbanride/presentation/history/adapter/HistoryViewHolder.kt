@@ -200,7 +200,7 @@ class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                         binding.graph.gridLabelRenderer.verticalAxisTitle =
                             itemView.context.getString(R.string.graph_speed_axis_mile)
                     }
-                    showSeries(binding.graph, speedTimeSeries)
+                    showGraphSeries(binding.graph, speedTimeSeries)
                 }
                 R.id.dist_speed_graph -> {
                     if (ride.isUnitsMetric) {
@@ -214,13 +214,13 @@ class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                         binding.graph.gridLabelRenderer.verticalAxisTitle =
                             itemView.context.getString(R.string.graph_speed_axis_mile)
                     }
-                    showSeries(binding.graph, speedDistSeries)
+                    showGraphSeries(binding.graph, speedDistSeries)
                 }
             }
         }
     }
 
-    private fun showSeries(graph: GraphView, series: LineGraphSeries<DataPoint>) {
+    private fun showGraphSeries(graph: GraphView, series: LineGraphSeries<DataPoint>) {
         graph.removeAllSeries()
         graph.onDataChanged(false, false)
         graph.viewport.setMaxX(series.highestValueX * 1.1)

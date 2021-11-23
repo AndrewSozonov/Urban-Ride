@@ -3,7 +3,7 @@ package com.andrewsozonov.urbanride.presentation.history.model
 import android.graphics.Bitmap
 
 /**
- * Модель данных дя отображения на экране History
+ * Модель данных для отображения на экране History
  *
  * @param date дата поездки
  * @param startTime время начала поездки

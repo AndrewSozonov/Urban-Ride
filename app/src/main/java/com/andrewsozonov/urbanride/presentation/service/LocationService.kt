@@ -50,7 +50,7 @@ import javax.inject.Inject
 /**
  * Сервис получает геолокацию устройства
  * Стартует таймер во время работы
- * Обновляет данные в [MutableLiveData]
+ * Обновляет данные в [LocationServiceViewModel]
  *
  * @author Андрей Созонов
  */
@@ -201,10 +201,6 @@ class LocationService : LifecycleService() {
             val points = trackingPoints.value
             val lastLatitude = points?.get(points.size - 2)?.last()?.latitude
             val lastLongitude = points?.get(points.size - 2)?.last()?.longitude
-            Log.d(
-                "CheckLocationEquals",
-                " lastLatitude: $lastLatitude  currentLatitude: ${location.latitude}  lastLongitude: $lastLongitude  currentLongitude: ${location.longitude}"
-            )
             return (location.latitude == lastLatitude && location.longitude == lastLongitude)
         }
         return false

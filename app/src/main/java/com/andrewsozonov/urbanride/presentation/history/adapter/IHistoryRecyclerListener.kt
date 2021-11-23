@@ -2,7 +2,7 @@ package com.andrewsozonov.urbanride.presentation.history.adapter
 
 
 /**
- * Интерфейс слушателя нажатий на элемент списка экрана History
+ * Интерфейс слушателя нажатий на карту и кнопку share в элементе списка экрана History
  *
  * @author Андрей Созонов
  */

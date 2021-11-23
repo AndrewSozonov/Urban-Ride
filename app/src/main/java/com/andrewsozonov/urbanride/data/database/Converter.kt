@@ -2,7 +2,6 @@ package com.andrewsozonov.urbanride.data.database
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import androidx.annotation.Nullable
 import androidx.room.TypeConverter
 import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
 import com.google.gson.Gson
@@ -24,7 +23,7 @@ class Converter {
      * @return возвращает изображение [Bitmap]
      */
     @TypeConverter
-    fun toBitmap(byteArray: ByteArray) : Bitmap {
+    fun toBitmap(byteArray: ByteArray): Bitmap {
         return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
     }
 
@@ -35,7 +34,7 @@ class Converter {
      * @return возвращает массив байтов который можно добавить в БД
      */
     @TypeConverter
-    fun fromBitmap(bitmap: Bitmap) : ByteArray {
+    fun fromBitmap(bitmap: Bitmap): ByteArray {
         val outputStream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
         return outputStream.toByteArray()
@@ -48,7 +47,7 @@ class Converter {
      * @return возвращает String для записи в БД
      */
     @TypeConverter
-    fun fromLatLng(list : List<List<LocationPoint>>) : String {
+    fun fromLatLng(list: List<List<LocationPoint>>): String {
         val gson = Gson()
         return gson.toJson(list)
     }

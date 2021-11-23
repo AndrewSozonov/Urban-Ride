@@ -5,7 +5,6 @@ import android.content.Intent
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -29,6 +28,8 @@ import com.andrewsozonov.urbanride.util.constants.LocationConstants.SERVICE_STAT
 import com.andrewsozonov.urbanride.util.constants.LocationConstants.SERVICE_STATUS_STOPPED
 import com.andrewsozonov.urbanride.util.constants.LocationConstants.START_LOCATION_SERVICE
 import com.andrewsozonov.urbanride.util.constants.LocationConstants.STOP_LOCATION_SERVICE
+import com.andrewsozonov.urbanride.util.constants.UIConstants.CAMERA_ZOOM_SCALING_AFTER_STOP
+import com.andrewsozonov.urbanride.util.constants.UIConstants.CAMERA_ZOOM_VALUE
 import com.andrewsozonov.urbanride.util.constants.UIConstants.POLYLINE_WIDTH
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -41,9 +42,8 @@ import javax.inject.Inject
  * Показывает карту.
  * При нажатии на кнопку запуска, запускает [LocationService] и получает координаты пользователя.
  * Обновляет карту на основе полученных координат и рисует маршрут.
- * Координаты и время отправляет во [RideViewModel] для подсчета расстояния и скорости
- * Полученные из [RideViewModel] данные отображает в соответсвующих полях.
- * При нажатии на кнопку стоп отправлет данные в базу.
+ * Полученные из [RideViewModel] данные отображает в соответствующих полях.
+ * При нажатии на кнопку стоп отправлет данные в БД.
  */
 class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     GoogleMap.OnMyLocationClickListener,
@@ -285,7 +285,12 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
 
     private fun moveCameraToCurrentLocation() {
         if (trackingPoints.isNotEmpty() && trackingPoints.last().size > 1) {
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(trackingPoints.last().last(), 16f))
+            map.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    trackingPoints.last().last(),
+                    CAMERA_ZOOM_VALUE
+                )
+            )
         }
     }
 
@@ -307,7 +312,7 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
                             bounds.build(),
                             it,
                             it1,
-                            (mapView?.height!! * 0.1f).toInt()
+                            (mapView?.height!! * CAMERA_ZOOM_SCALING_AFTER_STOP).toInt()
                         )
                     }
                 }
@@ -397,13 +402,11 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
                     registerForActivityResult(
                         ActivityResultContracts.RequestPermission()
                     ) {
-                        Log.e("DEBUG", "ACCESS_FINE_LOCATION = $it")
                     }
                 val requestPermissionLauncher2 =
                     registerForActivityResult(
                         ActivityResultContracts.RequestPermission()
                     ) {
-                        Log.e("DEBUG", "ACCESS_BACKGROUND_LOCATION = $it")
                     }
                 requestPermissionLauncher.launch(
                     Manifest.permission.ACCESS_FINE_LOCATION

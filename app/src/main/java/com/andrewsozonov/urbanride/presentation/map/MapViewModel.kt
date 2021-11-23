@@ -13,7 +13,7 @@ import io.reactivex.Single
  * [ViewModel] прикреплена к [MapFragment]
  * Загружает поездку из БД для отображения маршрута на карте
  *
- * @param interactor ссылка на интерактор экрана Map
+ * @param interactor интерактор экрана Map
  * @param schedulersProvider интерфейс предоставляющий потоки
  *
  * @author Андрей Созонов

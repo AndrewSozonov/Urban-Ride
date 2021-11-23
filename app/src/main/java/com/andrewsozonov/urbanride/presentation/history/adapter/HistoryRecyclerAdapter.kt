@@ -9,6 +9,8 @@ import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
 /**
  * Адаптер для списка истории поездок во фрагменте HistoryFragment
  *
+ * @param listener слушатель нажатий на карту и кнопку share
+ *
  * @author Андрей Созонов
  */
 class HistoryRecyclerAdapter(private val listener: IHistoryRecyclerListener) :

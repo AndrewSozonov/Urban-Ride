@@ -15,7 +15,6 @@ class RideViewModelFactory(
     private val schedulersProvider: ISchedulersProvider
 ) : ViewModelProvider.Factory {
 
-
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return RideViewModel(interactor, schedulersProvider) as T
     }

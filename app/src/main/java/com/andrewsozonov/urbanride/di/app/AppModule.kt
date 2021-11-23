@@ -22,7 +22,9 @@ import dagger.Provides
 import javax.inject.Singleton
 
 /**
- * Модуль предоставляет зависимости [RideRepository], [ISchedulersProvider]
+ * Модуль предоставляет зависимости [RideRepository], [ISchedulersProvider], [RideDao],
+ * [RideRepositoryConverter], [RideInteractor], [RideConverter], [HistoryInteractor], [HistoryConverter],
+ * [MapScreenInteractor], [MapScreenDataConverter], [SettingsRepository], [SharedPreferences]
  *
  * @author Андрей Созонов
  */
@@ -32,9 +34,9 @@ class AppModule(var application: Application) {
     @Singleton
     @Provides
     fun provideRepository(
-        rideDao: RideDao, repositoryConverter: RepositoryConverter
+        rideDao: RideDao, rideRepositoryConverter: RideRepositoryConverter
     ): RideRepository {
-        return RideRepositoryImpl(rideDao, repositoryConverter)
+        return RideRepositoryImpl(rideDao, rideRepositoryConverter)
     }
 
     @Singleton
@@ -49,8 +51,8 @@ class AppModule(var application: Application) {
     }
 
     @Provides
-    fun provideRepositoryConverter(): RepositoryConverter {
-        return RepositoryConverter()
+    fun provideRepositoryConverter(): RideRepositoryConverter {
+        return RideRepositoryConverter()
     }
 
     @Provides
@@ -79,12 +81,12 @@ class AppModule(var application: Application) {
     }
 
     @Provides
-    fun provideMapInteractor(repository: RideRepository, screenDataConverter: MapScreenDataConverter): MapScreenInteractor {
+    fun provideMapScreenInteractor(repository: RideRepository, screenDataConverter: MapScreenDataConverter): MapScreenInteractor {
         return MapScreenInteractor(repository, screenDataConverter)
     }
 
     @Provides
-    fun provideMapConverter(): MapScreenDataConverter {
+    fun provideMapScreenConverter(): MapScreenDataConverter {
         return MapScreenDataConverter()
     }
 

@@ -9,7 +9,7 @@ import com.andrewsozonov.urbanride.util.constants.UnitsContants.SECONDS_IN_HOUR
 import java.text.DecimalFormat
 
 /**
- * Конвертирует из модели данных data в модель для отображения на главном экране
+ * Конвертирует из модели данных data слоя в модель для отображения на главном экране
  *
  * @author Андрей Созонов
  */

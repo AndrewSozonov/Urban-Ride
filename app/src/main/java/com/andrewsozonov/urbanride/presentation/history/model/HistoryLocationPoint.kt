@@ -9,4 +9,4 @@ package com.andrewsozonov.urbanride.presentation.history.model
  *  @param time время поездки в данной точке в минутах
  *  @param distance пройденное расстояние в данной точке в км или милях
  */
-data class HistoryLocationPoint(var latitude: Double, var longitude: Double, var speed: Double, var time: Double, var distance: Double)
+data class HistoryLocationPoint(val latitude: Double, val longitude: Double, val speed: Double, val time: Double, val distance: Double)

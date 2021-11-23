@@ -3,7 +3,7 @@ package com.andrewsozonov.urbanride.util
 import io.reactivex.Scheduler
 
 /**
- * Интерфейс для выбора потоков
+ * Интерфейс предоставляющий потоки
  *
  * @author Андрей Созонов
  */

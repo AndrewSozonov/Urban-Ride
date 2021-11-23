@@ -9,7 +9,7 @@ import com.andrewsozonov.urbanride.domain.RideRepository
  * [ViewModel] прикреплена к [LocationService]
  * Обновляет данные геолокации из сервиса в репозиторий
  *
- * @param repository ссылка на главный репозиторий приложения
+ * @param repository интерфейс репозитория с данными о поездках
  *
  * @author Андрей Созонов
  */
@@ -35,7 +35,7 @@ class LocationServiceViewModel(val repository: RideRepository) : ViewModel() {
     /**
      * Обновляет значение статуса сервиса геолокации
      *
-     * @param status статус сервиса STARTED, STOPPED, PAUSED
+     * @param status статус сервиса: STARTED, STOPPED, PAUSED
      */
     fun updateServiceStatus(status: String) {
         repository.updateServiceStatus(status)

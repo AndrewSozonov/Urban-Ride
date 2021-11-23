@@ -62,9 +62,13 @@ import com.andrewsozonov.urbanride.util.TestConstants.TIME3_MS
 import com.andrewsozonov.urbanride.util.TestConstants.TIME4_MIN
 import com.andrewsozonov.urbanride.util.TestConstants.TIME4_MS
 import com.google.common.truth.Truth
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.runs
 import org.junit.Before
 import org.junit.Test
+import java.util.*
 
 class HistoryConverterTest {
 

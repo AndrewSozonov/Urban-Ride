@@ -8,7 +8,7 @@ import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
 /**
  * Интерактор экрана History
  *
- * @param repository ссылка на интерфейс главного репозитория
+ * @param repository интерфейс репозитория с данными о поездках
  * @param settings интерфейс с настройками
  * @param converter конвертер модели данных
  *
@@ -32,10 +32,8 @@ class HistoryInteractor(
     /**
      * Получает список всех поездок из БД
      * конвертирует их в зависимости от единиц измерения [HistoryModel]
-     *
      */
     fun getAllRides(): List<HistoryModel> {
-//        Log.d("HistoryInteractor", " rides: ${repository.getAllRides()}")
         return repository.getAllRides()
             .map { converter.convertFromRideToHistoryModel(it, settings.getUnits()) }
     }

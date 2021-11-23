@@ -7,7 +7,7 @@ import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
 /**
  * Интерактор экрана Map
  *
- * @param repository ссылка на интерфейс главного репозитория
+ * @param repository интерфейс репозитория с данными о поездках
  * @param screenDataConverter конвертер модели данных
  *
  * @author Андрей Созонов

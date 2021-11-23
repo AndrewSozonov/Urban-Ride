@@ -8,7 +8,7 @@ import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
 import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
 
 /**
- * Интерфейс главного репозитория приложения
+ * Интерфейс репозитория с данными о поездках
  *
  * @author Андрей Созонов
  */

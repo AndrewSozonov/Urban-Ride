@@ -1,7 +1,6 @@
 package com.andrewsozonov.urbanride.data.repository
 
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.andrewsozonov.urbanride.data.database.RideDBModel
@@ -14,16 +13,17 @@ import java.util.*
 
 
 /**
- * Главный репозиторий приложения
+ * Реализация [RideRepository]
+ * Репозиторий с данными о текущей поездке
  *
  * @param rideDao интерфейс предоставляющий доступ к БД
- * @param converter репозитория
+ * @param converterRide репозитория
  *
  * @author Андрей Созонов
  */
 class RideRepositoryImpl(
     private val rideDao: RideDao,
-    private val converter: RepositoryConverter
+    private val converterRide: RideRepositoryConverter
 ) : RideRepository {
 
     private var trackingPoints: List<List<LocationPoint>> = mutableListOf()
@@ -87,7 +87,6 @@ class RideRepositoryImpl(
      * @return список поездок [RideDBModel]
      */
     override fun getAllRides(): List<RideDBModel> {
-        Log.d("repository", "rides: ${rideDao.getAllRides().last()}")
         return rideDao.getAllRides()
     }
 
@@ -128,12 +127,11 @@ class RideRepositoryImpl(
      * обновляет в LiveData[data]
      */
     private fun calculateData() {
-        val rideDataModel = converter.convertDataToRideDataModel(trackingPoints, ridingTimeInMillis)
+        val rideDataModel = converterRide.convertDataToRideDataModel(trackingPoints, ridingTimeInMillis)
 
         distanceInMeters = rideDataModel.distance
         speedInMpS = rideDataModel.speed
         averageSpeedInMpS = rideDataModel.averageSpeed
-        Log.d("calculateData", "rideDataModel ${rideDataModel.trackingPoints}")
         data.value = rideDataModel
     }
 }

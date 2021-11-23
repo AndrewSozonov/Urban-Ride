@@ -44,9 +44,7 @@ class RideInteractorTest {
     private val rideInteractor = RideInteractor(repository, settings, converter)
 
 
-//    private val rideDataModel = RideDataModel(DISTANCE_METERS, SPEED_M_S, AVG_SPEED_M_S, testTrackingPoints)
     private lateinit var rideDataModel: RideDataModel
-//    private val rideModel = RideModel(DISTANCE_KM, SPEED_KM_H, AVG_SPEED_KM_H, testTrackingPoints)
     private lateinit var rideModel: RideModel
     private val testTimerValue = TIMER_VALUE
     private val testServiceStatus = STATUS
@@ -73,7 +71,7 @@ class RideInteractorTest {
         val result = rideInteractor.getTrackingData()
         val expectedResult: MutableLiveData<RideModel> = MutableLiveData(rideModel)
 
-        assertThat(result.value).isEqualTo(expectedResult.value)
+        assertThat(result.value).isEqualTo(rideModel)
     }*/
 
     @Test

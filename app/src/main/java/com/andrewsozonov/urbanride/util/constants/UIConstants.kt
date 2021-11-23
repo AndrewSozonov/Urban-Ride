@@ -3,6 +3,9 @@ package com.andrewsozonov.urbanride.util.constants
 object UIConstants {
 
     const val POLYLINE_WIDTH = 12f
+    const val CAMERA_ZOOM_VALUE = 16f
+    const val CAMERA_ZOOM_SCALING_AFTER_STOP = 0.1f
+
     const val GRAPH_PADDING = 20
     const val RECYCLER_ITEMS_SPACING = 20
 

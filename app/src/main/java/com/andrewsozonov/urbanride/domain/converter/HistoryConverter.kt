@@ -99,17 +99,25 @@ class HistoryConverter {
         trackingPoints.map {
             val historyLine: MutableList<HistoryLocationPoint> = mutableListOf()
             it.map { point ->
+                val distance = if (isUnitsMetric) {
+                    convertMetersToKilometers(point.distance)
+                } else {
+                    convertKilometersToMiles(convertMetersToKilometers(point.distance))
+                }
+
+                val speed = if (isUnitsMetric) {
+                    convertSpeedToKmH(point.speed)
+                } else {
+                    convertKilometersToMiles(convertSpeedToKmH(point.speed))
+                }
                 val historyPoint = HistoryLocationPoint(
                     point.latitude,
                     point.longitude,
-                    convertSpeedToKmH(point.speed),
+                    speed,
                     convertMillisecondsToMinutes(point.time),
-                    convertMetersToKilometers(point.distance)
+                    distance
                 )
-                if (!isUnitsMetric) {
-                    historyPoint.distance = convertKilometersToMiles(historyPoint.distance)
-                    historyPoint.speed = convertKilometersToMiles(historyPoint.speed)
-                }
+
                 historyLine.add(historyPoint)
             }
             list.add(historyLine)

@@ -55,15 +55,12 @@ class HistoryViewModel(
             .doAfterTerminate { isLoading.value = false }
             .subscribe { t1, t2 ->
                 t1?.let(listOfRides::setValue)
-                Log.d("getRidesFromDB", " listOfRides $t1")
-
             })
     }
 
     /**
      * Получает список поездок [HistoryModel] из БД
      * передает в liveData [listOfRides]
-     *
      */
     fun getRidesFromDB() {
         val singleObservable = Single.fromCallable {

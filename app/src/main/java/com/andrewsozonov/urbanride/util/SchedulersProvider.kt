@@ -5,6 +5,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
+/**
+ * Иплементация [ISchedulersProvider]
+ *
+ * @author Андрей Созонов
+ */
 open class SchedulersProvider: ISchedulersProvider {
     override fun io(): Scheduler {
         return Schedulers.io()

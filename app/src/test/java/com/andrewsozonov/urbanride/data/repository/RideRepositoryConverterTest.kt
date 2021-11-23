@@ -29,9 +29,9 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.common.truth.Truth
 import org.junit.Test
 
-class RepositoryConverterTest {
+class RideRepositoryConverterTest {
 
-    private val converter = RepositoryConverter()
+    private val converter = RideRepositoryConverter()
     private lateinit var locationPoints: MutableList<MutableList<LocationPoint>>
     private lateinit var rideDataModel: RideDataModel
 

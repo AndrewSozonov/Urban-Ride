@@ -7,7 +7,7 @@ import com.andrewsozonov.urbanride.util.constants.UnitsContants.METERS_IN_KM
 import com.google.android.gms.maps.model.LatLng
 
 /**
- * Конвертирует из модели базы данных в модель для отображения на экране Map
+ * Конвертирует из модели базы данных в модель для отображения маршрута на экране Map
  *
  * @author Андрей Созонов
  */

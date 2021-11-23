@@ -14,7 +14,7 @@ import java.math.RoundingMode
  *
  * @author Андрей Созонов
  */
-class RepositoryConverter {
+class RideRepositoryConverter {
 
     /**
      * Конвертирует данные полученные из сервиса геолокации в модель
