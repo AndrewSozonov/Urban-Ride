@@ -1,4 +1,4 @@
-package com.andrewsozonov.urbanride.data.model
+package com.andrewsozonov.urbanride.models.data
 
 import com.google.android.gms.maps.model.LatLng
 
@@ -14,4 +14,5 @@ data class RideDataModel(
     val distance: Float,
     val speed: Float,
     val averageSpeed: Float,
-    val trackingPoints: List<List<LatLng>>)
+    val trackingPoints: List<List<LatLng>>
+)

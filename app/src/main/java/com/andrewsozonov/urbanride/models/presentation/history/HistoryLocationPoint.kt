@@ -1,4 +1,4 @@
-package com.andrewsozonov.urbanride.presentation.history.model
+package com.andrewsozonov.urbanride.models.presentation.history
 
 /**
  *  Модель данных точки геолокации для экрана History
@@ -9,4 +9,10 @@ package com.andrewsozonov.urbanride.presentation.history.model
  *  @param time время поездки в данной точке в минутах
  *  @param distance пройденное расстояние в данной точке в км или милях
  */
-data class HistoryLocationPoint(val latitude: Double, val longitude: Double, val speed: Double, val time: Double, val distance: Double)
+data class HistoryLocationPoint(
+    val latitude: Double,
+    val longitude: Double,
+    val speed: Double,
+    val time: Double,
+    val distance: Double
+)

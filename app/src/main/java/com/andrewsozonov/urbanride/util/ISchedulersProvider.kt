@@ -10,12 +10,12 @@ import io.reactivex.Scheduler
 interface ISchedulersProvider {
 
     /**
-     * Предоставляет Scheduler для выполнения блокирующих IO операций
+     * Возвращает Scheduler для выполнения блокирующих IO операций
      */
-    fun io() : Scheduler
+    fun io(): Scheduler
 
     /**
      * Возвращает UI Scheduler
      */
-    fun ui() : Scheduler
+    fun ui(): Scheduler
 }

@@ -1,9 +1,9 @@
 package com.andrewsozonov.urbanride.domain.converter
 
-import com.andrewsozonov.urbanride.data.database.RideDBModel
-import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
-import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
-import com.andrewsozonov.urbanride.util.constants.UnitsContants.METERS_IN_KM
+import com.andrewsozonov.urbanride.models.data.RideDBModel
+import com.andrewsozonov.urbanride.models.presentation.ride.RideModel
+import com.andrewsozonov.urbanride.models.presentation.service.LocationPoint
+import com.andrewsozonov.urbanride.util.constants.UnitsConstants.METERS_IN_KM
 import com.google.android.gms.maps.model.LatLng
 
 /**

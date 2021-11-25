@@ -1,7 +1,7 @@
 package com.andrewsozonov.urbanride.domain.converter
 
-import com.andrewsozonov.urbanride.data.model.RideDataModel
-import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
+import com.andrewsozonov.urbanride.models.data.RideDataModel
+import com.andrewsozonov.urbanride.models.presentation.ride.RideModel
 import com.andrewsozonov.urbanride.util.TestConstants.AVG_SPEED_KM_H
 import com.andrewsozonov.urbanride.util.TestConstants.AVG_SPEED_ML_H
 import com.andrewsozonov.urbanride.util.TestConstants.AVG_SPEED_M_S

@@ -6,15 +6,17 @@ import androidx.preference.PreferenceManager
 import androidx.room.Room
 import com.andrewsozonov.urbanride.data.database.RideDao
 import com.andrewsozonov.urbanride.data.database.RidingDatabase
-import com.andrewsozonov.urbanride.data.repository.*
+import com.andrewsozonov.urbanride.data.repository.RideRepositoryConverter
+import com.andrewsozonov.urbanride.data.repository.RideRepositoryImpl
+import com.andrewsozonov.urbanride.data.repository.SettingsRepositoryImpl
 import com.andrewsozonov.urbanride.domain.RideRepository
 import com.andrewsozonov.urbanride.domain.SettingsRepository
-import com.andrewsozonov.urbanride.domain.converter.RideConverter
-import com.andrewsozonov.urbanride.domain.interactor.RideInteractor
 import com.andrewsozonov.urbanride.domain.converter.HistoryConverter
 import com.andrewsozonov.urbanride.domain.converter.MapScreenDataConverter
+import com.andrewsozonov.urbanride.domain.converter.RideConverter
 import com.andrewsozonov.urbanride.domain.interactor.HistoryInteractor
 import com.andrewsozonov.urbanride.domain.interactor.MapScreenInteractor
+import com.andrewsozonov.urbanride.domain.interactor.RideInteractor
 import com.andrewsozonov.urbanride.util.ISchedulersProvider
 import com.andrewsozonov.urbanride.util.SchedulersProvider
 import dagger.Module
@@ -61,7 +63,11 @@ class AppModule(var application: Application) {
     }
 
     @Provides
-    fun provideRideInteractor(repository: RideRepository, settings: SettingsRepository, converter: RideConverter): RideInteractor {
+    fun provideRideInteractor(
+        repository: RideRepository,
+        settings: SettingsRepository,
+        converter: RideConverter
+    ): RideInteractor {
         return RideInteractor(repository, settings, converter)
     }
 
@@ -71,7 +77,11 @@ class AppModule(var application: Application) {
     }
 
     @Provides
-    fun provideHistoryInteractor(repository: RideRepository, settings: SettingsRepository, converter: HistoryConverter): HistoryInteractor {
+    fun provideHistoryInteractor(
+        repository: RideRepository,
+        settings: SettingsRepository,
+        converter: HistoryConverter
+    ): HistoryInteractor {
         return HistoryInteractor(repository, settings, converter)
     }
 
@@ -81,7 +91,10 @@ class AppModule(var application: Application) {
     }
 
     @Provides
-    fun provideMapScreenInteractor(repository: RideRepository, screenDataConverter: MapScreenDataConverter): MapScreenInteractor {
+    fun provideMapScreenInteractor(
+        repository: RideRepository,
+        screenDataConverter: MapScreenDataConverter
+    ): MapScreenInteractor {
         return MapScreenInteractor(repository, screenDataConverter)
     }
 

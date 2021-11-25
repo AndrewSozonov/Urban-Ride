@@ -1,11 +1,10 @@
 package com.andrewsozonov.urbanride.presentation.history
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.andrewsozonov.urbanride.domain.interactor.HistoryInteractor
+import com.andrewsozonov.urbanride.models.presentation.history.HistoryModel
 import com.andrewsozonov.urbanride.presentation.BaseViewModel
-import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
 import com.andrewsozonov.urbanride.util.ISchedulersProvider
 import io.reactivex.Completable
 import io.reactivex.Single

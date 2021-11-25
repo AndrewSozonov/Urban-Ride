@@ -6,6 +6,7 @@ import android.content.Intent
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -16,20 +17,21 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.andrewsozonov.urbanride.R
 import com.andrewsozonov.urbanride.app.App
 import com.andrewsozonov.urbanride.databinding.FragmentRideBinding
-import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
+import com.andrewsozonov.urbanride.models.presentation.ride.RideModel
+import com.andrewsozonov.urbanride.models.presentation.service.ServiceStatus
 import com.andrewsozonov.urbanride.presentation.service.LocationService
-import com.andrewsozonov.urbanride.presentation.service.model.ServiceStatus
 import com.andrewsozonov.urbanride.util.BitmapHelper
 import com.andrewsozonov.urbanride.util.PermissionsUtil
-import com.andrewsozonov.urbanride.util.constants.LocationConstants.PAUSE_LOCATION_SERVICE
-import com.andrewsozonov.urbanride.util.constants.LocationConstants.START_LOCATION_SERVICE
-import com.andrewsozonov.urbanride.util.constants.LocationConstants.STOP_LOCATION_SERVICE
-import com.andrewsozonov.urbanride.util.constants.UIConstants.CAMERA_ZOOM_SCALING_AFTER_STOP
-import com.andrewsozonov.urbanride.util.constants.UIConstants.CAMERA_ZOOM_VALUE
-import com.andrewsozonov.urbanride.util.constants.UIConstants.POLYLINE_WIDTH
+import com.andrewsozonov.urbanride.util.constants.LocationConstants.ACTION_PAUSE_LOCATION_SERVICE
+import com.andrewsozonov.urbanride.util.constants.LocationConstants.ACTION_START_LOCATION_SERVICE
+import com.andrewsozonov.urbanride.util.constants.LocationConstants.ACTION_STOP_LOCATION_SERVICE
+import com.andrewsozonov.urbanride.util.constants.MapConstants.CAMERA_ZOOM_SCALING_AFTER_STOP
+import com.andrewsozonov.urbanride.util.constants.MapConstants.CAMERA_ZOOM_VALUE
+import com.andrewsozonov.urbanride.util.constants.MapConstants.POLYLINE_WIDTH
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -98,17 +100,17 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
                 when (trackingStatus) {
                     ServiceStatus.STARTED -> {
                         trackingStatus = ServiceStatus.PAUSED
-                        operateService(PAUSE_LOCATION_SERVICE)
+                        operateService(ACTION_PAUSE_LOCATION_SERVICE)
                     }
 
                     ServiceStatus.PAUSED -> {
                         trackingStatus = ServiceStatus.STARTED
-                        operateService(START_LOCATION_SERVICE)
+                        operateService(ACTION_START_LOCATION_SERVICE)
                     }
                     else -> {
                         trackingStatus = ServiceStatus.STARTED
                         clearMap()
-                        operateService(START_LOCATION_SERVICE)
+                        operateService(ACTION_START_LOCATION_SERVICE)
                     }
                 }
                 updateUi()
@@ -125,9 +127,9 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     }
 
     private fun createViewModel() {
-        App.getAppComponent()?.activityComponent()?.inject(this)
-        rideViewModel = viewModelFactory.create(RideViewModel::class.java)
-
+        App.getAppComponent()?.fragmentComponent()?.inject(this)
+        rideViewModel = ViewModelProvider(this, viewModelFactory)[RideViewModel::class.java]
+        Log.d("RideFragment", " rideViewModel: ${rideViewModel}")
     }
 
     private fun subscribeToObservers() {
@@ -154,7 +156,7 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     }
 
     private fun stopRide() {
-        operateService(STOP_LOCATION_SERVICE)
+        operateService(ACTION_STOP_LOCATION_SERVICE)
     }
 
     override fun onMyLocationButtonClick(): Boolean {

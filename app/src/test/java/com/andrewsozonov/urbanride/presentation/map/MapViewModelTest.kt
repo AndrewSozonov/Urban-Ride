@@ -2,7 +2,7 @@ package com.andrewsozonov.urbanride.presentation.map
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.andrewsozonov.urbanride.domain.interactor.MapScreenInteractor
-import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
+import com.andrewsozonov.urbanride.models.presentation.ride.RideModel
 import com.andrewsozonov.urbanride.util.ISchedulersProvider
 import com.andrewsozonov.urbanride.util.TestConstants
 import com.andrewsozonov.urbanride.util.TestConstants.ID

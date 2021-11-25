@@ -3,12 +3,12 @@ package com.andrewsozonov.urbanride.data.repository
 import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.andrewsozonov.urbanride.data.database.RideDBModel
 import com.andrewsozonov.urbanride.data.database.RideDao
-import com.andrewsozonov.urbanride.data.model.RideDataModel
 import com.andrewsozonov.urbanride.domain.RideRepository
-import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
-import com.andrewsozonov.urbanride.presentation.service.model.ServiceStatus
+import com.andrewsozonov.urbanride.models.data.RideDBModel
+import com.andrewsozonov.urbanride.models.data.RideDataModel
+import com.andrewsozonov.urbanride.models.presentation.service.LocationPoint
+import com.andrewsozonov.urbanride.models.presentation.service.ServiceStatus
 import com.andrewsozonov.urbanride.util.DataFormatter
 import java.util.*
 
@@ -27,15 +27,14 @@ class RideRepositoryImpl(
     private val converterRide: RideRepositoryConverter
 ) : RideRepository {
 
-    private var trackingPoints: List<List<LocationPoint>> = mutableListOf()
-    private var ridingTimeInMillis: Long = 0L  // миллисекунды
-    private var distanceInMeters: Float = 0f  // метры
-    private var speedInMpS: Float = 0f // метры в сек
-    private var averageSpeedInMpS: Float = 0f // метры в сек
-
-    private val serviceStatusLiveData: MutableLiveData<ServiceStatus> = MutableLiveData()
-    private val timerLiveData: MutableLiveData<String> = MutableLiveData()
-    private val data: MutableLiveData<RideDataModel> = MutableLiveData()
+    var trackingPoints: List<List<LocationPoint>> = mutableListOf()
+    var ridingTimeInMillis: Long = 0L  // миллисекунды
+    var distanceInMeters: Float = 0f  // метры
+    var speedInMpS: Float = 0f // метры в сек
+    var averageSpeedInMpS: Float = 0f // метры в сек
+    val serviceStatusLiveData: MutableLiveData<ServiceStatus> = MutableLiveData()
+    val timerLiveData: MutableLiveData<String> = MutableLiveData()
+    val data: MutableLiveData<RideDataModel> = MutableLiveData()
 
     override fun getTimerValue(): LiveData<String> {
         return timerLiveData
@@ -128,7 +127,8 @@ class RideRepositoryImpl(
      * обновляет в LiveData[data]
      */
     private fun calculateData() {
-        val rideDataModel = converterRide.convertDataToRideDataModel(trackingPoints, ridingTimeInMillis)
+        val rideDataModel =
+            converterRide.convertDataToRideDataModel(trackingPoints, ridingTimeInMillis)
 
         distanceInMeters = rideDataModel.distance
         speedInMpS = rideDataModel.speed

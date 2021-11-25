@@ -4,18 +4,19 @@ import android.content.Context
 import android.graphics.*
 import androidx.core.content.ContextCompat
 import com.andrewsozonov.urbanride.R
-import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
-import com.andrewsozonov.urbanride.util.constants.UIConstants.SHARE_IMAGE_STROKE_WIDTH
-import com.andrewsozonov.urbanride.util.constants.UIConstants.SHARE_IMAGE_TEXT_HORIZONTAL_MARGIN
-import com.andrewsozonov.urbanride.util.constants.UIConstants.SHARE_IMAGE_TEXT_SIZE
-import com.andrewsozonov.urbanride.util.constants.UIConstants.SHARE_IMAGE_TEXT_VERTICAL_MARGIN
+import com.andrewsozonov.urbanride.models.presentation.history.HistoryModel
+import com.andrewsozonov.urbanride.util.constants.SharedImageConstants.SHARE_IMAGE_STROKE_WIDTH
+import com.andrewsozonov.urbanride.util.constants.SharedImageConstants.SHARE_IMAGE_TEXT_HORIZONTAL_MARGIN
+import com.andrewsozonov.urbanride.util.constants.SharedImageConstants.SHARE_IMAGE_TEXT_SIZE
+import com.andrewsozonov.urbanride.util.constants.SharedImageConstants.SHARE_IMAGE_TEXT_VERTICAL_MARGIN
+
 
 /**
  * Класс собирающий изображение для sharing
  *
  * @author Андрей Созонов
  */
-class BitmapConstructor(val context: Context) {
+class BitmapConstructor {
 
 
     /**
@@ -24,7 +25,7 @@ class BitmapConstructor(val context: Context) {
      * @param ride модель выбранной поездки [HistoryModel]
      * @return возвращает изображение с информацией
      */
-    fun constructBitmapForSharing(ride: HistoryModel): Bitmap {
+    fun constructBitmapForSharing(context: Context, ride: HistoryModel): Bitmap {
         val mapImage: Bitmap = ride.mapImg
         val shareMapImage = mapImage.copy(mapImage.config, true)
 
@@ -45,7 +46,8 @@ class BitmapConstructor(val context: Context) {
         val horizontalMargin = SHARE_IMAGE_TEXT_HORIZONTAL_MARGIN
         val verticalMargin = SHARE_IMAGE_TEXT_VERTICAL_MARGIN
         val distanceTextBounds = Rect()
-        val distance = context.resources.getString(R.string.distance_share_image, ride.distance.toString())
+        val distance =
+            context.resources.getString(R.string.distance_share_image, ride.distance.toString())
         fillPaint.getTextBounds(
             distance,
             0,

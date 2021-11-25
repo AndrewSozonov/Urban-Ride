@@ -5,7 +5,8 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
-import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
+import com.andrewsozonov.urbanride.models.data.RideDBModel
+import com.andrewsozonov.urbanride.models.presentation.service.LocationPoint
 import com.andrewsozonov.urbanride.util.AndroidTestConstants.AVG_SPEED_M_S
 import com.andrewsozonov.urbanride.util.AndroidTestConstants.DISTANCE1_METERS
 import com.andrewsozonov.urbanride.util.AndroidTestConstants.DISTANCE2_METERS

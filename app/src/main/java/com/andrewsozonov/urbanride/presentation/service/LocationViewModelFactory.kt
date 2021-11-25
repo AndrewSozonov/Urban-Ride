@@ -10,7 +10,7 @@ import com.andrewsozonov.urbanride.domain.RideRepository
  *
  * @author Андрей Созонов
  */
-class LocationViewModelFactory (
+class LocationViewModelFactory(
     private val repository: RideRepository,
 ) : ViewModelProvider.Factory {
 

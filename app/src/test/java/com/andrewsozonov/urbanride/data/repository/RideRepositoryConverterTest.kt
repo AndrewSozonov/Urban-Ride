@@ -1,7 +1,7 @@
 package com.andrewsozonov.urbanride.data.repository
 
-import com.andrewsozonov.urbanride.data.model.RideDataModel
-import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
+import com.andrewsozonov.urbanride.models.data.RideDataModel
+import com.andrewsozonov.urbanride.models.presentation.service.LocationPoint
 import com.andrewsozonov.urbanride.util.TestConstants
 import com.andrewsozonov.urbanride.util.TestConstants.DISTANCE1_METERS
 import com.andrewsozonov.urbanride.util.TestConstants.DISTANCE2_METERS

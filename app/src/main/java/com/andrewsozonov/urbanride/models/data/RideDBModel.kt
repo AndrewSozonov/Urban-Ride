@@ -1,9 +1,9 @@
-package com.andrewsozonov.urbanride.data.database
+package com.andrewsozonov.urbanride.models.data
 
 import android.graphics.Bitmap
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
+import com.andrewsozonov.urbanride.models.presentation.service.LocationPoint
 
 /**
  * Модель данных для добавления в БД

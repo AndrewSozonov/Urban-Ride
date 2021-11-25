@@ -3,6 +3,7 @@ package com.andrewsozonov.urbanride.data.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.andrewsozonov.urbanride.models.data.RideDBModel
 
 /**
  * База данных с историей поездок

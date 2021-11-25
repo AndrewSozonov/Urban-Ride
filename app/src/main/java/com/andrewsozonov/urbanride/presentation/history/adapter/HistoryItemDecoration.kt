@@ -16,7 +16,11 @@ import androidx.recyclerview.widget.RecyclerView
  *
  * @author Андрей Созонов
  */
-class HistoryItemDecoration(val context: Context, private val resId: Int, private val spaceHeight: Int) : RecyclerView.ItemDecoration() {
+class HistoryItemDecoration(
+    val context: Context,
+    private val resId: Int,
+    private val spaceHeight: Int
+) : RecyclerView.ItemDecoration() {
     private var divider: Drawable? = null
 
     init {

@@ -6,8 +6,8 @@ import androidx.lifecycle.map
 import com.andrewsozonov.urbanride.domain.RideRepository
 import com.andrewsozonov.urbanride.domain.SettingsRepository
 import com.andrewsozonov.urbanride.domain.converter.RideConverter
-import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
-import com.andrewsozonov.urbanride.presentation.service.model.ServiceStatus
+import com.andrewsozonov.urbanride.models.presentation.ride.RideModel
+import com.andrewsozonov.urbanride.models.presentation.service.ServiceStatus
 
 /**
  * Интерактор экрана Ride
@@ -49,7 +49,7 @@ class RideInteractor(
         return data.map {
             converter.convertFromRideDataModelToRideModel(
                 it,
-                settings.getUnits()
+                settings.isUnitsMetric()
             )
         }
     }

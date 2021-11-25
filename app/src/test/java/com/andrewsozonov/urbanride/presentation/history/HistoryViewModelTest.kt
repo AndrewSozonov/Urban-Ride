@@ -3,8 +3,8 @@ package com.andrewsozonov.urbanride.presentation.history
 import android.graphics.Bitmap
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.andrewsozonov.urbanride.domain.interactor.HistoryInteractor
-import com.andrewsozonov.urbanride.presentation.history.model.HistoryLocationPoint
-import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
+import com.andrewsozonov.urbanride.models.presentation.history.HistoryLocationPoint
+import com.andrewsozonov.urbanride.models.presentation.history.HistoryModel
 import com.andrewsozonov.urbanride.util.ISchedulersProvider
 import com.andrewsozonov.urbanride.util.TestConstants.AVG_SPEED_KM_H_DB
 import com.andrewsozonov.urbanride.util.TestConstants.DISTANCE1_KM
@@ -55,7 +55,6 @@ class HistoryViewModelTest {
 
     @Before
     fun setUp() {
-        MockKAnnotations.init(this)
         every { schedulersProvider.io() } returns Schedulers.trampoline()
         every { schedulersProvider.ui() } returns Schedulers.trampoline()
 

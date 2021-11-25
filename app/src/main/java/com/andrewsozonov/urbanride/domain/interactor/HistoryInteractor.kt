@@ -1,10 +1,9 @@
 package com.andrewsozonov.urbanride.domain.interactor
 
-import android.util.Log
 import com.andrewsozonov.urbanride.domain.RideRepository
 import com.andrewsozonov.urbanride.domain.SettingsRepository
 import com.andrewsozonov.urbanride.domain.converter.HistoryConverter
-import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
+import com.andrewsozonov.urbanride.models.presentation.history.HistoryModel
 
 /**
  * Интерактор экрана History
@@ -36,6 +35,6 @@ class HistoryInteractor(
      */
     fun getAllRides(): List<HistoryModel> {
         return repository.getAllRides()
-            .map { converter.convertFromRideToHistoryModel(it, settings.getUnits()) }
+            .map { converter.convertFromRideToHistoryModel(it, settings.isUnitsMetric()) }
     }
 }

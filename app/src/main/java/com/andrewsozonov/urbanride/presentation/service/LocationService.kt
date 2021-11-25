@@ -20,19 +20,19 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import com.andrewsozonov.urbanride.R
 import com.andrewsozonov.urbanride.app.App
+import com.andrewsozonov.urbanride.models.presentation.service.LocationPoint
+import com.andrewsozonov.urbanride.models.presentation.service.ServiceStatus
 import com.andrewsozonov.urbanride.presentation.MainActivity
-import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
-import com.andrewsozonov.urbanride.presentation.service.model.ServiceStatus
 import com.andrewsozonov.urbanride.util.DataFormatter
 import com.andrewsozonov.urbanride.util.PermissionsUtil
+import com.andrewsozonov.urbanride.util.constants.LocationConstants.ACTION_PAUSE_LOCATION_SERVICE
 import com.andrewsozonov.urbanride.util.constants.LocationConstants.ACTION_SHOW_RIDING_FRAGMENT
+import com.andrewsozonov.urbanride.util.constants.LocationConstants.ACTION_START_LOCATION_SERVICE
+import com.andrewsozonov.urbanride.util.constants.LocationConstants.ACTION_STOP_LOCATION_SERVICE
 import com.andrewsozonov.urbanride.util.constants.LocationConstants.LOCATION_UPDATE_INTERVAL
 import com.andrewsozonov.urbanride.util.constants.LocationConstants.NOTIFICATION_CHANNEL_ID
 import com.andrewsozonov.urbanride.util.constants.LocationConstants.NOTIFICATION_CHANNEL_NAME
 import com.andrewsozonov.urbanride.util.constants.LocationConstants.NOTIFICATION_ID
-import com.andrewsozonov.urbanride.util.constants.LocationConstants.PAUSE_LOCATION_SERVICE
-import com.andrewsozonov.urbanride.util.constants.LocationConstants.START_LOCATION_SERVICE
-import com.andrewsozonov.urbanride.util.constants.LocationConstants.STOP_LOCATION_SERVICE
 import com.andrewsozonov.urbanride.util.constants.LocationConstants.TIMER_DELAY
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -96,14 +96,14 @@ class LocationService : LifecycleService() {
     }
 
     private fun createViewModel() {
-        App.getAppComponent()?.activityComponent()?.inject(this)
+        App.getAppComponent()?.serviceComponent()?.inject(this)
         locationViewModel = viewModelFactory.create(LocationServiceViewModel::class.java)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.let {
             when (it.action) {
-                START_LOCATION_SERVICE -> {
+                ACTION_START_LOCATION_SERVICE -> {
                     locationViewModel.updateServiceStatus(ServiceStatus.STARTED)
                     if (!isServiceResumed) {
                         initLocationLiveData()
@@ -113,11 +113,11 @@ class LocationService : LifecycleService() {
                         startTimer()
                     }
                 }
-                PAUSE_LOCATION_SERVICE -> {
+                ACTION_PAUSE_LOCATION_SERVICE -> {
                     locationViewModel.updateServiceStatus(ServiceStatus.PAUSED)
                     pauseService()
                 }
-                STOP_LOCATION_SERVICE -> {
+                ACTION_STOP_LOCATION_SERVICE -> {
                     locationViewModel.updateServiceStatus(ServiceStatus.STOPPED)
                     stopService()
                 }

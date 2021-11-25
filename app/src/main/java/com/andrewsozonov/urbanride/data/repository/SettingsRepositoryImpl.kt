@@ -2,8 +2,8 @@ package com.andrewsozonov.urbanride.data.repository
 
 import android.content.SharedPreferences
 import com.andrewsozonov.urbanride.domain.SettingsRepository
-import com.andrewsozonov.urbanride.util.constants.UIConstants.UNITS_KEY
-import com.andrewsozonov.urbanride.util.constants.UnitsContants.UNITS_KILOMETERS
+import com.andrewsozonov.urbanride.util.constants.SettingsConstants.UNITS_KEY
+import com.andrewsozonov.urbanride.util.constants.SettingsConstants.UNITS_KILOMETERS
 
 /**
  * Реализация [SettingsRepository] на SharedPreferences
@@ -20,7 +20,7 @@ class SettingsRepositoryImpl(private val sharedPreferences: SharedPreferences) :
      *
      * @return true - метры, false - мили
      */
-    override fun getUnits(): Boolean {
+    override fun isUnitsMetric(): Boolean {
         return sharedPreferences.getString(
             UNITS_KEY,
             UNITS_KILOMETERS

@@ -1,4 +1,4 @@
-package com.andrewsozonov.urbanride.presentation.service.model
+package com.andrewsozonov.urbanride.models.presentation.service
 
 
 /**
@@ -12,4 +12,10 @@ package com.andrewsozonov.urbanride.presentation.service.model
  *
  * @author Андрей Созонов
  */
-data class LocationPoint(val latitude: Double, val longitude: Double, val speed: Float, val time: Long, var distance: Float)
+data class LocationPoint(
+    val latitude: Double,
+    val longitude: Double,
+    val speed: Float,
+    val time: Long,
+    var distance: Float
+)

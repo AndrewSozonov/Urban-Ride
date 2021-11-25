@@ -1,9 +1,9 @@
 package com.andrewsozonov.urbanride.presentation.service
 
 import androidx.lifecycle.ViewModel
-import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
 import com.andrewsozonov.urbanride.domain.RideRepository
-import com.andrewsozonov.urbanride.presentation.service.model.ServiceStatus
+import com.andrewsozonov.urbanride.models.presentation.service.LocationPoint
+import com.andrewsozonov.urbanride.models.presentation.service.ServiceStatus
 
 
 /**

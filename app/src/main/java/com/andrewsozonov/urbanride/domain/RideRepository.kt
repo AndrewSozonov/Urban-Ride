@@ -2,11 +2,11 @@ package com.andrewsozonov.urbanride.domain
 
 import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
-import com.andrewsozonov.urbanride.data.database.RideDBModel
-import com.andrewsozonov.urbanride.data.model.RideDataModel
-import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
-import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
-import com.andrewsozonov.urbanride.presentation.service.model.ServiceStatus
+import com.andrewsozonov.urbanride.models.data.RideDBModel
+import com.andrewsozonov.urbanride.models.data.RideDataModel
+import com.andrewsozonov.urbanride.models.presentation.ride.RideModel
+import com.andrewsozonov.urbanride.models.presentation.service.LocationPoint
+import com.andrewsozonov.urbanride.models.presentation.service.ServiceStatus
 
 /**
  * Интерфейс репозитория с данными о поездках

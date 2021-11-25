@@ -2,18 +2,19 @@ package com.andrewsozonov.urbanride.presentation.map
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
+import androidx.lifecycle.ViewModelProvider
 import com.andrewsozonov.urbanride.R
 import com.andrewsozonov.urbanride.app.App
 import com.andrewsozonov.urbanride.databinding.MapFragmentBinding
 import com.andrewsozonov.urbanride.util.BitmapHelper
+import com.andrewsozonov.urbanride.util.constants.MapConstants.POLYLINE_WIDTH
 import com.andrewsozonov.urbanride.util.constants.UIConstants.BUNDLE_RIDE_ID_KEY
-import com.andrewsozonov.urbanride.util.constants.UIConstants.POLYLINE_WIDTH
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -60,15 +61,12 @@ class MapFragment : Fragment() {
             arguments?.getInt(BUNDLE_RIDE_ID_KEY)?.let { id -> viewModel.getRide(id) }
             subscribeToObservers()
         }
-
-        binding.closeMapButton.setOnClickListener {
-            closeMap()
-        }
     }
 
     private fun createViewModel() {
-        App.getAppComponent()?.activityComponent()?.inject(this)
-        viewModel = viewModelFactory.create(MapViewModel::class.java)
+        App.getAppComponent()?.fragmentComponent()?.inject(this)
+        viewModel = ViewModelProvider(this, viewModelFactory)[MapViewModel::class.java]
+        Log.d("MapFragment", " mapViewModel: ${viewModel}")
 
     }
 
@@ -95,11 +93,6 @@ class MapFragment : Fragment() {
         binding.mapProgressBar.visibility = View.GONE
     }
 
-    private fun closeMap() {
-        val navController = activity?.findNavController(R.id.nav_host_fragment_activity_main)
-        navController?.navigate(R.id.action_mapFragment_to_navigation_history)
-    }
-
     private fun drawFinalRoute() {
         if (trackingPoints.isNotEmpty()) {
             clearMap()
@@ -107,7 +100,7 @@ class MapFragment : Fragment() {
         for (line in trackingPoints) {
             val polylineOptions = PolylineOptions()
                 .width(POLYLINE_WIDTH)
-                .color(ContextCompat.getColor(requireContext(), R.color.middle_blue ))
+                .color(ContextCompat.getColor(requireContext(), R.color.middle_blue))
                 .jointType(JointType.ROUND)
                 .addAll(line)
             map.addPolyline(polylineOptions)
@@ -126,7 +119,7 @@ class MapFragment : Fragment() {
                     BitmapHelper.vectorToBitmap(
                         requireContext(),
                         R.drawable.ic_start_flag,
-                        ContextCompat.getColor(requireContext(), R.color.dark_blue )
+                        ContextCompat.getColor(requireContext(), R.color.dark_blue)
                     )
                 )
         )
@@ -138,7 +131,7 @@ class MapFragment : Fragment() {
                     BitmapHelper.vectorToBitmap(
                         requireContext(),
                         R.drawable.ic_finish_flag,
-                        ContextCompat.getColor(requireContext(), R.color.dark_blue )
+                        ContextCompat.getColor(requireContext(), R.color.dark_blue)
                     )
                 )
         )

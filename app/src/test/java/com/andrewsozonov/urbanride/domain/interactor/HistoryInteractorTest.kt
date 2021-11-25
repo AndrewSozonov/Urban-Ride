@@ -1,13 +1,13 @@
 package com.andrewsozonov.urbanride.domain.interactor
 
 import android.graphics.Bitmap
-import com.andrewsozonov.urbanride.data.database.RideDBModel
+import com.andrewsozonov.urbanride.models.data.RideDBModel
 import com.andrewsozonov.urbanride.domain.RideRepository
 import com.andrewsozonov.urbanride.domain.SettingsRepository
 import com.andrewsozonov.urbanride.domain.converter.HistoryConverter
-import com.andrewsozonov.urbanride.presentation.history.model.HistoryLocationPoint
-import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
-import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
+import com.andrewsozonov.urbanride.models.presentation.history.HistoryLocationPoint
+import com.andrewsozonov.urbanride.models.presentation.history.HistoryModel
+import com.andrewsozonov.urbanride.models.presentation.service.LocationPoint
 import com.andrewsozonov.urbanride.util.TestConstants.AVG_SPEED_KM_H_DB
 import com.andrewsozonov.urbanride.util.TestConstants.AVG_SPEED_M_S
 import com.andrewsozonov.urbanride.util.TestConstants.DISTANCE1_KM
@@ -78,7 +78,7 @@ class HistoryInteractorTest {
         every { repository.getAllRides() } returns listOfRidesFromDB
         every { converter.convertFromRideToHistoryModel(rideDBModel, true) } returns historyModel
         every { repository.deleteRide(any()) } just runs
-        every { settings.getUnits() } returns true
+        every { settings.isUnitsMetric() } returns true
 
     }
 

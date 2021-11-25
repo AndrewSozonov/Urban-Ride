@@ -1,4 +1,4 @@
-package com.andrewsozonov.urbanride.presentation.history.model
+package com.andrewsozonov.urbanride.models.presentation.history
 
 import android.graphics.Bitmap
 

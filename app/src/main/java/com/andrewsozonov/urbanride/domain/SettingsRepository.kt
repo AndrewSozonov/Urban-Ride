@@ -12,5 +12,5 @@ interface SettingsRepository {
      *
      * @return true - метры, false - мили
      */
-    fun getUnits(): Boolean
+    fun isUnitsMetric(): Boolean
 }

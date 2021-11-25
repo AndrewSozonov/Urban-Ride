@@ -3,8 +3,8 @@ package com.andrewsozonov.urbanride.presentation.map
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.andrewsozonov.urbanride.domain.interactor.MapScreenInteractor
+import com.andrewsozonov.urbanride.models.presentation.ride.RideModel
 import com.andrewsozonov.urbanride.presentation.BaseViewModel
-import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
 import com.andrewsozonov.urbanride.util.ISchedulersProvider
 import com.google.android.gms.maps.model.LatLng
 import io.reactivex.Single
@@ -21,7 +21,7 @@ import io.reactivex.Single
 class MapViewModel(
     val interactor: MapScreenInteractor,
     val schedulersProvider: ISchedulersProvider
-    ) : BaseViewModel() {
+) : BaseViewModel() {
 
     var trackingPoints: MutableLiveData<List<List<LatLng>>> = MutableLiveData()
 

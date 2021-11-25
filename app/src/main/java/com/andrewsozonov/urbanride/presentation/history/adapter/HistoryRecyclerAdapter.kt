@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.andrewsozonov.urbanride.R
-import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
+import com.andrewsozonov.urbanride.models.presentation.history.HistoryModel
 
 /**
  * Адаптер для списка истории поездок во фрагменте HistoryFragment

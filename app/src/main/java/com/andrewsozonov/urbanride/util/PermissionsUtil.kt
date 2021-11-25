@@ -1,13 +1,9 @@
 package com.andrewsozonov.urbanride.util
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
-import android.util.Log
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 
 /**
@@ -39,7 +35,7 @@ object PermissionsUtil {
             ) {
                 return true
             }
-        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R){
+        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
             if (ActivityCompat.checkSelfPermission(
                     context,
                     Manifest.permission.ACCESS_FINE_LOCATION

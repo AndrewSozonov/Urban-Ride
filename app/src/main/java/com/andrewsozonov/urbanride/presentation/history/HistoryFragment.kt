@@ -8,11 +8,13 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,10 +22,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.andrewsozonov.urbanride.R
 import com.andrewsozonov.urbanride.app.App
 import com.andrewsozonov.urbanride.databinding.FragmentHistoryBinding
+import com.andrewsozonov.urbanride.models.presentation.history.HistoryModel
 import com.andrewsozonov.urbanride.presentation.history.adapter.HistoryItemDecoration
 import com.andrewsozonov.urbanride.presentation.history.adapter.HistoryRecyclerAdapter
 import com.andrewsozonov.urbanride.presentation.history.adapter.IHistoryRecyclerListener
-import com.andrewsozonov.urbanride.presentation.history.model.HistoryModel
 import com.andrewsozonov.urbanride.util.constants.UIConstants.BUNDLE_RIDE_ID_KEY
 import com.andrewsozonov.urbanride.util.constants.UIConstants.RECYCLER_ITEMS_SPACING
 import java.io.OutputStream
@@ -92,8 +94,10 @@ class HistoryFragment : Fragment() {
     }
 
     private fun createViewModel() {
-        App.getAppComponent()?.activityComponent()?.inject(this)
-        historyViewModel = viewModelFactory.create(HistoryViewModel::class.java)
+        App.getAppComponent()?.fragmentComponent()?.inject(this)
+        historyViewModel = ViewModelProvider(this, viewModelFactory)[HistoryViewModel::class.java]
+        Log.d("HistoryFragment", " historyViewModel: ${historyViewModel}")
+
     }
 
     private fun initRecyclerView() {
@@ -148,8 +152,9 @@ class HistoryFragment : Fragment() {
     }
 
     private fun showShareSheet(position: Int) {
-        val bitmapConstructor = BitmapConstructor(requireContext())
-        val shareMapImage = bitmapConstructor.constructBitmapForSharing(listOfRides[position])
+        val bitmapConstructor = BitmapConstructor()
+        val shareMapImage =
+            bitmapConstructor.constructBitmapForSharing(requireContext(), listOfRides[position])
 
         val shareIntent = Intent().apply {
             action = Intent.ACTION_SEND

@@ -2,7 +2,7 @@ package com.andrewsozonov.urbanride.domain.interactor
 
 import com.andrewsozonov.urbanride.domain.RideRepository
 import com.andrewsozonov.urbanride.domain.converter.MapScreenDataConverter
-import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
+import com.andrewsozonov.urbanride.models.presentation.ride.RideModel
 
 /**
  * Интерактор экрана Map
@@ -12,7 +12,10 @@ import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
  *
  * @author Андрей Созонов
  */
-class MapScreenInteractor(val repository: RideRepository, val screenDataConverter: MapScreenDataConverter) {
+class MapScreenInteractor(
+    val repository: RideRepository,
+    val screenDataConverter: MapScreenDataConverter
+) {
 
     /**
      * Получает поездку из БД

@@ -1,11 +1,11 @@
 package com.andrewsozonov.urbanride.domain.interactor
 
 import android.graphics.Bitmap
-import com.andrewsozonov.urbanride.data.database.RideDBModel
+import com.andrewsozonov.urbanride.models.data.RideDBModel
 import com.andrewsozonov.urbanride.domain.RideRepository
 import com.andrewsozonov.urbanride.domain.converter.MapScreenDataConverter
-import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
-import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
+import com.andrewsozonov.urbanride.models.presentation.ride.RideModel
+import com.andrewsozonov.urbanride.models.presentation.service.LocationPoint
 import com.andrewsozonov.urbanride.util.TestConstants.AVG_SPEED_KM_H
 import com.andrewsozonov.urbanride.util.TestConstants.AVG_SPEED_M_S
 import com.andrewsozonov.urbanride.util.TestConstants.DISTANCE1_METERS

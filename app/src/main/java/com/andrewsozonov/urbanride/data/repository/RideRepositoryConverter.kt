@@ -1,10 +1,10 @@
 package com.andrewsozonov.urbanride.data.repository
 
-import com.andrewsozonov.urbanride.data.model.RideDataModel
-import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
-import com.andrewsozonov.urbanride.util.constants.UnitsContants.MILLIS_IN_SECONDS
-import com.andrewsozonov.urbanride.util.constants.UnitsContants.MILLIS_IN_SECONDS_FLOAT
-import com.andrewsozonov.urbanride.util.constants.UnitsContants.SCALE
+import com.andrewsozonov.urbanride.models.data.RideDataModel
+import com.andrewsozonov.urbanride.models.presentation.service.LocationPoint
+import com.andrewsozonov.urbanride.util.constants.UnitsConstants.MILLIS_IN_SECONDS
+import com.andrewsozonov.urbanride.util.constants.UnitsConstants.MILLIS_IN_SECONDS_FLOAT
+import com.andrewsozonov.urbanride.util.constants.UnitsConstants.SCALE
 import com.google.android.gms.maps.model.LatLng
 import java.math.RoundingMode
 

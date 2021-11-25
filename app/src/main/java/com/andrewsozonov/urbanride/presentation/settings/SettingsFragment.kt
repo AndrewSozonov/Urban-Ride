@@ -8,6 +8,8 @@ import com.andrewsozonov.urbanride.R
 
 /**
  *  Фрагмент с настройками приложения
+ *
+ *  @author Андрей Созонов
  */
 class SettingsFragment : PreferenceFragmentCompat() {
 

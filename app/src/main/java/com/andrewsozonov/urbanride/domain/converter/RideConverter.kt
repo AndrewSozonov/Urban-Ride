@@ -1,11 +1,11 @@
 package com.andrewsozonov.urbanride.domain.converter
 
-import com.andrewsozonov.urbanride.data.model.RideDataModel
-import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
-import com.andrewsozonov.urbanride.util.constants.UnitsContants.FORMAT_PATTERN
-import com.andrewsozonov.urbanride.util.constants.UnitsContants.METERS_IN_KM
-import com.andrewsozonov.urbanride.util.constants.UnitsContants.MILES_IN_KM
-import com.andrewsozonov.urbanride.util.constants.UnitsContants.SECONDS_IN_HOUR
+import com.andrewsozonov.urbanride.models.data.RideDataModel
+import com.andrewsozonov.urbanride.models.presentation.ride.RideModel
+import com.andrewsozonov.urbanride.util.constants.UnitsConstants.FORMAT_PATTERN
+import com.andrewsozonov.urbanride.util.constants.UnitsConstants.METERS_IN_KM
+import com.andrewsozonov.urbanride.util.constants.UnitsConstants.MILES_IN_KM
+import com.andrewsozonov.urbanride.util.constants.UnitsConstants.SECONDS_IN_HOUR
 import java.text.DecimalFormat
 
 /**

@@ -2,12 +2,12 @@ package com.andrewsozonov.urbanride.domain.interactor
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
-import com.andrewsozonov.urbanride.data.model.RideDataModel
+import com.andrewsozonov.urbanride.models.data.RideDataModel
 import com.andrewsozonov.urbanride.domain.RideRepository
 import com.andrewsozonov.urbanride.domain.SettingsRepository
 import com.andrewsozonov.urbanride.domain.converter.RideConverter
-import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
-import com.andrewsozonov.urbanride.presentation.service.model.ServiceStatus
+import com.andrewsozonov.urbanride.models.presentation.ride.RideModel
+import com.andrewsozonov.urbanride.models.presentation.service.ServiceStatus
 import com.andrewsozonov.urbanride.util.TestConstants.AVG_SPEED_KM_H
 import com.andrewsozonov.urbanride.util.TestConstants.AVG_SPEED_M_S
 import com.andrewsozonov.urbanride.util.TestConstants.DISTANCE_KM
@@ -60,7 +60,7 @@ class RideInteractorTest {
                 any()
             )
         } returns rideModel
-        every { settings.getUnits() } returns true
+        every { settings.isUnitsMetric() } returns true
 
         every { repository.getTimerValue() } returns MutableLiveData(testTimerValue)
         every { repository.getServiceStatus() } returns MutableLiveData(testServiceStatus)
