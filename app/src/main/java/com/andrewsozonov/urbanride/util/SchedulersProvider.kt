@@ -11,10 +11,17 @@ import javax.inject.Inject
  * @author Андрей Созонов
  */
 open class SchedulersProvider: ISchedulersProvider {
+
+    /**
+     * Возвращает Scheduler для выполнения блокирующих IO операций
+     */
     override fun io(): Scheduler {
         return Schedulers.io()
     }
 
+    /**
+    * Возвращает main поток Android
+    */
     override fun ui(): Scheduler {
         return AndroidSchedulers.mainThread()
     }

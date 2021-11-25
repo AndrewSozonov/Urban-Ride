@@ -7,6 +7,7 @@ import com.andrewsozonov.urbanride.domain.RideRepository
 import com.andrewsozonov.urbanride.domain.SettingsRepository
 import com.andrewsozonov.urbanride.domain.converter.RideConverter
 import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
+import com.andrewsozonov.urbanride.presentation.service.model.ServiceStatus
 
 /**
  * Интерактор экрана Ride
@@ -26,7 +27,7 @@ class RideInteractor(
     /**
      * Получает статус сервиса геолокации из репозитория
      */
-    fun getServiceStatus(): LiveData<String> = repository.getServiceStatus()
+    fun getServiceStatus(): LiveData<ServiceStatus> = repository.getServiceStatus()
 
     /**
      * Получает значение таймера из репозитория

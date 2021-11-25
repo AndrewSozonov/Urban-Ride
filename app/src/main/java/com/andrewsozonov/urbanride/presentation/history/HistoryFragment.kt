@@ -1,6 +1,7 @@
 package com.andrewsozonov.urbanride.presentation.history
 
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -48,13 +49,16 @@ class HistoryFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: HistoryViewModelFactory
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        createViewModel()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        createViewModel()
-
         _binding = FragmentHistoryBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -67,8 +71,15 @@ class HistoryFragment : Fragment() {
 
     private fun subscribeToObservers() {
         historyViewModel.listOfRides.observe(viewLifecycleOwner, {
-            setData(it)
-            listOfRides = it
+            if (it.isNotEmpty()) {
+                hideNoRidesMessage()
+                setData(it)
+                listOfRides = it
+            } else {
+                showNoRidesMessage()
+            }
+
+
         })
 
         historyViewModel.isLoading.observe(viewLifecycleOwner, {
@@ -126,6 +137,14 @@ class HistoryFragment : Fragment() {
 
     private fun hideProgressBar() {
         binding.historyProgressBar.visibility = View.GONE
+    }
+
+    private fun showNoRidesMessage() {
+        binding.noRidesTextView.visibility = View.VISIBLE
+    }
+
+    private fun hideNoRidesMessage() {
+        binding.noRidesTextView.visibility = View.GONE
     }
 
     private fun showShareSheet(position: Int) {

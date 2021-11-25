@@ -6,6 +6,7 @@ import com.andrewsozonov.urbanride.domain.RideRepository
 
 /**
  * Класс для создания [LocationServiceViewModel]
+ * @param repository интерфейс репозитория с данными о поездках
  *
  * @author Андрей Созонов
  */

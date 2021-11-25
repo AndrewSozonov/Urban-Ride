@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.andrewsozonov.urbanride.domain.interactor.RideInteractor
 import com.andrewsozonov.urbanride.presentation.BaseViewModel
 import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
+import com.andrewsozonov.urbanride.presentation.service.model.ServiceStatus
 import com.andrewsozonov.urbanride.util.ISchedulersProvider
 import io.reactivex.Completable
 
@@ -22,11 +23,11 @@ import io.reactivex.Completable
  */
 class RideViewModel(
     private val interactor: RideInteractor,
-    val schedulersProvider: ISchedulersProvider
+    private val schedulersProvider: ISchedulersProvider
 ) :
     BaseViewModel() {
 
-    val serviceStatus: LiveData<String> = interactor.getServiceStatus()
+    val serviceStatus: LiveData<ServiceStatus> = interactor.getServiceStatus()
 
     /**
      * [MutableLiveData] хранит значение таймера для обновления во фрагменте

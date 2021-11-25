@@ -8,6 +8,7 @@ import com.andrewsozonov.urbanride.data.database.RideDao
 import com.andrewsozonov.urbanride.data.model.RideDataModel
 import com.andrewsozonov.urbanride.domain.RideRepository
 import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
+import com.andrewsozonov.urbanride.presentation.service.model.ServiceStatus
 import com.andrewsozonov.urbanride.util.DataFormatter
 import java.util.*
 
@@ -32,7 +33,7 @@ class RideRepositoryImpl(
     private var speedInMpS: Float = 0f // метры в сек
     private var averageSpeedInMpS: Float = 0f // метры в сек
 
-    private val serviceStatusLiveData: MutableLiveData<String> = MutableLiveData()
+    private val serviceStatusLiveData: MutableLiveData<ServiceStatus> = MutableLiveData()
     private val timerLiveData: MutableLiveData<String> = MutableLiveData()
     private val data: MutableLiveData<RideDataModel> = MutableLiveData()
 
@@ -40,11 +41,11 @@ class RideRepositoryImpl(
         return timerLiveData
     }
 
-    override fun updateServiceStatus(status: String) {
+    override fun updateServiceStatus(status: ServiceStatus) {
         serviceStatusLiveData.value = status
     }
 
-    override fun getServiceStatus(): LiveData<String> {
+    override fun getServiceStatus(): LiveData<ServiceStatus> {
         return serviceStatusLiveData
     }
 

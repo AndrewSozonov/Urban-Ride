@@ -18,8 +18,10 @@ import io.reactivex.Single
  *
  * @author Андрей Созонов
  */
-class MapViewModel(val interactor: MapScreenInteractor, val schedulersProvider: ISchedulersProvider) :
-    BaseViewModel() {
+class MapViewModel(
+    val interactor: MapScreenInteractor,
+    val schedulersProvider: ISchedulersProvider
+    ) : BaseViewModel() {
 
     var trackingPoints: MutableLiveData<List<List<LatLng>>> = MutableLiveData()
 

@@ -1,5 +1,6 @@
 package com.andrewsozonov.urbanride.domain.interactor
 
+import android.util.Log
 import com.andrewsozonov.urbanride.domain.RideRepository
 import com.andrewsozonov.urbanride.domain.SettingsRepository
 import com.andrewsozonov.urbanride.domain.converter.HistoryConverter

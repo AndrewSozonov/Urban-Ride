@@ -1,6 +1,7 @@
 package com.andrewsozonov.urbanride.presentation.ride
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.location.Location
 import android.os.Build
@@ -20,12 +21,10 @@ import com.andrewsozonov.urbanride.app.App
 import com.andrewsozonov.urbanride.databinding.FragmentRideBinding
 import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
 import com.andrewsozonov.urbanride.presentation.service.LocationService
+import com.andrewsozonov.urbanride.presentation.service.model.ServiceStatus
 import com.andrewsozonov.urbanride.util.BitmapHelper
 import com.andrewsozonov.urbanride.util.PermissionsUtil
 import com.andrewsozonov.urbanride.util.constants.LocationConstants.PAUSE_LOCATION_SERVICE
-import com.andrewsozonov.urbanride.util.constants.LocationConstants.SERVICE_STATUS_PAUSED
-import com.andrewsozonov.urbanride.util.constants.LocationConstants.SERVICE_STATUS_STARTED
-import com.andrewsozonov.urbanride.util.constants.LocationConstants.SERVICE_STATUS_STOPPED
 import com.andrewsozonov.urbanride.util.constants.LocationConstants.START_LOCATION_SERVICE
 import com.andrewsozonov.urbanride.util.constants.LocationConstants.STOP_LOCATION_SERVICE
 import com.andrewsozonov.urbanride.util.constants.UIConstants.CAMERA_ZOOM_SCALING_AFTER_STOP
@@ -54,21 +53,23 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     private lateinit var map: GoogleMap
     private var mapView: MapView? = null
 
-    private var trackingStatus: String = SERVICE_STATUS_STOPPED
+    private var trackingStatus: ServiceStatus = ServiceStatus.STOPPED
     private var trackingPoints = listOf<List<LatLng>>()
 
     @Inject
     lateinit var viewModelFactory: RideViewModelFactory
     private val binding get() = _binding!!
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        createViewModel()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        createViewModel()
-
         _binding = FragmentRideBinding.inflate(inflater, container, false)
         val root: View = binding.root
         mapView = binding.mapView
@@ -84,7 +85,7 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
             map.setOnMyLocationClickListener(this)
             subscribeToObservers()
 
-            if (trackingStatus == SERVICE_STATUS_STOPPED && trackingPoints.isNotEmpty()) {
+            if (trackingStatus == ServiceStatus.STOPPED && trackingPoints.isNotEmpty()) {
                 drawFinalRoute()
             } else {
                 drawRoute()
@@ -95,17 +96,17 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
         binding.startRideButton.setOnClickListener {
             if (PermissionsUtil.checkPermissions(requireContext())) {
                 when (trackingStatus) {
-                    SERVICE_STATUS_STARTED -> {
-                        trackingStatus = SERVICE_STATUS_PAUSED
+                    ServiceStatus.STARTED -> {
+                        trackingStatus = ServiceStatus.PAUSED
                         operateService(PAUSE_LOCATION_SERVICE)
                     }
 
-                    SERVICE_STATUS_PAUSED -> {
-                        trackingStatus = SERVICE_STATUS_STARTED
+                    ServiceStatus.PAUSED -> {
+                        trackingStatus = ServiceStatus.STARTED
                         operateService(START_LOCATION_SERVICE)
                     }
                     else -> {
-                        trackingStatus = SERVICE_STATUS_STARTED
+                        trackingStatus = ServiceStatus.STARTED
                         clearMap()
                         operateService(START_LOCATION_SERVICE)
                     }
@@ -116,7 +117,7 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
             }
         }
         binding.stopRideButton.setOnClickListener {
-            trackingStatus = SERVICE_STATUS_STOPPED
+            trackingStatus = ServiceStatus.STOPPED
             updateUi()
             drawFinalRoute()
             zoomMapToSaveForDB()
@@ -165,15 +166,15 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
 
     private fun updateUi() {
         when (trackingStatus) {
-            SERVICE_STATUS_STARTED -> {
+            ServiceStatus.STARTED -> {
                 binding.startRideButton.setImageLevel(1)
                 binding.stopRideButton.visibility = GONE
             }
-            SERVICE_STATUS_PAUSED -> {
+            ServiceStatus.PAUSED -> {
                 binding.startRideButton.setImageLevel(0)
                 binding.stopRideButton.visibility = VISIBLE
             }
-            SERVICE_STATUS_STOPPED -> {
+            ServiceStatus.STOPPED -> {
                 binding.startRideButton.setImageLevel(0)
                 binding.stopRideButton.visibility = GONE
             }
@@ -394,7 +395,6 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
                         Manifest.permission.ACCESS_COARSE_LOCATION,
                         Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
-
                     )
                 )
             } else {

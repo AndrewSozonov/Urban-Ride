@@ -4,7 +4,8 @@
 
     <SwitchPreference
         app:key="@string/dark_theme_pref_key"
-        app:title="Dark theme"/>
+        app:title="Dark theme"
+        app:iconSpaceReserved="false"/>
 
     <ListPreference
         app:key="@string/unit_system_pref_key"
@@ -12,6 +13,6 @@
         app:entries="@array/units_array"
         app:entryValues="@array/units_array"
         android:defaultValue="@string/units_kilometers"
-        />
+        app:iconSpaceReserved="false" />
 
 </PreferenceScreen>

@@ -6,6 +6,7 @@ import com.andrewsozonov.urbanride.data.database.RideDBModel
 import com.andrewsozonov.urbanride.data.model.RideDataModel
 import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
 import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
+import com.andrewsozonov.urbanride.presentation.service.model.ServiceStatus
 
 /**
  * Интерфейс репозитория с данными о поездках
@@ -70,12 +71,12 @@ interface RideRepository {
      *
      * @param status STARTED, STOPPED, PAUSED
      */
-    fun updateServiceStatus(status: String)
+    fun updateServiceStatus(status: ServiceStatus)
 
     /**
      * Возвращает статус сервиса геолокации
      */
-    fun getServiceStatus(): LiveData<String>
+    fun getServiceStatus(): LiveData<ServiceStatus>
 
     /**
      * Возвращает LiveData со списком координат

@@ -1,5 +1,6 @@
 package com.andrewsozonov.urbanride.presentation.map
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -37,12 +38,15 @@ class MapFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: MapViewModelFactory
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        createViewModel()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        createViewModel()
-
         _binding = MapFragmentBinding.inflate(inflater, container, false)
         val root: View = binding.root
         mapView = binding.mapView

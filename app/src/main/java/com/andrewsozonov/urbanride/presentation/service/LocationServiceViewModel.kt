@@ -3,6 +3,7 @@ package com.andrewsozonov.urbanride.presentation.service
 import androidx.lifecycle.ViewModel
 import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
 import com.andrewsozonov.urbanride.domain.RideRepository
+import com.andrewsozonov.urbanride.presentation.service.model.ServiceStatus
 
 
 /**
@@ -37,7 +38,7 @@ class LocationServiceViewModel(val repository: RideRepository) : ViewModel() {
      *
      * @param status статус сервиса: STARTED, STOPPED, PAUSED
      */
-    fun updateServiceStatus(status: String) {
+    fun updateServiceStatus(status: ServiceStatus) {
         repository.updateServiceStatus(status)
     }
 }

@@ -9,6 +9,9 @@ import com.andrewsozonov.urbanride.util.ISchedulersProvider
 /**
  * Класс для создания [HistoryViewModel]
  *
+ * @param interactor ссылка на интерактор экрана History
+ * @param schedulersProvider интерфейс предоставляющий потоки
+ *
  * @author Андрей Созонов
  */
 class HistoryViewModelFactory(

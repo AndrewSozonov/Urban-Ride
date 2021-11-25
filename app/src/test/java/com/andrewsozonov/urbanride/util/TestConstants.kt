@@ -28,7 +28,6 @@ object TestConstants {
     const val AVG_SPEED_ML_H_DB = 13.99
 
     const val TIMER_VALUE = "23:59:59"
-    const val STATUS = "SERVICE_STARTED"
 
     const val SPEED1_M_S = 16.009497f
     const val SPEED2_M_S = 15.721939f

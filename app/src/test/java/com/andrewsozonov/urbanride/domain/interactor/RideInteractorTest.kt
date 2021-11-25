@@ -7,6 +7,7 @@ import com.andrewsozonov.urbanride.domain.RideRepository
 import com.andrewsozonov.urbanride.domain.SettingsRepository
 import com.andrewsozonov.urbanride.domain.converter.RideConverter
 import com.andrewsozonov.urbanride.presentation.ride.model.RideModel
+import com.andrewsozonov.urbanride.presentation.service.model.ServiceStatus
 import com.andrewsozonov.urbanride.util.TestConstants.AVG_SPEED_KM_H
 import com.andrewsozonov.urbanride.util.TestConstants.AVG_SPEED_M_S
 import com.andrewsozonov.urbanride.util.TestConstants.DISTANCE_KM
@@ -21,7 +22,6 @@ import com.andrewsozonov.urbanride.util.TestConstants.LONG3
 import com.andrewsozonov.urbanride.util.TestConstants.LONG4
 import com.andrewsozonov.urbanride.util.TestConstants.SPEED_KM_H
 import com.andrewsozonov.urbanride.util.TestConstants.SPEED_M_S
-import com.andrewsozonov.urbanride.util.TestConstants.STATUS
 import com.andrewsozonov.urbanride.util.TestConstants.TIMER_VALUE
 import com.google.android.gms.maps.model.LatLng
 import com.google.common.truth.Truth.assertThat
@@ -47,7 +47,7 @@ class RideInteractorTest {
     private lateinit var rideDataModel: RideDataModel
     private lateinit var rideModel: RideModel
     private val testTimerValue = TIMER_VALUE
-    private val testServiceStatus = STATUS
+    private val testServiceStatus = ServiceStatus.STARTED
 
     @Before
     fun setUp() {

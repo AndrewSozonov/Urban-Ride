@@ -22,6 +22,7 @@ import com.andrewsozonov.urbanride.R
 import com.andrewsozonov.urbanride.app.App
 import com.andrewsozonov.urbanride.presentation.MainActivity
 import com.andrewsozonov.urbanride.presentation.service.model.LocationPoint
+import com.andrewsozonov.urbanride.presentation.service.model.ServiceStatus
 import com.andrewsozonov.urbanride.util.DataFormatter
 import com.andrewsozonov.urbanride.util.PermissionsUtil
 import com.andrewsozonov.urbanride.util.constants.LocationConstants.ACTION_SHOW_RIDING_FRAGMENT
@@ -30,9 +31,6 @@ import com.andrewsozonov.urbanride.util.constants.LocationConstants.NOTIFICATION
 import com.andrewsozonov.urbanride.util.constants.LocationConstants.NOTIFICATION_CHANNEL_NAME
 import com.andrewsozonov.urbanride.util.constants.LocationConstants.NOTIFICATION_ID
 import com.andrewsozonov.urbanride.util.constants.LocationConstants.PAUSE_LOCATION_SERVICE
-import com.andrewsozonov.urbanride.util.constants.LocationConstants.SERVICE_STATUS_PAUSED
-import com.andrewsozonov.urbanride.util.constants.LocationConstants.SERVICE_STATUS_STARTED
-import com.andrewsozonov.urbanride.util.constants.LocationConstants.SERVICE_STATUS_STOPPED
 import com.andrewsozonov.urbanride.util.constants.LocationConstants.START_LOCATION_SERVICE
 import com.andrewsozonov.urbanride.util.constants.LocationConstants.STOP_LOCATION_SERVICE
 import com.andrewsozonov.urbanride.util.constants.LocationConstants.TIMER_DELAY
@@ -59,7 +57,6 @@ class LocationService : LifecycleService() {
     @Inject
     lateinit var viewModelFactory: LocationViewModelFactory
     private lateinit var locationViewModel: LocationServiceViewModel
-
 
     private var isServiceResumed = false
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -107,7 +104,7 @@ class LocationService : LifecycleService() {
         intent?.let {
             when (it.action) {
                 START_LOCATION_SERVICE -> {
-                    locationViewModel.updateServiceStatus(SERVICE_STATUS_STARTED)
+                    locationViewModel.updateServiceStatus(ServiceStatus.STARTED)
                     if (!isServiceResumed) {
                         initLocationLiveData()
                         startForegroundService()
@@ -117,11 +114,11 @@ class LocationService : LifecycleService() {
                     }
                 }
                 PAUSE_LOCATION_SERVICE -> {
-                    locationViewModel.updateServiceStatus(SERVICE_STATUS_PAUSED)
+                    locationViewModel.updateServiceStatus(ServiceStatus.PAUSED)
                     pauseService()
                 }
                 STOP_LOCATION_SERVICE -> {
-                    locationViewModel.updateServiceStatus(SERVICE_STATUS_STOPPED)
+                    locationViewModel.updateServiceStatus(ServiceStatus.STOPPED)
                     stopService()
                 }
                 else -> return super.onStartCommand(intent, flags, startId)

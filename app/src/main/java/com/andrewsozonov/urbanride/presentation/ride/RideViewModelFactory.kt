@@ -8,6 +8,9 @@ import com.andrewsozonov.urbanride.util.ISchedulersProvider
 /**
  * Класс для создания [RideViewModel]
  *
+ * @param interactor интерактор экрана Ride
+ * @param schedulersProvider интерфейс предоставляющий потоки
+ *
  * @author Андрей Созонов
  */
 class RideViewModelFactory(
