@@ -65,20 +65,11 @@ class LocationService : LifecycleService() {
     private var timeStarted = 0L
 
     private val isTracking = MutableLiveData<Boolean>()
-    private val trackingPoints = MutableLiveData<MutableList<MutableList<LocationPoint>>>()
-    private val rideTime = MutableLiveData<Long>()
+    private val trackingPoints: MutableList<MutableList<LocationPoint>> = mutableListOf()
 
     override fun onCreate() {
         super.onCreate()
         createViewModel()
-
-        trackingPoints.observe(this, {
-            locationViewModel.updateTrackingPoints(it)
-        })
-
-        rideTime.observe(this, {
-            locationViewModel.updateTimerValue(it)
-        })
 
         isTracking.observe(this, {
             updateLocationTracking(it)
@@ -90,9 +81,10 @@ class LocationService : LifecycleService() {
 
     private fun initLocationLiveData() {
         isTracking.postValue(false)
-        trackingPoints.value?.clear()
-        trackingPoints.postValue(mutableListOf())
-        rideTime.postValue(0L)
+        trackingPoints.clear()
+        locationViewModel.updateTrackingPoints(trackingPoints)
+        totalTime = 0L
+        locationViewModel.updateTimerValue(totalTime)
     }
 
     private fun createViewModel() {
@@ -145,7 +137,7 @@ class LocationService : LifecycleService() {
         CoroutineScope(Dispatchers.Main).launch {
             while (isTracking.value == true) {
                 intervalTime = System.currentTimeMillis() - timeStarted
-                rideTime.postValue(totalTime + intervalTime)
+                locationViewModel.updateTimerValue(totalTime + intervalTime)
                 updateNotification(createNotification())
                 delay(TIMER_DELAY)
             }
@@ -179,10 +171,10 @@ class LocationService : LifecycleService() {
             super.onLocationResult(p0)
             if (isTracking.value == true) {
                 p0.locations.let { locations ->
-                    if (!checkLocationsEquals(locations.last())) {
+                    if (!checkIfLocationsEqual(locations.last())) {
 //                        addTrackingPoint(locations.last())
                         locations.map {
-                            if (!checkLocationsEquals(it)) {
+                            if (!checkIfLocationsEqual(it)) {
                                 addTrackingPoint(it)
                             }
                         }
@@ -192,12 +184,10 @@ class LocationService : LifecycleService() {
         }
     }
 
-    private fun checkLocationsEquals(location: Location): Boolean {
-        if (trackingPoints.value?.size!! >= 2) {
-
-            val points = trackingPoints.value
-            val lastLatitude = points?.get(points.size - 2)?.last()?.latitude
-            val lastLongitude = points?.get(points.size - 2)?.last()?.longitude
+    private fun checkIfLocationsEqual(location: Location): Boolean {
+        if (trackingPoints.size >= 2) {
+            val lastLatitude = trackingPoints[trackingPoints.size - 2].last().latitude
+            val lastLongitude = trackingPoints[trackingPoints.size - 2].last().longitude
             return (location.latitude == lastLatitude && location.longitude == lastLongitude)
         }
         return false
@@ -210,14 +200,14 @@ class LocationService : LifecycleService() {
                     location.latitude,
                     location.longitude,
                     location.speed,
-                    rideTime.value!!,
+                    totalTime,
                     0f
                 )
-            trackingPoints.value?.apply {
+            trackingPoints.apply {
                 last().add(position)
                 val distance = calculateDistance(this)
                 this.last().last().distance = distance
-                trackingPoints.postValue(this)
+                locationViewModel.updateTrackingPoints(trackingPoints)
                 Log.d(
                     "addTrackingPoint",
                     "lat: ${position.latitude}  long: ${position.longitude}  speed: ${position.speed}  time: ${position.time}  distance: ${position.distance}"
@@ -246,10 +236,10 @@ class LocationService : LifecycleService() {
         return distance.toInt().toFloat()
     }
 
-    private fun addEmptyPath() = trackingPoints.value?.apply {
+    private fun addEmptyPath() = trackingPoints.apply {
         add(mutableListOf())
-        trackingPoints.postValue(this)
-    } ?: trackingPoints.postValue(mutableListOf(mutableListOf()))
+        locationViewModel.updateTrackingPoints(this)
+    }
 
     private fun startForegroundService() {
 
@@ -269,7 +259,7 @@ class LocationService : LifecycleService() {
             .setAutoCancel(false)
             .setOngoing(true)
             .setSmallIcon(R.drawable.ic_ride_white_24dp)
-            .setContentText(rideTime.value?.let { DataFormatter.formatTime(it) })
+            .setContentText((totalTime + intervalTime).let { DataFormatter.formatTime(it) })
             .setContentIntent(getMainActivityIntent())
         return notificationBuilder.build()
     }

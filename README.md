@@ -21,6 +21,7 @@
 
 ### Screenshots
 * [Ride screen](https://github.com/AndrewSozonov/Urban-Ride/blob/master/img/Screenshot_main.png)
+* [Ride screen](https://github.com/AndrewSozonov/Urban-Ride/blob/master/img/Screenshot_main2.png)
 * [History screen](https://github.com/AndrewSozonov/Urban-Ride/blob/master/img/Screenshot_history.png)
 
 ### Стек
@@ -31,3 +32,4 @@
 * [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
 * [LiveData](https://developer.android.com/topic/libraries/architecture/livedata)
 * [Navigation](https://developer.android.com/topic/libraries/architecture/navigation/) 
+* [GraphView](https://github.com/jjoe64/GraphView) 
