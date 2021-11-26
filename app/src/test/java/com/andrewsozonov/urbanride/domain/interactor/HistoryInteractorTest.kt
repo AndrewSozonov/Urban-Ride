@@ -1,10 +1,10 @@
 package com.andrewsozonov.urbanride.domain.interactor
 
 import android.graphics.Bitmap
-import com.andrewsozonov.urbanride.models.data.RideDBModel
 import com.andrewsozonov.urbanride.domain.RideRepository
 import com.andrewsozonov.urbanride.domain.SettingsRepository
 import com.andrewsozonov.urbanride.domain.converter.HistoryConverter
+import com.andrewsozonov.urbanride.models.data.RideDBModel
 import com.andrewsozonov.urbanride.models.presentation.history.HistoryLocationPoint
 import com.andrewsozonov.urbanride.models.presentation.history.HistoryModel
 import com.andrewsozonov.urbanride.models.presentation.service.LocationPoint
@@ -58,6 +58,11 @@ import io.mockk.*
 import org.junit.Before
 import org.junit.Test
 
+/**
+ * Тест класс для [HistoryInteractor]
+ *
+ * @author Андрей Созонов
+ */
 class HistoryInteractorTest {
 
     private val repository: RideRepository = mockk()

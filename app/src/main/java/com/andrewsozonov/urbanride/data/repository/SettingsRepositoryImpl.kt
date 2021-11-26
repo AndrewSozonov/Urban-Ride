@@ -2,6 +2,7 @@ package com.andrewsozonov.urbanride.data.repository
 
 import android.content.SharedPreferences
 import com.andrewsozonov.urbanride.domain.SettingsRepository
+import com.andrewsozonov.urbanride.util.constants.SettingsConstants.DARK_THEME_KEY
 import com.andrewsozonov.urbanride.util.constants.SettingsConstants.UNITS_KEY
 import com.andrewsozonov.urbanride.util.constants.SettingsConstants.UNITS_KILOMETERS
 
@@ -25,5 +26,14 @@ class SettingsRepositoryImpl(private val sharedPreferences: SharedPreferences) :
             UNITS_KEY,
             UNITS_KILOMETERS
         ) == UNITS_KILOMETERS
+    }
+
+    /**
+     * Проверяет включена ли темная тема в настройках
+     *
+     * @return true - включена, false - выключена
+     */
+    override fun isDarkThemeOn(): Boolean {
+        return sharedPreferences.getBoolean(DARK_THEME_KEY, false)
     }
 }

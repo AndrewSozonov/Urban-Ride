@@ -22,20 +22,12 @@ class HistoryRecyclerAdapter(private val listener: IHistoryRecyclerListener) :
         val view =
             LayoutInflater.from(parent.context)
                 .inflate(R.layout.recycler_item_history, parent, false)
-        return HistoryViewHolder(view)
+        return HistoryViewHolder(view, listener)
     }
 
     override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
 
-        holder.bind(data[position])
-
-        holder.binding.historyMap.setOnClickListener {
-            data[position].id.let { id -> listener.onMapClick(id) }
-        }
-
-        holder.binding.shareButton.setOnClickListener {
-            listener.onShareClick(position)
-        }
+        holder.bind(data[position], position)
     }
 
     override fun getItemCount(): Int {

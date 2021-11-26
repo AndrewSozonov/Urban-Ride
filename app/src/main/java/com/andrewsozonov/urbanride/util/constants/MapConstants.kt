@@ -21,4 +21,9 @@ object MapConstants {
      * Значение scalе карты после отрисовки всего маршрута после остановки
      */
     const val CAMERA_ZOOM_SCALING_AFTER_STOP = 0.1f
+
+    /**
+     * Размер стрелки маршрута на карте
+     */
+    const val CUSTOM_CAP_WIDTH = 70f
 }

@@ -23,6 +23,11 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.common.truth.Truth
 import org.junit.Test
 
+/**
+ * Тест класс для [RideConverter]
+ *
+ * @author Андрей Созонов
+ */
 class RideConverterTest {
 
     private val converter: RideConverter = RideConverter()

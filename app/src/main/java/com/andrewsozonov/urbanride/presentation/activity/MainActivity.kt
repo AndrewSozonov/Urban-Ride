@@ -1,4 +1,4 @@
-package com.andrewsozonov.urbanride.presentation
+package com.andrewsozonov.urbanride.presentation.activity
 
 import android.content.Context
 import android.content.Intent
@@ -7,18 +7,24 @@ import android.net.*
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
 import com.andrewsozonov.urbanride.R
+import com.andrewsozonov.urbanride.app.App
 import com.andrewsozonov.urbanride.databinding.ActivityMainBinding
+import com.andrewsozonov.urbanride.presentation.ride.RideViewModel
+import com.andrewsozonov.urbanride.presentation.ride.RideViewModelFactory
 import com.andrewsozonov.urbanride.util.constants.LocationConstants.ACTION_SHOW_RIDING_FRAGMENT
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
+import javax.inject.Inject
 
 
 /**
@@ -32,14 +38,19 @@ import com.google.android.material.snackbar.Snackbar
  */
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var viewModel: MainViewModel
     private lateinit var binding: ActivityMainBinding
     private lateinit var connectivityManager: ConnectivityManager
     private lateinit var networkCallBack: ConnectivityManager.NetworkCallback
     private lateinit var locationManager: LocationManager
 
+    @Inject
+    lateinit var viewModelFactory: MainActivityViewModelFactory
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        createViewModel()
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -62,10 +73,13 @@ class MainActivity : AppCompatActivity() {
         navigateToRideFragment(intent)
     }
 
+    private fun createViewModel() {
+        App.getAppComponent()?.activityComponent()?.inject(this)
+        viewModel = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
+    }
+
     private fun setColorTheme() {
-        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
-        val isDarkThemeOn =
-            sharedPrefs.getBoolean(getString(R.string.dark_theme_pref_key), false)
+        val isDarkThemeOn = viewModel.isDarkThemeOn()
         if (isDarkThemeOn) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         } else {
@@ -131,7 +145,7 @@ class MainActivity : AppCompatActivity() {
                 .setMessage(getString(R.string.location_option_required))
                 .setPositiveButton(
                     getString(R.string.open_settings)
-                ) { dialog, which ->
+                ) { _, _ ->
                     val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                     startActivity(intent)
                 }
@@ -149,6 +163,5 @@ class MainActivity : AppCompatActivity() {
         connectivityManager.unregisterNetworkCallback(networkCallBack)
         super.onDestroy()
     }
-
 }
 

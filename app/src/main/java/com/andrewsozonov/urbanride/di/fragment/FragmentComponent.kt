@@ -5,7 +5,6 @@ import com.andrewsozonov.urbanride.presentation.map.MapFragment
 import com.andrewsozonov.urbanride.presentation.ride.RideFragment
 import dagger.Subcomponent
 
-
 /**
  * Компонент для внедрения зависимостей во фрагменты
  *

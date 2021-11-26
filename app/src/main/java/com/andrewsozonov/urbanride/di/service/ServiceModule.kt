@@ -5,7 +5,6 @@ import com.andrewsozonov.urbanride.presentation.service.LocationViewModelFactory
 import dagger.Module
 import dagger.Provides
 
-
 /**
  * Модуль предоставляет зависимости [LocationViewModelFactory]
  *

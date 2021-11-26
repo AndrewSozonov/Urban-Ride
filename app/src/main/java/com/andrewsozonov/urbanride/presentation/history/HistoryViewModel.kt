@@ -9,7 +9,6 @@ import com.andrewsozonov.urbanride.util.ISchedulersProvider
 import io.reactivex.Completable
 import io.reactivex.Single
 
-
 /**
  * [ViewModel] прикреплена к [HistoryFragment]
  * Загружает список поездок из БД для отображения во фрагменте
@@ -20,8 +19,8 @@ import io.reactivex.Single
  * @author Андрей Созонов
  */
 class HistoryViewModel(
-    val interactor: HistoryInteractor,
-    val schedulersProvider: ISchedulersProvider
+    private val interactor: HistoryInteractor,
+    private val schedulersProvider: ISchedulersProvider
 ) : BaseViewModel() {
 
     /**

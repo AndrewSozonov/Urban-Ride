@@ -14,6 +14,11 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 
+/**
+ * Тест класс для [MapViewModel]
+ *
+ * @author Андрей Созонов
+ */
 class MapViewModelTest {
 
     @get:Rule
@@ -34,7 +39,6 @@ class MapViewModelTest {
 
         mapViewModel.isLoading.observeForever(isLoadingObserver)
         mapViewModel.trackingPoints.observeForever(dataObserver)
-
     }
 
     @Test
@@ -75,6 +79,5 @@ class MapViewModelTest {
             true
         )
     }
-
 }
 

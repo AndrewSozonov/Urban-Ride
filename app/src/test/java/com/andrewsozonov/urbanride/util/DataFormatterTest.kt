@@ -1,9 +1,13 @@
 package com.andrewsozonov.urbanride.util
 
 import com.google.common.truth.Truth
-import org.junit.Assert.*
 import org.junit.Test
 
+/**
+ * Тест класс для [DataFormatter]
+ *
+ * @author Андрей Созонов
+ */
 class DataFormatterTest {
 
     @Test

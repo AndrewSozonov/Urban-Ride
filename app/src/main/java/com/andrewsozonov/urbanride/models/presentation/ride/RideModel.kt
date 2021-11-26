@@ -2,7 +2,6 @@ package com.andrewsozonov.urbanride.models.presentation.ride
 
 import com.google.android.gms.maps.model.LatLng
 
-
 /**
  * Модель данных для отображения в главном фрагменте
  *

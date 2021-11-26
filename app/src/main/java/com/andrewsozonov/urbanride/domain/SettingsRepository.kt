@@ -13,4 +13,12 @@ interface SettingsRepository {
      * @return true - метры, false - мили
      */
     fun isUnitsMetric(): Boolean
+
+
+    /**
+     * Проверяет включена ли темная тема в настройках
+     *
+     * @return true - включена, false - выключена
+     */
+    fun isDarkThemeOn(): Boolean
 }

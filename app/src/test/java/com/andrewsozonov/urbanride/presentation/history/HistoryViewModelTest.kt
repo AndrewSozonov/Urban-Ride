@@ -41,6 +41,11 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 
+/**
+ * Тест класс для [HistoryViewModel]
+ *
+ * @author Андрей Созонов
+ */
 class HistoryViewModelTest {
 
     @get:Rule

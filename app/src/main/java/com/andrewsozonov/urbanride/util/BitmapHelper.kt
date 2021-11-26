@@ -11,6 +11,11 @@ import androidx.core.graphics.drawable.DrawableCompat
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 
+/**
+ * Конвертирует Drawable в BitmapDescriptor для отображения иконок на карте
+ *
+ * @author Андрей Созонов
+ */
 object BitmapHelper {
     /**
      * Demonstrates converting a [Drawable] to a [BitmapDescriptor],

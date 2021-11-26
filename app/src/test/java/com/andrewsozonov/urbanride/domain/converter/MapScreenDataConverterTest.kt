@@ -36,6 +36,11 @@ import io.mockk.mockk
 import org.junit.Before
 import org.junit.Test
 
+/**
+ * Тест класс для [MapScreenDataConverter]
+ *
+ * @author Андрей Созонов
+ */
 class MapScreenDataConverterTest {
 
     private val converter = MapScreenDataConverter()
@@ -68,7 +73,7 @@ class MapScreenDataConverterTest {
                 LocationPoint(LAT4, LONG4, SPEED4_M_S, TIME4_MS, DISTANCE4_METERS),
             )
         )
-        return  RideDBModel(
+        return RideDBModel(
             START_TIME_MS,
             FINISH_TIME_MS,
             DURATION_MS,

@@ -116,7 +116,6 @@ class RideRepositoryImpl(
      * @param trackingPoints список [LocationPoint]
      */
     override fun updateLocation(trackingPoints: MutableList<MutableList<LocationPoint>>) {
-
         this.trackingPoints = trackingPoints
         calculateData()
     }

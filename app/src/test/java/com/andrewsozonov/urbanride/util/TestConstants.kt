@@ -1,5 +1,10 @@
 package com.andrewsozonov.urbanride.util
 
+/**
+ * Константы для тестовых классов
+ *
+ * @author Андрей Созонов
+ */
 object TestConstants {
 
     const val LAT1 = 59.9368217

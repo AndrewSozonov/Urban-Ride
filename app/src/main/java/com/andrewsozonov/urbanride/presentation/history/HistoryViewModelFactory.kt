@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.andrewsozonov.urbanride.domain.interactor.HistoryInteractor
 import com.andrewsozonov.urbanride.util.ISchedulersProvider
 
-
 /**
  * Класс для создания [HistoryViewModel]
  *

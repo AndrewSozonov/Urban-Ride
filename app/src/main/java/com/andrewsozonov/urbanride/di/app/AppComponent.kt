@@ -1,5 +1,6 @@
 package com.andrewsozonov.urbanride.di.app
 
+import com.andrewsozonov.urbanride.di.activity.ActivityComponent
 import com.andrewsozonov.urbanride.di.fragment.FragmentComponent
 import com.andrewsozonov.urbanride.di.service.ServiceComponent
 import dagger.Component
@@ -17,4 +18,6 @@ interface AppComponent {
     fun fragmentComponent(): FragmentComponent
 
     fun serviceComponent(): ServiceComponent
+
+    fun activityComponent(): ActivityComponent
 }

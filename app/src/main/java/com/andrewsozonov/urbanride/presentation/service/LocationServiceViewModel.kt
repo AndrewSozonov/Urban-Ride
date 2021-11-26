@@ -5,9 +5,8 @@ import com.andrewsozonov.urbanride.domain.RideRepository
 import com.andrewsozonov.urbanride.models.presentation.service.LocationPoint
 import com.andrewsozonov.urbanride.models.presentation.service.ServiceStatus
 
-
 /**
- * [ViewModel] прикреплена к [LocationService]
+ * [ViewModel] [LocationService]
  * Обновляет данные геолокации из сервиса в репозиторий
  *
  * @param repository интерфейс репозитория с данными о поездках

@@ -10,7 +10,6 @@ import com.andrewsozonov.urbanride.util.ISchedulersProvider
 import dagger.Module
 import dagger.Provides
 
-
 /**
  * Модуль предоставляет зависимости [RideViewModelFactory], [HistoryViewModelFactory],
  * [MapViewModelFactory]

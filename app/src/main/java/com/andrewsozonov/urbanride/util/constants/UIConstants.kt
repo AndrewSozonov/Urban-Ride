@@ -13,6 +13,11 @@ object UIConstants {
     const val GRAPH_PADDING = 20
 
     /**
+     * Максимальное значение шкалы X графика относительно максимального
+     */
+    const val GRAPH_X_SCALE_MAX = 1.1
+
+    /**
      * Расстояние между элементами списка History
      */
     const val RECYCLER_ITEMS_SPACING = 20

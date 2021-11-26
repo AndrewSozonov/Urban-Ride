@@ -22,7 +22,7 @@ import com.andrewsozonov.urbanride.R
 import com.andrewsozonov.urbanride.app.App
 import com.andrewsozonov.urbanride.models.presentation.service.LocationPoint
 import com.andrewsozonov.urbanride.models.presentation.service.ServiceStatus
-import com.andrewsozonov.urbanride.presentation.MainActivity
+import com.andrewsozonov.urbanride.presentation.activity.MainActivity
 import com.andrewsozonov.urbanride.util.DataFormatter
 import com.andrewsozonov.urbanride.util.PermissionsUtil
 import com.andrewsozonov.urbanride.util.constants.LocationConstants.ACTION_PAUSE_LOCATION_SERVICE
@@ -46,7 +46,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
- * Сервис получает геолокацию устройства
+ * Foreground Сервис получает геолокацию устройства
  * Стартует таймер во время работы
  * Обновляет данные в [LocationServiceViewModel]
  *
@@ -151,7 +151,6 @@ class LocationService : LifecycleService() {
             if (PermissionsUtil.checkPermissions(this)) {
                 val request = LocationRequest().apply {
                     interval = LOCATION_UPDATE_INTERVAL
-//                    fastestInterval = 2000L
                     priority = PRIORITY_HIGH_ACCURACY
                     isWaitForAccurateLocation = true
                 }
@@ -200,7 +199,7 @@ class LocationService : LifecycleService() {
                     location.latitude,
                     location.longitude,
                     location.speed,
-                    totalTime,
+                    totalTime + intervalTime,
                     0f
                 )
             trackingPoints.apply {
@@ -209,7 +208,7 @@ class LocationService : LifecycleService() {
                 this.last().last().distance = distance
                 locationViewModel.updateTrackingPoints(trackingPoints)
                 Log.d(
-                    "addTrackingPoint",
+                    "LocationService",
                     "lat: ${position.latitude}  long: ${position.longitude}  speed: ${position.speed}  time: ${position.time}  distance: ${position.distance}"
                 )
             }

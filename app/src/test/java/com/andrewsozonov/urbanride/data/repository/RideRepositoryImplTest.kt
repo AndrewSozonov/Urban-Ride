@@ -2,8 +2,8 @@ package com.andrewsozonov.urbanride.data.repository
 
 import android.graphics.Bitmap
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.andrewsozonov.urbanride.models.data.RideDBModel
 import com.andrewsozonov.urbanride.data.database.RideDao
+import com.andrewsozonov.urbanride.models.data.RideDBModel
 import com.andrewsozonov.urbanride.models.data.RideDataModel
 import com.andrewsozonov.urbanride.models.presentation.service.LocationPoint
 import com.andrewsozonov.urbanride.util.TestConstants
@@ -24,6 +24,11 @@ import org.junit.Test
 import org.junit.rules.TestRule
 import java.util.*
 
+/**
+ * Тест класс для [RideRepositoryImpl]
+ *
+ * @author Андрей Созонов
+ */
 class RideRepositoryImplTest {
 
     private val rideDao: RideDao = mockk()

@@ -19,9 +19,9 @@ import com.andrewsozonov.urbanride.models.presentation.service.ServiceStatus
  * @author Андрей Созонов
  */
 class RideInteractor(
-    val repository: RideRepository,
+    private val repository: RideRepository,
     private val settings: SettingsRepository,
-    val converter: RideConverter
+    private val converter: RideConverter
 ) {
 
     /**
@@ -53,5 +53,4 @@ class RideInteractor(
             )
         }
     }
-
 }

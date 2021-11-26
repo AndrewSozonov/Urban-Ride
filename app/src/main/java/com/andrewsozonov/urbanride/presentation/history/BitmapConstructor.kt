@@ -10,14 +10,12 @@ import com.andrewsozonov.urbanride.util.constants.SharedImageConstants.SHARE_IMA
 import com.andrewsozonov.urbanride.util.constants.SharedImageConstants.SHARE_IMAGE_TEXT_SIZE
 import com.andrewsozonov.urbanride.util.constants.SharedImageConstants.SHARE_IMAGE_TEXT_VERTICAL_MARGIN
 
-
 /**
  * Класс собирающий изображение для sharing
  *
  * @author Андрей Созонов
  */
 class BitmapConstructor {
-
 
     /**
      * Накладывает данные о текущей поездке на изображение с картой
@@ -29,7 +27,7 @@ class BitmapConstructor {
         val mapImage: Bitmap = ride.mapImg
         val shareMapImage = mapImage.copy(mapImage.config, true)
 
-        val canvas = shareMapImage.let { Canvas(it) }
+        val canvas = Canvas(shareMapImage)
         val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         fillPaint.style = Paint.Style.FILL
         fillPaint.color = ContextCompat.getColor(context, R.color.middle_blue)
@@ -41,7 +39,6 @@ class BitmapConstructor {
         strokePaint.strokeWidth = SHARE_IMAGE_STROKE_WIDTH
         strokePaint.textSize = SHARE_IMAGE_TEXT_SIZE
         fillPaint.setShadowLayer(2f, 0f, 1f, Color.BLACK)
-
 
         val horizontalMargin = SHARE_IMAGE_TEXT_HORIZONTAL_MARGIN
         val verticalMargin = SHARE_IMAGE_TEXT_VERTICAL_MARGIN

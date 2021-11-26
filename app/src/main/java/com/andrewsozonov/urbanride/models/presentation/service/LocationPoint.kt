@@ -1,6 +1,5 @@
 package com.andrewsozonov.urbanride.models.presentation.service
 
-
 /**
  * Модель данных точки геолокации получаемой из сервиса
  *

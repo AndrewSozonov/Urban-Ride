@@ -6,7 +6,6 @@ import android.content.Intent
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -31,6 +30,7 @@ import com.andrewsozonov.urbanride.util.constants.LocationConstants.ACTION_START
 import com.andrewsozonov.urbanride.util.constants.LocationConstants.ACTION_STOP_LOCATION_SERVICE
 import com.andrewsozonov.urbanride.util.constants.MapConstants.CAMERA_ZOOM_SCALING_AFTER_STOP
 import com.andrewsozonov.urbanride.util.constants.MapConstants.CAMERA_ZOOM_VALUE
+import com.andrewsozonov.urbanride.util.constants.MapConstants.CUSTOM_CAP_WIDTH
 import com.andrewsozonov.urbanride.util.constants.MapConstants.POLYLINE_WIDTH
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -92,7 +92,6 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
             } else {
                 drawRoute()
             }
-
         }
 
         binding.startRideButton.setOnClickListener {
@@ -129,7 +128,6 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     private fun createViewModel() {
         App.getAppComponent()?.fragmentComponent()?.inject(this)
         rideViewModel = ViewModelProvider(this, viewModelFactory)[RideViewModel::class.java]
-        Log.d("RideFragment", " rideViewModel: ${rideViewModel}")
     }
 
     private fun subscribeToObservers() {
@@ -219,7 +217,8 @@ class RideFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
                     .addAll(line)
                     .endCap(
                         CustomCap(
-                            BitmapDescriptorFactory.fromResource(R.drawable.ic_arrow), 70f
+                            BitmapDescriptorFactory.fromResource(R.drawable.ic_arrow),
+                            CUSTOM_CAP_WIDTH
                         )
                     )
                 map.addPolyline(polylineOptions)

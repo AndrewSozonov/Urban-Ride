@@ -21,4 +21,9 @@ object SettingsConstants {
      * Значение миль в настройках единиц измерения SharedPreferences
      */
     const val UNITS_MILES = "Miles"
+
+    /**
+     * Ключ настроек тёмной темы в SharedPreferences
+     */
+    const val DARK_THEME_KEY = "dark_theme_pref_key"
 }

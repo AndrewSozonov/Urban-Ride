@@ -1,5 +1,10 @@
 package com.andrewsozonov.urbanride.util
 
+/**
+ * Константы для androidTest
+ *
+ * @author Андрей Созонов
+ */
 object AndroidTestConstants {
 
     const val LAT1 = 59.9368217

@@ -13,8 +13,8 @@ import com.andrewsozonov.urbanride.models.presentation.ride.RideModel
  * @author Андрей Созонов
  */
 class MapScreenInteractor(
-    val repository: RideRepository,
-    val screenDataConverter: MapScreenDataConverter
+    private val repository: RideRepository,
+    private val screenDataConverter: MapScreenDataConverter
 ) {
 
     /**

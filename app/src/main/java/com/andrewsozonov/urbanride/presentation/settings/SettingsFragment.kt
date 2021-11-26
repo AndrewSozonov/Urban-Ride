@@ -5,7 +5,6 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.andrewsozonov.urbanride.R
 
-
 /**
  *  Фрагмент с настройками приложения
  *
@@ -16,7 +15,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, null)
-
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {

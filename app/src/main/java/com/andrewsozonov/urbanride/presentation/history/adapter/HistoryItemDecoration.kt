@@ -38,7 +38,7 @@ class HistoryItemDecoration(
 
     override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         val left: Int = parent.paddingLeft
-        val right: Int = parent.width - parent.paddingRight;
+        val right: Int = parent.width - parent.paddingRight
 
         val childCount = parent.childCount
         for (i in 0 until childCount) {

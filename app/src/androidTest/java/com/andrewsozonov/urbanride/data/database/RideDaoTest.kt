@@ -40,7 +40,11 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
-
+/**
+ * Тест класс для [RideDao]
+ *
+ * @author Андрей Созонов
+ */
 @RunWith(AndroidJUnit4::class)
 @SmallTest
 class RideDaoTest {

@@ -1,6 +1,5 @@
 package com.andrewsozonov.urbanride.presentation.history.adapter
 
-
 /**
  * Интерфейс слушателя нажатий на карту и кнопку share в элементе списка экрана History
  *
@@ -11,9 +10,9 @@ interface IHistoryRecyclerListener {
     /**
      * Вызывается при клике на изображение с картой
      *
-     * @param position номер позиции элемента
+     * @param id id элемента
      */
-    fun onMapClick(position: Int)
+    fun onMapClick(id: Int)
 
     /**
      * Вызывается при клике на кнопку Share

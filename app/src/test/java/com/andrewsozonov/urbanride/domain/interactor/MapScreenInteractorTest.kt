@@ -1,9 +1,9 @@
 package com.andrewsozonov.urbanride.domain.interactor
 
 import android.graphics.Bitmap
-import com.andrewsozonov.urbanride.models.data.RideDBModel
 import com.andrewsozonov.urbanride.domain.RideRepository
 import com.andrewsozonov.urbanride.domain.converter.MapScreenDataConverter
+import com.andrewsozonov.urbanride.models.data.RideDBModel
 import com.andrewsozonov.urbanride.models.presentation.ride.RideModel
 import com.andrewsozonov.urbanride.models.presentation.service.LocationPoint
 import com.andrewsozonov.urbanride.util.TestConstants.AVG_SPEED_KM_H
@@ -41,6 +41,11 @@ import io.mockk.mockk
 import org.junit.Before
 import org.junit.Test
 
+/**
+ * Тест класс для [MapScreenInteractor]
+ *
+ * @author Андрей Созонов
+ */
 class MapScreenInteractorTest {
 
     private val repository: RideRepository = mockk()
@@ -79,7 +84,15 @@ class MapScreenInteractorTest {
                 LocationPoint(LAT4, LONG4, SPEED4_M_S, TIME4_MS, DISTANCE4_METERS),
             )
         )
-        return RideDBModel(START_TIME_MS, FINISH_TIME_MS, DURATION_MS, DISTANCE_METERS, AVG_SPEED_M_S, mapImage, locationPoints)
+        return RideDBModel(
+            START_TIME_MS,
+            FINISH_TIME_MS,
+            DURATION_MS,
+            DISTANCE_METERS,
+            AVG_SPEED_M_S,
+            mapImage,
+            locationPoints
+        )
     }
 
     private fun createRideModel(): RideModel {
@@ -93,5 +106,4 @@ class MapScreenInteractorTest {
         )
         return RideModel(DISTANCE_KM, SPEED4_M_S, AVG_SPEED_KM_H, trackingPoints, true)
     }
-
 }

@@ -5,7 +5,11 @@ import com.andrewsozonov.urbanride.di.app.AppComponent
 import com.andrewsozonov.urbanride.di.app.AppModule
 import com.andrewsozonov.urbanride.di.app.DaggerAppComponent
 
-
+/**
+ * Класс application приложения
+ *
+ * @author Андрей Созонов
+ */
 class App : Application() {
 
     override fun onCreate() {

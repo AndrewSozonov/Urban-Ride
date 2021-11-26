@@ -2,7 +2,6 @@ package com.andrewsozonov.urbanride.presentation.map
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +12,7 @@ import com.andrewsozonov.urbanride.R
 import com.andrewsozonov.urbanride.app.App
 import com.andrewsozonov.urbanride.databinding.MapFragmentBinding
 import com.andrewsozonov.urbanride.util.BitmapHelper
+import com.andrewsozonov.urbanride.util.constants.MapConstants.CAMERA_ZOOM_SCALING_AFTER_STOP
 import com.andrewsozonov.urbanride.util.constants.MapConstants.POLYLINE_WIDTH
 import com.andrewsozonov.urbanride.util.constants.UIConstants.BUNDLE_RIDE_ID_KEY
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -66,8 +66,6 @@ class MapFragment : Fragment() {
     private fun createViewModel() {
         App.getAppComponent()?.fragmentComponent()?.inject(this)
         viewModel = ViewModelProvider(this, viewModelFactory)[MapViewModel::class.java]
-        Log.d("MapFragment", " mapViewModel: ${viewModel}")
-
     }
 
     private fun subscribeToObservers() {
@@ -155,7 +153,7 @@ class MapFragment : Fragment() {
                             bounds.build(),
                             it,
                             it1,
-                            (mapView?.height!! * 0.1f).toInt()
+                            (mapView?.height!! * CAMERA_ZOOM_SCALING_AFTER_STOP).toInt()
                         )
                     }
                 }

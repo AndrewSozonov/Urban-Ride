@@ -8,7 +8,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +29,6 @@ import com.andrewsozonov.urbanride.util.constants.UIConstants.BUNDLE_RIDE_ID_KEY
 import com.andrewsozonov.urbanride.util.constants.UIConstants.RECYCLER_ITEMS_SPACING
 import java.io.OutputStream
 import javax.inject.Inject
-
 
 /**
  * Фрагмент с историей поездок.
@@ -80,8 +78,6 @@ class HistoryFragment : Fragment() {
             } else {
                 showNoRidesMessage()
             }
-
-
         })
 
         historyViewModel.isLoading.observe(viewLifecycleOwner, {
@@ -96,16 +92,14 @@ class HistoryFragment : Fragment() {
     private fun createViewModel() {
         App.getAppComponent()?.fragmentComponent()?.inject(this)
         historyViewModel = ViewModelProvider(this, viewModelFactory)[HistoryViewModel::class.java]
-        Log.d("HistoryFragment", " historyViewModel: ${historyViewModel}")
-
     }
 
     private fun initRecyclerView() {
         binding.historyRecyclerView.setHasFixedSize(true)
         binding.historyRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         historyRecyclerAdapter = HistoryRecyclerAdapter(object : IHistoryRecyclerListener {
-            override fun onMapClick(position: Int) {
-                openMapFragment(position)
+            override fun onMapClick(id: Int) {
+                openMapFragment(id)
             }
 
             override fun onShareClick(position: Int) {
@@ -129,8 +123,8 @@ class HistoryFragment : Fragment() {
         historyRecyclerAdapter?.setData(rides)
     }
 
-    private fun openMapFragment(position: Int) {
-        val bundle = bundleOf(BUNDLE_RIDE_ID_KEY to position)
+    private fun openMapFragment(id: Int) {
+        val bundle = bundleOf(BUNDLE_RIDE_ID_KEY to id)
         val navController = activity?.findNavController(R.id.nav_host_fragment_activity_main)
         navController?.navigate(R.id.action_navigation_history_to_mapFragment, bundle)
     }

@@ -11,6 +11,7 @@ import com.andrewsozonov.urbanride.R
 import com.andrewsozonov.urbanride.databinding.RecyclerItemHistoryBinding
 import com.andrewsozonov.urbanride.models.presentation.history.HistoryModel
 import com.andrewsozonov.urbanride.util.constants.UIConstants.GRAPH_PADDING
+import com.andrewsozonov.urbanride.util.constants.UIConstants.GRAPH_X_SCALE_MAX
 import com.bumptech.glide.Glide
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.series.DataPoint
@@ -19,11 +20,14 @@ import com.jjoe64.graphview.series.LineGraphSeries
 /**
  * ViewHolder для [HistoryRecyclerAdapter]
  *
+ * @param listener слушатель нажатий на карту и кнопку share
+ *
  * @author Андрей Созонов
  */
-class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class HistoryViewHolder(itemView: View, private val listener: IHistoryRecyclerListener) :
+    RecyclerView.ViewHolder(itemView) {
 
-    val binding = RecyclerItemHistoryBinding.bind(itemView)
+    private val binding = RecyclerItemHistoryBinding.bind(itemView)
     private val resources: Resources = itemView.resources
 
     /**
@@ -32,7 +36,7 @@ class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
      * @param ride модель данных поездки [HistoryModel]
      *
      */
-    fun bind(ride: HistoryModel) {
+    fun bind(ride: HistoryModel, position: Int) {
         binding.dateTextView.text = ride.date
         binding.startTextView.text = ride.startTime
         binding.finishTextView.text = ride.finishTime
@@ -52,6 +56,14 @@ class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 resources.getString(R.string.miles_h, ride.averageSpeed.toString())
             binding.maxSpeedTextView.text =
                 resources.getString(R.string.miles_h, ride.maxSpeed.toString())
+        }
+
+        binding.historyMap.setOnClickListener {
+            ride.id.let { id -> listener.onMapClick(id) }
+        }
+
+        binding.shareButton.setOnClickListener {
+            listener.onShareClick(position)
         }
 
         itemView.setOnClickListener {
@@ -223,7 +235,7 @@ class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private fun showGraphSeries(graph: GraphView, series: LineGraphSeries<DataPoint>) {
         graph.removeAllSeries()
         graph.onDataChanged(false, false)
-        graph.viewport.setMaxX(series.highestValueX * 1.1)
+        graph.viewport.setMaxX(series.highestValueX * GRAPH_X_SCALE_MAX)
         graph.addSeries(series)
         graph.viewport.isScalable = true
         graph.viewport.isScrollable = true

@@ -64,5 +64,4 @@ class Converter {
         val type: Type = object : TypeToken<ArrayList<ArrayList<LocationPoint>>>() {}.type
         return Gson().fromJson(jsonString, type)
     }
-
 }

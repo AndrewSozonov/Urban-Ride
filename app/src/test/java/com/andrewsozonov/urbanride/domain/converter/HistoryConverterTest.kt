@@ -66,6 +66,11 @@ import io.mockk.mockk
 import org.junit.Before
 import org.junit.Test
 
+/**
+ * Тест класс для [HistoryConverter]
+ *
+ * @author Андрей Созонов
+ */
 class HistoryConverterTest {
 
     private val converter = HistoryConverter()

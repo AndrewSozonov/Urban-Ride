@@ -2,10 +2,10 @@ package com.andrewsozonov.urbanride.domain.interactor
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
-import com.andrewsozonov.urbanride.models.data.RideDataModel
 import com.andrewsozonov.urbanride.domain.RideRepository
 import com.andrewsozonov.urbanride.domain.SettingsRepository
 import com.andrewsozonov.urbanride.domain.converter.RideConverter
+import com.andrewsozonov.urbanride.models.data.RideDataModel
 import com.andrewsozonov.urbanride.models.presentation.ride.RideModel
 import com.andrewsozonov.urbanride.models.presentation.service.ServiceStatus
 import com.andrewsozonov.urbanride.util.TestConstants.AVG_SPEED_KM_H
@@ -32,6 +32,11 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 
+/**
+ * Тест класс для [RideInteractor]
+ *
+ * @author Андрей Созонов
+ */
 class RideInteractorTest {
 
 
@@ -55,7 +60,8 @@ class RideInteractorTest {
         rideModel = createRideModel()
         every { repository.getTrackingData() } returns MutableLiveData(rideDataModel)
 
-        every { converter.convertFromRideDataModelToRideModel(
+        every {
+            converter.convertFromRideDataModelToRideModel(
                 rideDataModel,
                 any()
             )
@@ -90,7 +96,7 @@ class RideInteractorTest {
         assertThat(result.value).isEqualTo(expectedResult)
     }
 
-    private fun createTrackingPoints() : MutableList<MutableList<LatLng>> {
+    private fun createTrackingPoints(): MutableList<MutableList<LatLng>> {
         return mutableListOf(
             mutableListOf(
                 LatLng(LAT1, LONG1),

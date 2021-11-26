@@ -51,7 +51,6 @@ interface RideRepository {
      */
     fun updateTimerValue(time: Long)
 
-
     /**
      * Обновляет список с координатами в репозитории
      *

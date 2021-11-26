@@ -13,7 +13,6 @@ import androidx.core.app.ActivityCompat
  */
 object PermissionsUtil {
 
-
     /**
      * Проверяет наличие разрешений на геолокацию у пользователя при старте приложения
      */

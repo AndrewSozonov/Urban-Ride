@@ -15,9 +15,9 @@ import com.andrewsozonov.urbanride.models.presentation.history.HistoryModel
  * @author Андрей Созонов
  */
 class HistoryInteractor(
-    val repository: RideRepository,
+    private val repository: RideRepository,
     private val settings: SettingsRepository,
-    val converter: HistoryConverter
+    private val converter: HistoryConverter
 ) {
 
     /**
